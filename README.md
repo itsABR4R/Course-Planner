@@ -112,8 +112,4 @@ start_A < end_B  AND  start_B < end_A
 
 Backup sections of the **same course** are exempt from cross-section conflict checks (since you'd only attend one).
 
----
-
-## License
-
 MIT
