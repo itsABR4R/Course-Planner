@@ -1,23 +1,24 @@
 /**
  * src/components/CourseCard.jsx
  * A colored course block shown inside the CalendarGrid cells.
+ * Now shows the time slot (startStr–endStr) directly on the card.
  */
 import React from 'react';
 import { X } from 'lucide-react';
 
-export default function CourseCard({ entry, onRemove, compact = false }) {
-    const { code, name, section, faculty, room, color } = entry;
+export default function CourseCard({ entry, slot, onRemove, compact = false }) {
+    const { code, name, section, room, color } = entry;
 
     return (
         <div
-            className="relative rounded-lg overflow-hidden group transition-all duration-200 hover:scale-[1.02] hover:shadow-lg"
+            className="relative rounded-lg overflow-hidden group transition-all duration-200 hover:scale-[1.02] hover:shadow-lg h-full"
             style={{
                 background: color.bg,
                 borderLeft: `3px solid ${color.border}`,
                 boxShadow: `0 2px 12px ${color.bg}`,
             }}
         >
-            <div className={`${compact ? 'p-1.5' : 'p-2'} text-white`}>
+            <div className={`${compact ? 'p-1.5' : 'p-2'} text-white h-full flex flex-col justify-between`}>
                 <div className="flex items-start justify-between gap-1">
                     <div className="min-w-0 flex-1">
                         <p className={`font-bold leading-tight truncate ${compact ? 'text-[10px]' : 'text-xs'}`}>
@@ -29,9 +30,6 @@ export default function CourseCard({ entry, onRemove, compact = false }) {
                         <p className={`opacity-80 leading-tight ${compact ? 'text-[9px]' : 'text-[10px] mt-0.5'}`}>
                             Sec {section}
                         </p>
-                        {!compact && room && (
-                            <p className="text-[9px] opacity-70 mt-0.5 truncate">📍 {room}</p>
-                        )}
                     </div>
                     {onRemove && (
                         <button
@@ -43,6 +41,18 @@ export default function CourseCard({ entry, onRemove, compact = false }) {
                         </button>
                     )}
                 </div>
+
+                {/* Time badge at the bottom of the card */}
+                {slot && !compact && (
+                    <div className="mt-1">
+                        <span className="inline-block bg-black/25 rounded px-1.5 py-0.5 text-[9px] font-mono text-white/90 leading-tight">
+                            {slot.startStr}–{slot.endStr}
+                        </span>
+                    </div>
+                )}
+                {slot && compact && (
+                    <p className="text-[8px] font-mono opacity-75 leading-tight">{slot.startStr}–{slot.endStr}</p>
+                )}
             </div>
         </div>
     );
