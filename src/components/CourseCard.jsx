@@ -8,7 +8,7 @@ import React from 'react';
 import { X } from 'lucide-react';
 
 export default function CourseCard({ entry, onRemove, compact = false, timeSlot }) {
-    const { code, name, section, room, color, role } = entry;
+    const { code, name, section, room, faculty, color, role } = entry;
     const isBackup = role === 'backup';
     const timeLabel = timeSlot ? `${timeSlot.startStr}–${timeSlot.endStr}` : null;
 
@@ -66,11 +66,18 @@ export default function CourseCard({ entry, onRemove, compact = false, timeSlot 
                             Sec {section}{room ? ` | Room : ${room}` : ''}
                         </p>
 
-                        {/* Time */}
+                        {/* Faculty name + Time */}
                         {timeLabel && !compact && (
-                            <p className="text-[11px] font-bold mt-1 tracking-tight" style={{ opacity: 0.95 }}>
-                                {timeLabel}
-                            </p>
+                            <>
+                                {faculty && (
+                                    <p className="text-[9px] mt-1 leading-tight truncate" style={{ opacity: 0.75 }}>
+                                        {faculty}
+                                    </p>
+                                )}
+                                <p className="text-[11px] font-bold mt-0.5 tracking-tight" style={{ opacity: 0.95 }}>
+                                    {timeLabel}
+                                </p>
+                            </>
                         )}
                         {timeLabel && compact && (
                             <p className="text-[9px] font-bold mt-0.5 opacity-90">{timeLabel}</p>
