@@ -1,13 +1,14 @@
 /**
  * src/components/CourseCard.jsx
  * A colored course block shown inside the CalendarGrid cells.
- * Now shows the time slot (startStr–endStr) directly on the card.
+ * timeSlot: { startStr, endStr } for the specific day this card is on.
  */
 import React from 'react';
 import { X } from 'lucide-react';
 
-export default function CourseCard({ entry, slot, onRemove, compact = false }) {
+export default function CourseCard({ entry, onRemove, compact = false, timeSlot }) {
     const { code, name, section, room, color } = entry;
+    const timeLabel = timeSlot ? `${timeSlot.startStr}–${timeSlot.endStr}` : null;
 
     return (
         <div
@@ -18,19 +19,41 @@ export default function CourseCard({ entry, slot, onRemove, compact = false }) {
                 boxShadow: `0 2px 12px ${color.bg}`,
             }}
         >
-            <div className={`${compact ? 'p-1.5' : 'p-2'} text-white h-full flex flex-col justify-between`}>
-                <div className="flex items-start justify-between gap-1">
+            <div
+                className="text-white h-full"
+                style={{ padding: compact ? '6px' : '8px 8px 12px 8px' }}
+            >
+                <div className="flex items-start justify-between gap-1 h-full">
                     <div className="min-w-0 flex-1">
+                        {/* Course code */}
                         <p className={`font-bold leading-tight truncate ${compact ? 'text-[10px]' : 'text-xs'}`}>
                             {code}
                         </p>
+
+                        {/* Course name */}
                         {!compact && (
-                            <p className="text-[10px] leading-tight opacity-90 line-clamp-2 mt-0.5">{name}</p>
+                            <p className="text-[10px] leading-tight opacity-90 line-clamp-1 mt-0.5">{name}</p>
                         )}
+
+                        {/* Section + Room inline */}
                         <p className={`opacity-80 leading-tight ${compact ? 'text-[9px]' : 'text-[10px] mt-0.5'}`}>
-                            Sec {section}
+                            Sec {section}{room ? ` | Room : ${room}` : ''}
                         </p>
+
+                        {/* Time — bold, always shown unless too compact */}
+                        {timeLabel && !compact && (
+                            <p className="text-[11px] font-bold mt-1 tracking-tight" style={{ opacity: 0.95 }}>
+                                {timeLabel}
+                            </p>
+                        )}
+                        {timeLabel && compact && (
+                            <p className="text-[9px] font-bold mt-0.5 opacity-90">{timeLabel}</p>
+                        )}
+
+
                     </div>
+
+                    {/* Remove button */}
                     {onRemove && (
                         <button
                             onClick={(e) => { e.stopPropagation(); onRemove(entry.id); }}
@@ -41,18 +64,6 @@ export default function CourseCard({ entry, slot, onRemove, compact = false }) {
                         </button>
                     )}
                 </div>
-
-                {/* Time badge at the bottom of the card */}
-                {slot && !compact && (
-                    <div className="mt-1">
-                        <span className="inline-block bg-black/25 rounded px-1.5 py-0.5 text-[9px] font-mono text-white/90 leading-tight">
-                            {slot.startStr}–{slot.endStr}
-                        </span>
-                    </div>
-                )}
-                {slot && compact && (
-                    <p className="text-[8px] font-mono opacity-75 leading-tight">{slot.startStr}–{slot.endStr}</p>
-                )}
             </div>
         </div>
     );
