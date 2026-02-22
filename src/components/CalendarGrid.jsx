@@ -34,7 +34,7 @@ function getSlotsForDay(entry, day) {
 }
 
 export default function CalendarGrid({ routine, onRemoveCourse }) {
-    const GRID_HEIGHT = 520;
+    const GRID_HEIGHT = 420;
 
     const topPercent = (min) => ((min - GRID_START) / GRID_TOTAL) * 100;
     const heightPercent = (start, end) => ((end - start) / GRID_TOTAL) * 100;
@@ -53,13 +53,13 @@ export default function CalendarGrid({ routine, onRemoveCourse }) {
             </div>
 
             {/* Grid body */}
-            <div className="grid" style={{ gridTemplateColumns: 'repeat(5, 1fr)' }}>
+            <div className="grid overflow-hidden" style={{ gridTemplateColumns: 'repeat(5, 1fr)' }}>
                 {DAYS.map(day => {
                     const dayEntries = getEntriesForDay(routine, day);
                     return (
                         <div
                             key={day}
-                            className="border-r border-white/10 last:border-r-0 relative"
+                            className="border-r border-white/10 last:border-r-0 relative overflow-hidden"
                             style={{ height: GRID_HEIGHT }}
                         >
                             {/* Horizontal guide lines */}
