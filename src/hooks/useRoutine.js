@@ -78,7 +78,7 @@ export function useRoutine() {
     const addCourse = useCallback((courseEntry) => {
         const id = `${courseEntry.code}-${courseEntry.section}`;
 
-        // Prevent duplicate
+        // Prevent exact duplicate (same code + same section)
         if (routine.find(r => r.id === id)) {
             showToast(`${courseEntry.code} Section ${courseEntry.section} is already in your routine.`, 'warning');
             return false;
@@ -86,12 +86,17 @@ export function useRoutine() {
 
         // Skip courses with no parseable schedule (TBA)
         if (!courseEntry.slots || courseEntry.slots.length === 0) {
-            showToast(`${courseEntry.code} Section ${courseEntry.section} has a TBA schedule and cannot be added to the grid.`, 'warning');
+            showToast(`${courseEntry.code} Section ${courseEntry.section} has a TBA schedule and cannot be added.`, 'warning');
             return false;
         }
 
-        // Check for conflicts
-        const conflict = findConflict(courseEntry, routine);
+        // Determine role: first section of this course = primary, rest = backup
+        const sameCourseEntries = routine.filter(r => r.code === courseEntry.code);
+        const role = sameCourseEntries.length === 0 ? 'primary' : 'backup';
+
+        // Conflict check only against OTHER courses (not other sections of the same course)
+        const otherCourses = routine.filter(r => r.code !== courseEntry.code);
+        const conflict = findConflict(courseEntry, otherCourses);
         if (conflict) {
             showToast(
                 `⚠ Time Conflict! ${courseEntry.code}-${courseEntry.section} overlaps with "${conflict.name}" (${conflict.code}-${conflict.section}).`,
@@ -100,11 +105,18 @@ export function useRoutine() {
             return false;
         }
 
-        // All clear — assign color and add
-        const color = COLOR_PALETTE[colorIndex % COLOR_PALETTE.length];
-        setColorIndex(prev => prev + 1);
-        setRoutine(prev => [...prev, { ...courseEntry, id, color }]);
-        showToast(`✓ Added ${courseEntry.code} Section ${courseEntry.section}!`, 'success');
+        // Reuse the same color family as existing sections of this course (if any)
+        const existingColor = sameCourseEntries[0]?.color;
+        const color = existingColor ?? COLOR_PALETTE[colorIndex % COLOR_PALETTE.length];
+        if (!existingColor) setColorIndex(prev => prev + 1);
+
+        setRoutine(prev => [...prev, { ...courseEntry, id, color, role }]);
+
+        if (role === 'backup') {
+            showToast(`📌 Added ${courseEntry.code} Sec ${courseEntry.section} as Backup`, 'success');
+        } else {
+            showToast(`✓ Added ${courseEntry.code} Section ${courseEntry.section}!`, 'success');
+        }
         return true;
     }, [routine, colorIndex, showToast]);
 

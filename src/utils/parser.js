@@ -75,7 +75,21 @@ export function parseScheduleString(scheduleStr) {
 }
 
 /**
+ * Cleans up raw room strings from the CSV.
+ * e.g. "727 - Computer Lab" → "727 (Lab)"
+ *      "304"               → "304"
+ */
+function cleanRoom(raw) {
+    if (!raw) return '';
+    // Strip " - Computer Lab" variants (case-insensitive) and append "(Lab)"
+    const cleaned = raw.replace(/\s*-\s*computer\s*lab/i, '').trim();
+    const isLab = /computer\s*lab/i.test(raw);
+    return isLab ? `${cleaned} (Lab)` : cleaned;
+}
+
+/**
  * Fetches and parses the UIU schedule CSV file.
+
  * @param {string} csvPath - path to the CSV (typically '/UIU_Full_Schedule.csv')
  * @returns {Promise<Array>} array of parsed course objects
  */
@@ -101,7 +115,7 @@ export async function loadCourseData(csvPath = '/UIU_Full_Schedule.csv') {
                         section: row['Section'],
                         faculty: row['Faculty'],
                         scheduleRaw: row['Schedule'],
-                        room: row['Room'],
+                        room: cleanRoom(row['Room']),
                         slots: parseScheduleString(row['Schedule']),
                     }));
                 resolve(courses);

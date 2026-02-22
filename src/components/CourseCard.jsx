@@ -2,33 +2,59 @@
  * src/components/CourseCard.jsx
  * A colored course block shown inside the CalendarGrid cells.
  * timeSlot: { startStr, endStr } for the specific day this card is on.
+ * entry.role: 'primary' | 'backup'
  */
 import React from 'react';
 import { X } from 'lucide-react';
 
 export default function CourseCard({ entry, onRemove, compact = false, timeSlot }) {
-    const { code, name, section, room, color } = entry;
+    const { code, name, section, room, color, role } = entry;
+    const isBackup = role === 'backup';
     const timeLabel = timeSlot ? `${timeSlot.startStr}–${timeSlot.endStr}` : null;
 
     return (
         <div
             className="relative rounded-lg overflow-hidden group transition-all duration-200 hover:scale-[1.02] hover:shadow-lg h-full"
             style={{
-                background: color.bg,
-                borderLeft: `3px solid ${color.border}`,
-                boxShadow: `0 2px 12px ${color.bg}`,
+                background: isBackup ? 'transparent' : color.bg,
+                border: isBackup ? `2px dashed ${color.border}` : `none`,
+                borderLeft: isBackup ? `3px dashed ${color.border}` : `3px solid ${color.border}`,
+                boxShadow: isBackup ? 'none' : `0 2px 12px ${color.bg}`,
+                opacity: isBackup ? 0.75 : 1,
             }}
         >
+            {/* Backup: faint tinted background */}
+            {isBackup && (
+                <div
+                    className="absolute inset-0 rounded-lg"
+                    style={{ background: color.bg, opacity: 0.25 }}
+                />
+            )}
+
             <div
-                className="text-white h-full"
+                className="relative text-white h-full"
                 style={{ padding: compact ? '6px' : '8px 8px 12px 8px' }}
             >
-                <div className="flex items-start justify-between gap-1 h-full">
+                <div className="flex items-center justify-between gap-1 h-full">
                     <div className="min-w-0 flex-1">
-                        {/* Course code */}
-                        <p className={`font-bold leading-tight truncate ${compact ? 'text-[10px]' : 'text-xs'}`}>
-                            {code}
-                        </p>
+                        {/* Course code + Backup badge */}
+                        <div className="flex items-center gap-1.5">
+                            <p className={`font-bold leading-tight truncate ${compact ? 'text-[10px]' : 'text-xs'}`}>
+                                {code}
+                            </p>
+                            {isBackup && (
+                                <span
+                                    className="text-[8px] font-bold px-1 py-0.5 rounded uppercase tracking-wider flex-shrink-0"
+                                    style={{
+                                        background: color.border,
+                                        color: '#fff',
+                                        opacity: 0.9,
+                                    }}
+                                >
+                                    Backup
+                                </span>
+                            )}
+                        </div>
 
                         {/* Course name */}
                         {!compact && (
@@ -40,7 +66,7 @@ export default function CourseCard({ entry, onRemove, compact = false, timeSlot 
                             Sec {section}{room ? ` | Room : ${room}` : ''}
                         </p>
 
-                        {/* Time — bold, always shown unless too compact */}
+                        {/* Time */}
                         {timeLabel && !compact && (
                             <p className="text-[11px] font-bold mt-1 tracking-tight" style={{ opacity: 0.95 }}>
                                 {timeLabel}
@@ -49,8 +75,6 @@ export default function CourseCard({ entry, onRemove, compact = false, timeSlot 
                         {timeLabel && compact && (
                             <p className="text-[9px] font-bold mt-0.5 opacity-90">{timeLabel}</p>
                         )}
-
-
                     </div>
 
                     {/* Remove button */}

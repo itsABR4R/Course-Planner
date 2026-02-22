@@ -111,22 +111,39 @@ export default function App() {
                                 <span className="text-xs font-semibold text-slate-300">Selected Courses</span>
                             </div>
                             <div className="flex flex-wrap gap-2">
-                                {routine.map(entry => (
-                                    <div
-                                        key={entry.id}
-                                        className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full text-white font-medium"
-                                        style={{ background: entry.color.bg, border: `1px solid ${entry.color.border}` }}
-                                    >
-                                        <span>{entry.code}</span>
-                                        <span className="opacity-70">§{entry.section}</span>
-                                        <button
-                                            onClick={() => removeCourse(entry.id)}
-                                            className="ml-0.5 hover:opacity-100 opacity-60 transition-opacity"
+                                {routine.map(entry => {
+                                    const isBackup = entry.role === 'backup';
+                                    return (
+                                        <div
+                                            key={entry.id}
+                                            className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full text-white font-medium"
+                                            style={{
+                                                background: isBackup ? 'transparent' : entry.color.bg,
+                                                border: isBackup
+                                                    ? `1.5px dashed ${entry.color.border}`
+                                                    : `1px solid ${entry.color.border}`,
+                                                opacity: isBackup ? 0.8 : 1,
+                                            }}
                                         >
-                                            <X size={11} />
-                                        </button>
-                                    </div>
-                                ))}
+                                            <span>{entry.code}</span>
+                                            <span className="opacity-70">§{entry.section}</span>
+                                            {isBackup && (
+                                                <span
+                                                    className="text-[8px] font-bold px-1 rounded uppercase tracking-wider"
+                                                    style={{ background: entry.color.border, opacity: 0.9 }}
+                                                >
+                                                    BK
+                                                </span>
+                                            )}
+                                            <button
+                                                onClick={() => removeCourse(entry.id)}
+                                                className="ml-0.5 hover:opacity-100 opacity-60 transition-opacity"
+                                            >
+                                                <X size={11} />
+                                            </button>
+                                        </div>
+                                    );
+                                })}
                             </div>
                         </div>
                     )}
