@@ -138,7 +138,7 @@ function CustomSelect({ value, onChange, options, placeholder = 'Any', icon: Ico
 
 
 /* ─── Section row ─── */
-function SectionRow({ courseCode, courseName, section, onAdd, showCourseName = false }) {
+function SectionRow({ courseCode, courseName, section, onAdd, showCourseName = false, isAdded }) {
     const hasTBA = !section.slots || section.slots.length === 0;
 
     return (
@@ -148,9 +148,11 @@ function SectionRow({ courseCode, courseName, section, onAdd, showCourseName = f
                 transition-all duration-150 group
                 ${hasTBA
                     ? 'opacity-50 cursor-not-allowed'
+                    : isAdded
+                    ? 'bg-emerald-500/10 border-emerald-500/20'
                     : 'cursor-pointer hover:bg-white/10 hover:border-white/20 border border-transparent'}
             `}
-            onClick={() => !hasTBA && onAdd(section)}
+            onClick={() => !hasTBA && !isAdded && onAdd(section)}
         >
             <div className="flex items-center gap-3 min-w-0">
                 <span className="text-xs font-bold text-indigo-300 w-8 flex-shrink-0">
@@ -186,13 +188,16 @@ function SectionRow({ courseCode, courseName, section, onAdd, showCourseName = f
                 </div>
             </div>
             {!hasTBA && (
-                <button className="
-                    ml-2 flex-shrink-0 text-xs font-semibold px-3 py-1 rounded-lg
-                    bg-indigo-600/30 text-indigo-300 border border-indigo-500/30
-                    group-hover:bg-indigo-600 group-hover:text-white
-                    transition-all duration-150
-                ">
-                    Add
+                <button
+                    disabled={isAdded}
+                    className={`
+                        ml-2 flex-shrink-0 text-xs font-semibold px-3 py-1 rounded-lg transition-all duration-150
+                        ${isAdded
+                            ? 'bg-emerald-600/20 text-emerald-400 border border-emerald-500/20 cursor-not-allowed'
+                            : 'bg-indigo-600/30 text-indigo-300 border border-indigo-500/30 group-hover:bg-indigo-600 group-hover:text-white'}
+                    `}
+                >
+                    {isAdded ? 'Already exists' : 'Add'}
                 </button>
             )}
         </div>
@@ -200,7 +205,7 @@ function SectionRow({ courseCode, courseName, section, onAdd, showCourseName = f
 }
 
 /* ─── Collapsible course item ─── */
-function CourseItem({ courseGroup, onAddSection, defaultExpanded = false }) {
+function CourseItem({ courseGroup, onAddSection, defaultExpanded = false, routine }) {
     const [expanded, setExpanded] = useState(defaultExpanded);
 
     // If defaultExpanded flips (e.g. suggestion selected), sync state
@@ -226,15 +231,19 @@ function CourseItem({ courseGroup, onAddSection, defaultExpanded = false }) {
             </button>
             {expanded && (
                 <div className="border-t border-white/10 px-3 pb-3 pt-2 space-y-1 animate-fade-in">
-                    {courseGroup.sections.map((sec) => (
-                        <SectionRow
-                            key={sec.section}
-                            courseCode={courseGroup.code}
-                            courseName={courseGroup.name}
-                            section={sec}
-                            onAdd={() => onAddSection({ ...courseGroup, ...sec })}
-                        />
-                    ))}
+                    {courseGroup.sections.map((sec) => {
+                        const isAdded = routine && routine.some(r => r.id === `${courseGroup.code}-${sec.section}`);
+                        return (
+                            <SectionRow
+                                key={sec.section}
+                                courseCode={courseGroup.code}
+                                courseName={courseGroup.name}
+                                section={sec}
+                                isAdded={isAdded}
+                                onAdd={() => onAddSection({ ...courseGroup, ...sec })}
+                            />
+                        );
+                    })}
                 </div>
             )}
         </div>
@@ -242,30 +251,34 @@ function CourseItem({ courseGroup, onAddSection, defaultExpanded = false }) {
 }
 
 /* ─── Advanced flat results ─── */
-function AdvancedResults({ results, onAddSection }) {
+function AdvancedResults({ results, onAddSection, routine }) {
     if (results === null) return null;
     if (results.length === 0) {
         return <div className="text-center text-slate-500 text-sm py-8">No sections found.</div>;
     }
     return (
         <div className="space-y-1 animate-fade-in">
-            {results.map(({ courseGroup, section }, i) => (
-                <div key={i} className="glass rounded-xl overflow-hidden border border-white/10">
-                    <SectionRow
-                        courseCode={courseGroup.code}
-                        courseName={courseGroup.name}
-                        section={section}
-                        showCourseName={true}
-                        onAdd={() => onAddSection({ ...courseGroup, ...section })}
-                    />
-                </div>
-            ))}
+            {results.map(({ courseGroup, section }, i) => {
+                const isAdded = routine && routine.some(r => r.id === `${courseGroup.code}-${section.section}`);
+                return (
+                    <div key={i} className="glass rounded-xl overflow-hidden border border-white/10">
+                        <SectionRow
+                            courseCode={courseGroup.code}
+                            courseName={courseGroup.name}
+                            section={section}
+                            showCourseName={true}
+                            isAdded={isAdded}
+                            onAdd={() => onAddSection({ ...courseGroup, ...section })}
+                        />
+                    </div>
+                );
+            })}
         </div>
     );
 }
 
 /* ─── Main export ─── */
-export default function CourseSearch({ courseMap, onAddCourse }) {
+export default function CourseSearch({ courseMap, onAddCourse, routine }) {
     const [query, setQuery] = useState('');
     const [showSugg, setShowSugg] = useState(false);
     const [pinned, setPinned] = useState(null); // pinned course code (from suggestion click)
@@ -536,7 +549,7 @@ export default function CourseSearch({ courseMap, onAddCourse }) {
             {!(showSugg && suggestions.length > 0) && (
                 <div className="overflow-y-auto max-h-[calc(100vh-300px)] pr-1">
                     {advOpen && (advMode === 'faculty' ? advQuery : (advDay || advTime)) ? (
-                        <AdvancedResults results={advResults} onAddSection={onAddCourse} />
+                        <AdvancedResults results={advResults} onAddSection={onAddCourse} routine={routine} />
                     ) : (
                         <>
                             {!query && !pinned && !advOpen && (
@@ -555,6 +568,7 @@ export default function CourseSearch({ courseMap, onAddCourse }) {
                                         courseGroup={cg}
                                         onAddSection={onAddCourse}
                                         defaultExpanded={pinned === cg.code}
+                                        routine={routine}
                                     />
                                 ))
                             )}

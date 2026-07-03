@@ -1,193 +1,120 @@
 /**
  * src/components/CalendarGrid.jsx
  *
- * Weekly calendar grid (Sat–Wed), 08:30–16:30.
- *
- * Same-day same-course grouping:
- *   Primary card + same-day backups → CourseCardStack (click to expand backups)
- *
- * Same-day different-course at overlapping times → greedy lane/sub-column split
- *
- * Same-course different-day backups → rendered as normal backup cards
+ * Weekly calendar schedule rendered as a 2D grid table (Sat–Wed).
+ * Left column displays "Slot N" showing the slot start time.
+ * Rows are dynamically generated for each unique course start time in the routine.
+ * Day cells stack same-day same-start-time courses vertically.
  */
 import React from 'react';
 import CourseCard from './CourseCard';
-import CourseCardStack from './CourseCardStack';
 
 const DAYS = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday'];
 
-const GRID_START = 8 * 60 + 30;  // 08:30
-const GRID_END = 16 * 60 + 30; // 16:30
-const GRID_TOTAL = GRID_END - GRID_START; // 480 min
-
-const TIME_SLOTS = [
-    { label: '08:30', start: 8 * 60 + 30 },
-    { label: '09:51', start: 9 * 60 + 51 },
-    { label: '11:11', start: 11 * 60 + 11 },
-    { label: '12:31', start: 12 * 60 + 31 },
-    { label: '13:51', start: 13 * 60 + 51 },
-    { label: '15:11', start: 15 * 60 + 11 },
-    { label: '16:30', start: 16 * 60 + 30 },
-];
-
-const topPercent = (min) => ((min - GRID_START) / GRID_TOTAL) * 100;
-
-/** Greedy lane assignment — returns items augmented with { lane, totalLanes } */
-function computeLanes(items) {
-    if (items.length === 0) return [];
-    const sorted = [...items].sort((a, b) => a.representativeSlot.startMin - b.representativeSlot.startMin);
-    const laneEnds = [];
-    const withLanes = sorted.map(item => {
-        let lane = laneEnds.findIndex(end => end <= item.representativeSlot.startMin);
-        if (lane === -1) { lane = laneEnds.length; laneEnds.push(item.representativeSlot.endMin); }
-        else { laneEnds[lane] = item.representativeSlot.endMin; }
-        return { ...item, lane };
-    });
-    const totalLanes = laneEnds.length;
-    return withLanes.map(item => ({ ...item, totalLanes }));
-}
+const formatMinutes = (min) => {
+    const hrs = Math.floor(min / 60);
+    const mins = min % 60;
+    return `${hrs.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`;
+};
 
 export default function CalendarGrid({ routine, onRemoveCourse }) {
-    const GRID_HEIGHT = 520;
-    const CARD_HEIGHT = 88;
+    // Extract unique start times from the current routine and sort chronologically
+    const uniqueStartTimes = Array.from(
+        new Set(
+            routine.flatMap(entry => entry.slots.map(s => s.startMin))
+        )
+    ).sort((a, b) => a - b);
+
+    const numRows = uniqueStartTimes.length;
 
     return (
-        <div className="glass rounded-2xl overflow-hidden border border-white/10">
-            {/* Header */}
-            <div className="grid border-b border-white/10" style={{ gridTemplateColumns: 'repeat(5, 1fr)' }}>
-                {DAYS.map(day => (
-                    <div key={day} className="py-3 px-2 text-center border-r border-white/10 last:border-r-0">
-                        <span className="text-xs font-semibold text-slate-300 uppercase tracking-wider">
-                            {day.slice(0, 3)}
-                        </span>
+        <div 
+            id="weekly-schedule-grid"
+            className="grid border border-white/10 rounded-2xl overflow-hidden glass"
+            style={{
+                gridTemplateColumns: '85px repeat(5, 1fr)',
+                gridTemplateRows: `auto repeat(${numRows}, minmax(110px, auto))`,
+            }}
+        >
+            {/* ── Column Header Row ── */}
+            <div 
+                className="py-3 px-2 text-center border-r border-b border-white/10 bg-white/5 font-semibold text-slate-400 text-xs uppercase tracking-wider" 
+                style={{ gridRow: 1, gridColumn: 1 }}
+            >
+                Slot
+            </div>
+            {DAYS.map((day, dayIndex) => (
+                <div 
+                    key={day} 
+                    className="py-3 px-2 text-center border-b border-white/10 bg-white/5 font-semibold text-slate-300 text-xs uppercase tracking-wider"
+                    style={{ 
+                        gridRow: 1, 
+                        gridColumn: dayIndex + 2,
+                        borderRight: dayIndex === DAYS.length - 1 ? 'none' : '1px solid rgba(255, 255, 255, 0.1)'
+                    }}
+                >
+                    {day.slice(0, 3)}
+                </div>
+            ))}
+
+            {/* ── Dynamic Rows based on Start Times ── */}
+            {uniqueStartTimes.map((startMin, rowIndex) => (
+                <React.Fragment key={`row-${startMin}`}>
+                    {/* Left Slot Label Cell */}
+                    <div 
+                        className="p-3 flex flex-col justify-center items-center border-r border-b border-white/10 bg-white/[0.02] text-center animate-fade-in"
+                        style={{ 
+                            gridRow: rowIndex + 2, 
+                            gridColumn: 1,
+                            borderBottom: rowIndex === numRows - 1 ? 'none' : undefined
+                        }}
+                    >
+                        <span className="text-xs font-bold text-slate-200">Slot {rowIndex + 1}</span>
                     </div>
-                ))}
-            </div>
 
-            {/* Body */}
-            <div className="grid" style={{ gridTemplateColumns: 'repeat(5, 1fr)' }}>
-                {DAYS.map((day) => {
-                    // All {entry, slot} pairs for this day
-                    const rawItems = [];
-                    for (const entry of routine) {
-                        for (const slot of entry.slots.filter(s => s.day === day)) {
-                            rawItems.push({ entry, slot });
+                    {/* Day Schedule Cells */}
+                    {DAYS.map((day, dayIndex) => {
+                        // Gather sections for this day starting at this startMin
+                        const cellItems = [];
+                        for (const entry of routine) {
+                            for (const slot of entry.slots.filter(s => s.day === day)) {
+                                if (slot.startMin === startMin) {
+                                    cellItems.push({ entry, slot });
+                                }
+                            }
                         }
-                    }
 
-                    // ── Build display items ──────────────────────────────────────
-                    // Rule: same course + same day + overlapping time → dropdown stack
-                    //       same course + same day + DIFFERENT time  → separate items (lanes)
+                        // Sort by routine addition order to maintain choice priority visually
+                        cellItems.sort((a, b) => routine.indexOf(a.entry) - routine.indexOf(b.entry));
 
-                    const processedKeys = new Set();
-                    const displayItems = [];
-
-                    // Key for a {entry, slot} pair
-                    const key = (entry, slot) => `${entry.id}-${slot.startMin}`;
-
-                    // Helper: do two slots overlap?
-                    const overlaps = (a, b) => a.startMin < b.endMin && b.startMin < a.endMin;
-
-                    // Process primaries first — collect their overlapping same-course backups
-                    for (const item of rawItems.filter(i => i.entry.role === 'primary')) {
-                        const k = key(item.entry, item.slot);
-                        if (processedKeys.has(k)) continue;
-                        processedKeys.add(k);
-
-                        // Find backups of same course that overlap in time on this day
-                        const stackedBackups = rawItems.filter(b =>
-                            b.entry.role === 'backup' &&
-                            b.entry.code === item.entry.code &&
-                            !processedKeys.has(key(b.entry, b.slot)) &&
-                            overlaps(item.slot, b.slot)
+                        return (
+                            <div 
+                                key={`cell-${day}-${startMin}`}
+                                className="p-2 flex flex-col gap-2 justify-start overflow-visible min-h-[110px]"
+                                style={{ 
+                                    gridRow: rowIndex + 2, 
+                                    gridColumn: dayIndex + 2,
+                                    borderRight: dayIndex === DAYS.length - 1 ? 'none' : '1px solid rgba(255, 255, 255, 0.1)',
+                                    borderBottom: rowIndex === numRows - 1 ? 'none' : '1px solid rgba(255, 255, 255, 0.1)',
+                                    background: 'rgba(255, 255, 255, 0.005)'
+                                }}
+                            >
+                                {cellItems.map(({ entry, slot }) => (
+                                    <div key={entry.id} className="w-full min-h-[88px] flex-shrink-0 animate-fade-in">
+                                        <CourseCard
+                                            entry={entry}
+                                            onRemove={onRemoveCourse}
+                                            compact={cellItems.length > 1}
+                                            timeSlot={slot}
+                                            routine={routine}
+                                        />
+                                    </div>
+                                ))}
+                            </div>
                         );
-                        stackedBackups.forEach(b => processedKeys.add(key(b.entry, b.slot)));
-
-                        displayItems.push({
-                            primaryEntry: item.entry,
-                            primarySlot: item.slot,
-                            backups: stackedBackups,         // go into dropdown
-                            representativeSlot: item.slot,
-                        });
-                    }
-
-                    // Remaining items (standalone backups, different-time backups, etc.)
-                    for (const item of rawItems) {
-                        const k = key(item.entry, item.slot);
-                        if (processedKeys.has(k)) continue;
-                        processedKeys.add(k);
-
-                        displayItems.push({
-                            primaryEntry: item.entry,
-                            primarySlot: item.slot,
-                            backups: [],
-                            representativeSlot: item.slot,
-                        });
-                    }
-
-
-                    // Lane assignment on display items
-                    const laidOut = computeLanes(displayItems);
-
-                    return (
-                        <div
-                            key={day}
-                            className="border-r border-white/10 last:border-r-0 relative"
-                            style={{ height: GRID_HEIGHT, overflow: 'visible' }}
-                        >
-                            {/* Guide lines */}
-                            {TIME_SLOTS.slice(1).map(({ start }, i) => (
-                                <div
-                                    key={`gl-${i}`}
-                                    className="absolute left-0 right-0 border-t border-white/5"
-                                    style={{ top: `${topPercent(start)}%` }}
-                                />
-                            ))}
-
-                            {/* Render each display item */}
-                            {laidOut.map(({ primaryEntry, primarySlot, backups, lane, totalLanes }) => {
-                                const laneW = 100 / totalLanes;
-                                const leftPct = lane * laneW;
-
-                                return (
-                                    <React.Fragment key={`${primaryEntry.id}-${primarySlot.startMin}`}>
-                                        {/* Primary card (or stacked with backups) */}
-                                        <div
-                                            className="absolute z-10 animate-fade-in"
-                                            style={{
-                                                top: `${topPercent(primarySlot.startMin)}%`,
-                                                height: `${CARD_HEIGHT}px`,
-                                                left: `calc(${leftPct}% + 4px)`,
-                                                width: `calc(${laneW}% - 8px)`,
-                                                overflow: 'visible',
-                                            }}
-                                        >
-                                            {backups.length > 0 ? (
-                                                <CourseCardStack
-                                                    primary={primaryEntry}
-                                                    primarySlot={primarySlot}
-                                                    backups={backups}
-                                                    onRemove={onRemoveCourse}
-                                                />
-                                            ) : (
-                                                <div className="h-full overflow-hidden">
-                                                    <CourseCard
-                                                        entry={primaryEntry}
-                                                        onRemove={onRemoveCourse}
-                                                        compact={false}
-                                                        timeSlot={primarySlot}
-                                                    />
-                                                </div>
-                                            )}
-                                        </div>
-
-                                    </React.Fragment>
-                                );
-                            })}
-                        </div>
-                    );
-                })}
-            </div>
+                    })}
+                </React.Fragment>
+            ))}
         </div>
     );
 }

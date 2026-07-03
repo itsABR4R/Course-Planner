@@ -3,12 +3,13 @@
  * Main application component — wires together all parts of the Course Planner.
  */
 import React, { useState, useEffect } from 'react';
-import { BookOpen, Trash2, GraduationCap, Calendar, Sparkles, X } from 'lucide-react';
+import { BookOpen, Trash2, GraduationCap, Calendar, Sparkles, X, Download } from 'lucide-react';
 import { loadCourseData, groupCoursesByCode } from './utils/parser';
-import { useRoutine } from './hooks/useRoutine';
+import { useRoutine, getCourseRole } from './hooks/useRoutine';
 import CalendarGrid from './components/CalendarGrid';
 import CourseSearch from './components/CourseSearch';
 import Toast from './components/Toast';
+import { toPng } from 'html-to-image';
 
 export default function App() {
     const [courseMap, setCourseMap] = useState({});
@@ -40,6 +41,34 @@ export default function App() {
         });
     };
 
+    const handleSaveImage = () => {
+        const node = document.getElementById('weekly-schedule-grid');
+        if (!node) return;
+
+        showToast('Generating image...', 'info');
+
+        // We use a small timeout to let the toast render
+        setTimeout(() => {
+            toPng(node, {
+                backgroundColor: '#0a0c1e', // Ensure a solid dark background is baked in
+                style: {
+                    borderRadius: '16px',
+                }
+            })
+            .then((dataUrl) => {
+                const link = document.createElement('a');
+                link.download = 'uiu-schedule.png';
+                link.href = dataUrl;
+                link.click();
+                showToast('Schedule saved as image!', 'success');
+            })
+            .catch((err) => {
+                console.error('oops, something went wrong!', err);
+                showToast('Failed to save schedule as image.', 'error');
+            });
+        }, 100);
+    };
+
     return (
         <div className="min-h-screen flex flex-col">
             {/* ── Header ── */}
@@ -60,6 +89,13 @@ export default function App() {
                                 <span className="text-xs text-slate-400">
                                     <span className="text-indigo-300 font-semibold">{routine.length}</span> course{routine.length !== 1 ? 's' : ''} added
                                 </span>
+                                <button
+                                    onClick={handleSaveImage}
+                                    className="flex items-center gap-1.5 text-xs text-indigo-300 hover:text-indigo-200 border border-indigo-500/30 hover:border-indigo-400/50 px-3 py-1.5 rounded-lg transition-all"
+                                >
+                                    <Download size={13} />
+                                    Save as Image
+                                </button>
                                 <button
                                     onClick={clearRoutine}
                                     className="flex items-center gap-1.5 text-xs text-red-400 hover:text-red-300 border border-red-500/30 hover:border-red-400/50 px-3 py-1.5 rounded-lg transition-all"
@@ -95,7 +131,7 @@ export default function App() {
                                 <p className="text-xs text-slate-500 mt-1">{error}</p>
                             </div>
                         ) : (
-                            <CourseSearch courseMap={courseMap} onAddCourse={handleAddCourse} />
+                            <CourseSearch courseMap={courseMap} onAddCourse={handleAddCourse} routine={routine} />
                         )}
                     </div>
                 </aside>
@@ -112,32 +148,71 @@ export default function App() {
                             </div>
                             <div className="flex flex-wrap gap-2">
                                 {routine.map(entry => {
-                                    const isBackup = entry.role === 'backup';
+                                    const roleInfo = getCourseRole(entry, routine);
+                                    const isBackup = roleInfo.type === 'backup';
+                                    const isChoice = roleInfo.type === 'choice';
+
+                                    let chipBg = entry.color.bg;
+                                    let chipBorder = `1px solid ${entry.color.border}`;
+                                    let chipOpacity = 1;
+
+                                    if (isBackup) {
+                                         chipBg = 'rgba(30, 41, 59, 0.75)';
+                                         chipBorder = `1.5px dashed ${entry.color.border}`;
+                                         chipOpacity = 1.0;
+                                    } else if (isChoice) {
+                                         chipBg = 'rgba(30, 41, 59, 0.6)';
+                                         chipBorder = `1.5px dotted ${entry.color.border}`;
+                                         chipOpacity = 0.95;
+                                    }
+
                                     return (
                                         <div
                                             key={entry.id}
-                                            className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full text-white font-medium"
+                                            className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full text-white font-medium relative"
                                             style={{
-                                                background: isBackup ? 'transparent' : entry.color.bg,
-                                                border: isBackup
-                                                    ? `1.5px dashed ${entry.color.border}`
-                                                    : `1px solid ${entry.color.border}`,
-                                                opacity: isBackup ? 0.8 : 1,
+                                                background: chipBg,
+                                                border: chipBorder,
+                                                opacity: chipOpacity,
                                             }}
                                         >
-                                            <span>{entry.code}</span>
-                                            <span className="opacity-70">§{entry.section}</span>
+                                            {/* Tint overlay for backup/choice chips */}
+                                            {(isBackup || isChoice) && (
+                                                <div 
+                                                    className="absolute inset-0 rounded-full pointer-events-none" 
+                                                    style={{ 
+                                                        background: entry.color.bg, 
+                                                        opacity: isBackup ? 0.28 : 0.3 
+                                                    }} 
+                                                />
+                                            )}
+                                            <span className="relative z-10">{entry.code}</span>
+                                            <span className="opacity-70 relative z-10">§{entry.section}</span>
                                             {isBackup && (
                                                 <span
-                                                    className="text-[8px] font-bold px-1 rounded uppercase tracking-wider"
-                                                    style={{ background: entry.color.border, opacity: 0.9 }}
+                                                    className="text-[8px] font-extrabold px-1.5 py-0.5 rounded uppercase tracking-wider relative z-10 text-white"
+                                                    style={{ 
+                                                        background: '#ef4444',
+                                                        boxShadow: '0 0 6px rgba(239, 68, 68, 0.3)'
+                                                    }}
                                                 >
                                                     BK
                                                 </span>
                                             )}
+                                            {isChoice && (
+                                                <span
+                                                    className="text-[8px] font-extrabold px-1.5 py-0.5 rounded uppercase tracking-wider relative z-10"
+                                                    style={{ 
+                                                        background: roleInfo.level === 2 ? '#f59e0b' : '#d946ef', 
+                                                        color: roleInfo.level === 2 ? '#000' : '#fff' 
+                                                    }}
+                                                >
+                                                    {roleInfo.shortLabel}
+                                                </span>
+                                            )}
                                             <button
                                                 onClick={() => removeCourse(entry.id)}
-                                                className="ml-0.5 hover:opacity-100 opacity-60 transition-opacity"
+                                                className="ml-0.5 hover:opacity-100 opacity-60 transition-opacity relative z-10"
                                             >
                                                 <X size={11} />
                                             </button>
@@ -163,7 +238,10 @@ export default function App() {
                                 <p className="text-slate-600 text-xs">Search for a course on the left and add sections to fill your week</p>
                             </div>
                         ) : (
-                            <CalendarGrid routine={routine} onRemoveCourse={removeCourse} />
+                            <CalendarGrid 
+                                routine={routine} 
+                                onRemoveCourse={removeCourse} 
+                            />
                         )}
                     </div>
                 </div>

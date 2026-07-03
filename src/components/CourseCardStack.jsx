@@ -6,80 +6,46 @@
  *
  * Used only when same-day same-course grouping is detected in CalendarGrid.
  */
-import React, { useState, useRef, useEffect } from 'react';
-import { ChevronDown } from 'lucide-react';
+import React from 'react';
+import { ChevronRight } from 'lucide-react';
 import CourseCard from './CourseCard';
 
-export default function CourseCardStack({ primary, primarySlot, backups, onRemove }) {
-    const [open, setOpen] = useState(false);
-    const containerRef = useRef(null);
-
-    // Close dropdown when clicking outside
-    useEffect(() => {
-        if (!open) return;
-        const handler = (e) => {
-            if (containerRef.current && !containerRef.current.contains(e.target)) {
-                setOpen(false);
-            }
-        };
-        document.addEventListener('mousedown', handler);
-        return () => document.removeEventListener('mousedown', handler);
-    }, [open]);
-
+export default function CourseCardStack({ primary, primarySlot, backups, onRemove, routine, onOpenDetails }) {
     return (
-        <div ref={containerRef} className="relative h-full">
-            {/* Primary card — clickable to reveal backups */}
+        <div className="relative h-full">
+            {/* Top-right badge showing total overlapping count */}
+            {backups.length > 0 && (
+                <div
+                    className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-gradient-to-br from-pink-500 to-rose-600 flex items-center justify-center text-[10px] font-extrabold text-white shadow-lg border border-white/20 animate-pulse z-20 pointer-events-none"
+                >
+                    {backups.length + 1}
+                </div>
+            )}
+
+            {/* Primary card — clickable to reveal details in drawer */}
             <div
                 className="h-full relative cursor-pointer select-none"
-                onClick={() => backups.length > 0 && setOpen(o => !o)}
+                onClick={() => backups.length > 0 && onOpenDetails()}
             >
                 <CourseCard
                     entry={primary}
                     onRemove={onRemove}
                     compact={false}
                     timeSlot={primarySlot}
+                    routine={routine}
                 />
 
-                {/* Backup count indicator on the primary card */}
+                {/* Alternative choices count indicator on the primary card */}
                 {backups.length > 0 && (
                     <div
-                        className="absolute bottom-1.5 right-1.5 flex items-center gap-0.5 rounded-md px-1.5 py-0.5 text-white text-[8px] font-bold pointer-events-none"
+                        className="absolute bottom-1.5 right-1.5 flex items-center gap-0.5 rounded-md px-1.5 py-0.5 text-white text-[8px] font-bold pointer-events-none z-10"
                         style={{ background: 'rgba(0,0,0,0.45)' }}
                     >
-                        <ChevronDown
-                            size={8}
-                            style={{
-                                transform: open ? 'rotate(180deg)' : 'rotate(0deg)',
-                                transition: 'transform 0.2s',
-                            }}
-                        />
-                        {backups.length} backup{backups.length > 1 ? 's' : ''}
+                        <ChevronRight size={8} />
+                        {backups.length} more
                     </div>
                 )}
             </div>
-
-            {/* Dropdown — appears below primary card, floats over grid */}
-            {open && backups.length > 0 && (
-                <div
-                    className="absolute left-0 right-0 z-50 flex flex-col gap-1 pt-1"
-                    style={{ top: '100%' }}
-                >
-                    {backups.map(({ entry, slot }) => (
-                        <div
-                            key={`${entry.id}-${slot.startMin}`}
-                            style={{ height: 88 }}
-                            className="rounded-lg overflow-hidden shadow-xl"
-                        >
-                            <CourseCard
-                                entry={entry}
-                                onRemove={(id) => { onRemove(id); setOpen(false); }}
-                                compact={false}
-                                timeSlot={slot}
-                            />
-                        </div>
-                    ))}
-                </div>
-            )}
         </div>
     );
 }

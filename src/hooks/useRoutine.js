@@ -33,31 +33,60 @@ const COLOR_PALETTE = [
 ];
 
 /**
- * Checks if two time intervals [s1, e1) and [s2, e2) overlap.
- * Returns true if they conflict.
+ * Checks if two course entries overlap in schedule.
  */
-function intervalsOverlap(s1, e1, s2, e2) {
-    return s1 < e2 && s2 < e1;
-}
-
-/**
- * Checks whether a candidate course entry conflicts with any existing routine entry.
- * Returns the conflicting entry, or null if no conflict.
- */
-function findConflict(candidate, routine) {
-    for (const existing of routine) {
-        for (const cSlot of candidate.slots) {
-            for (const eSlot of existing.slots) {
-                if (
-                    cSlot.day === eSlot.day &&
-                    intervalsOverlap(cSlot.startMin, cSlot.endMin, eSlot.startMin, eSlot.endMin)
-                ) {
-                    return existing; // return the conflicting course
-                }
+export function entriesOverlap(entry1, entry2) {
+    if (!entry1.slots || !entry2.slots) return false;
+    for (const s1 of entry1.slots) {
+        for (const s2 of entry2.slots) {
+            if (
+                s1.day === s2.day &&
+                s1.startMin < s2.endMin && s2.startMin < s1.endMin
+            ) {
+                return true;
             }
         }
     }
-    return null;
+    return false;
+}
+
+/**
+ * Dynamically computes the role details of a course entry.
+ */
+export function getCourseRole(entry, routine) {
+    const isBackup = routine.findIndex(r => r.code === entry.code) !== routine.indexOf(entry);
+    if (isBackup) {
+        return { type: 'backup', label: 'Backup', shortLabel: 'BK' };
+    }
+
+    // Find all primary entries (first sections of courses)
+    const primaryEntries = routine.filter(r => 
+        routine.findIndex(other => other.code === r.code) === routine.indexOf(r)
+    );
+
+    // Find overlapping primary entries
+    const overlappingPrimaries = primaryEntries.filter(r => 
+        r.code !== entry.code && entriesOverlap(r, entry)
+    );
+
+    const allGroup = [entry, ...overlappingPrimaries];
+    allGroup.sort((a, b) => routine.indexOf(a) - routine.indexOf(b));
+
+    const choiceIndex = allGroup.indexOf(entry);
+    if (choiceIndex === 0) {
+        return { type: 'primary', label: 'Primary', shortLabel: '1st' };
+    } else {
+        const n = choiceIndex + 1;
+        let suffix = 'th';
+        if (n === 2) suffix = 'nd';
+        if (n === 3) suffix = 'rd';
+        return { 
+            type: 'choice', 
+            level: n, 
+            label: `${n}${suffix} Choice`, 
+            shortLabel: `${n}${suffix}` 
+        };
+    }
 }
 
 export function useRoutine() {
@@ -73,14 +102,14 @@ export function useRoutine() {
 
     /**
      * Adds a course section to the routine.
-     * Returns false if a conflict was found (and shows a toast).
+     * Returns false if a duplicate was found (and shows a toast).
      */
     const addCourse = useCallback((courseEntry) => {
         const id = `${courseEntry.code}-${courseEntry.section}`;
 
         // Prevent exact duplicate (same code + same section)
         if (routine.find(r => r.id === id)) {
-            showToast(`${courseEntry.code} Section ${courseEntry.section} is already in your routine.`, 'warning');
+            showToast('Already exists', 'warning');
             return false;
         }
 
@@ -92,28 +121,24 @@ export function useRoutine() {
 
         // Determine role: first section of this course = primary, rest = backup
         const sameCourseEntries = routine.filter(r => r.code === courseEntry.code);
-        const role = sameCourseEntries.length === 0 ? 'primary' : 'backup';
-
-        // Conflict check only against OTHER courses (not other sections of the same course)
-        const otherCourses = routine.filter(r => r.code !== courseEntry.code);
-        const conflict = findConflict(courseEntry, otherCourses);
-        if (conflict) {
-            showToast(
-                `⚠ Time Conflict! ${courseEntry.code}-${courseEntry.section} overlaps with "${conflict.name}" (${conflict.code}-${conflict.section}).`,
-                'error'
-            );
-            return false;
-        }
+        const isBackup = sameCourseEntries.length > 0;
 
         // Reuse the same color family as existing sections of this course (if any)
         const existingColor = sameCourseEntries[0]?.color;
         const color = existingColor ?? COLOR_PALETTE[colorIndex % COLOR_PALETTE.length];
         if (!existingColor) setColorIndex(prev => prev + 1);
 
-        setRoutine(prev => [...prev, { ...courseEntry, id, color, role }]);
+        const newEntry = { ...courseEntry, id, color, role: isBackup ? 'backup' : 'primary' };
+        setRoutine(prev => [...prev, newEntry]);
 
-        if (role === 'backup') {
+        // Calculate role details for the toast message
+        const tempRoutine = [...routine, newEntry];
+        const roleInfo = getCourseRole(newEntry, tempRoutine);
+
+        if (roleInfo.type === 'backup') {
             showToast(`📌 Added ${courseEntry.code} Sec ${courseEntry.section} as Backup`, 'success');
+        } else if (roleInfo.type === 'choice') {
+            showToast(`✓ Added ${courseEntry.code} Section ${courseEntry.section} as ${roleInfo.label}!`, 'success');
         } else {
             showToast(`✓ Added ${courseEntry.code} Section ${courseEntry.section}!`, 'success');
         }
