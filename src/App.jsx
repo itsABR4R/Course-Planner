@@ -10,6 +10,7 @@ import CalendarGrid from './components/CalendarGrid';
 import CourseSearch from './components/CourseSearch';
 import Toast from './components/Toast';
 import { toPng } from 'html-to-image';
+import { Analytics } from '@vercel/analytics/react';
 
 export default function App() {
     const [courseMap, setCourseMap] = useState({});
@@ -249,6 +250,9 @@ export default function App() {
 
             {/* ── Toast ── */}
             <Toast toast={toast} onDismiss={() => { }} />
+            
+            {/* ── Vercel Analytics ── */}
+            <Analytics />
         </div>
     );
 }
