@@ -5,7 +5,7 @@
  * entry.role: 'primary' | 'backup'
  */
 import React from 'react';
-import { X } from 'lucide-react';
+import { X, FlaskConical } from 'lucide-react';
 import { getCourseRole } from '../hooks/useRoutine';
 
 export default function CourseCard({ entry, onRemove, compact = false, timeSlot, routine }) {
@@ -21,6 +21,10 @@ export default function CourseCard({ entry, onRemove, compact = false, timeSlot,
     const isChoice = roleInfo.type === 'choice';
     const timeLabel = timeSlot ? `${timeSlot.startStr}–${timeSlot.endStr}` : null;
 
+    const isLab = name.toLowerCase().includes('laboratory') || 
+                  name.toLowerCase().includes('lab') || 
+                  (room && room.toLowerCase().includes('lab'));
+
     // Distinct styles based on choice/backup status
     let bgStyle = color.bg;
     let borderStyle = 'none';
@@ -31,20 +35,20 @@ export default function CourseCard({ entry, onRemove, compact = false, timeSlot,
     if (isBackup) {
         bgStyle = 'rgba(30, 41, 59, 0.75)'; // Medium-dark glass background
         borderStyle = `2px dashed ${color.border}`; // dashed border
-        leftBorderStyle = `4px dashed ${color.border}`;
+        leftBorderStyle = `2px dashed ${color.border}`; // match border style to prevent overlap glitches
         opacityStyle = 1.0;
         shadowStyle = `0 2px 8px ${color.bg}15`;
     } else if (isChoice) {
         bgStyle = 'rgba(30, 41, 59, 0.7)'; // Medium glass background
         borderStyle = `2.5px dotted ${color.border}`; // dotted border
-        leftBorderStyle = `4px dotted ${color.border}`;
+        leftBorderStyle = `2.5px dotted ${color.border}`; // match border style to prevent overlap glitches
         opacityStyle = 0.95;
         shadowStyle = `0 2px 8px ${color.bg}20`;
     }
 
     return (
         <div
-            className="relative rounded-lg overflow-hidden group transition-all duration-200 hover:scale-[1.02] hover:shadow-lg h-full"
+            className="relative rounded-lg overflow-hidden group transition-all duration-200 hover:scale-[1.02] hover:shadow-lg min-h-full h-fit flex flex-col justify-between"
             style={{
                 background: bgStyle,
                 border: borderStyle,
@@ -68,16 +72,33 @@ export default function CourseCard({ entry, onRemove, compact = false, timeSlot,
             )}
 
             <div
-                className="relative text-white h-full"
-                style={{ padding: compact ? '4px 6px' : '6px 8px' }}
+                className="relative text-white min-h-full h-fit flex flex-col justify-between"
+                style={{ 
+                    paddingTop: compact ? '8px' : '12px',
+                    paddingBottom: compact ? '8px' : '12px',
+                    paddingRight: compact ? '6px' : '8px',
+                    paddingLeft: compact ? '11px' : '15px'
+                }}
             >
-                <div className="flex items-center justify-between gap-1 h-full">
+                <div className="flex items-center justify-between gap-1 min-h-full h-fit">
                     <div className="min-w-0 flex-1">
                         {/* Course code + Backup/Choice badge */}
                         <div className="flex items-center gap-1.5 flex-wrap">
                             <p className={`font-bold leading-tight truncate ${compact ? 'text-[10px]' : 'text-xs'}`}>
                                 {code}
                             </p>
+                            {isLab && (
+                                <span 
+                                    className="text-[8px] font-extrabold px-1.5 py-0.5 rounded uppercase tracking-wider flex-shrink-0 flex items-center gap-0.5 text-black"
+                                    style={{
+                                        background: '#eab308',
+                                        boxShadow: '0 0 8px rgba(234, 179, 8, 0.4)',
+                                    }}
+                                >
+                                    <FlaskConical size={8} className="text-black" />
+                                    Lab
+                                </span>
+                            )}
                             {isBackup && (
                                 <span
                                     className="text-[8px] font-extrabold px-1.5 py-0.5 rounded uppercase tracking-wider flex-shrink-0 text-white"
@@ -93,10 +114,10 @@ export default function CourseCard({ entry, onRemove, compact = false, timeSlot,
                                 <span
                                     className="text-[8px] font-extrabold px-1.5 py-0.5 rounded uppercase tracking-wider flex-shrink-0"
                                     style={{
-                                        background: roleInfo.level === 2 ? '#f59e0b' : '#d946ef',
+                                        background: roleInfo.level === 2 ? '#06b6d4' : '#d946ef',
                                         color: roleInfo.level === 2 ? '#000' : '#fff',
                                         boxShadow: roleInfo.level === 2 
-                                            ? '0 0 8px rgba(245, 158, 11, 0.4)' 
+                                            ? '0 0 8px rgba(6, 182, 212, 0.4)' 
                                             : '0 0 8px rgba(217, 70, 239, 0.4)',
                                     }}
                                 >

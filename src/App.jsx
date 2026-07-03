@@ -204,7 +204,7 @@ export default function App() {
                                                 <span
                                                     className="text-[8px] font-extrabold px-1.5 py-0.5 rounded uppercase tracking-wider relative z-10"
                                                     style={{ 
-                                                        background: roleInfo.level === 2 ? '#f59e0b' : '#d946ef', 
+                                                        background: roleInfo.level === 2 ? '#06b6d4' : '#d946ef', 
                                                         color: roleInfo.level === 2 ? '#000' : '#fff' 
                                                     }}
                                                 >
