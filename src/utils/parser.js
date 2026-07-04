@@ -95,8 +95,9 @@ function cleanRoom(raw) {
  */
 export async function loadCourseData(csvPath = '/UIU_Full_Schedule.csv') {
     const response = await fetch(csvPath);
-    if (!response.ok) {
-        throw new Error(`Failed to load CSV: ${response.status} ${response.statusText}`);
+    const contentType = response.headers.get('content-type');
+    if (!response.ok || (contentType && contentType.includes('text/html'))) {
+        throw new Error(`Failed to load CSV: ${response.status}`);
     }
     const text = await response.text();
 
