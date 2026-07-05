@@ -300,7 +300,7 @@ export default function App() {
             </header>
 
             {/* ── Department Selector & Mode Toggle ── */}
-            <div className="max-w-screen-2xl w-full mx-auto px-4 lg:px-6 pt-4 lg:pt-6">
+            <div className="max-w-screen-2xl w-full mx-auto px-4 lg:px-6 pt-4 lg:pt-6 relative z-30">
                 <div className="glass-dark rounded-2xl p-2.5 border border-white/8 flex flex-col md:flex-row md:items-center gap-3 justify-between">
                     {/* Left: Department Tabs (scrollable) */}
                     <div className="flex items-center gap-2 overflow-x-auto no-scrollbar scroll-smooth flex-1 w-full">
@@ -326,52 +326,71 @@ export default function App() {
                     <div className="hidden md:block w-px h-6 bg-white/10 flex-shrink-0" />
 
                     {/* Right: Mode Toggle */}
-                    <div className="flex items-center bg-white/5 rounded-xl p-1 border border-white/5 flex-shrink-0 self-start md:self-auto">
-                        <button
-                            onClick={() => setPlannerMode('backup')}
-                            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 ${
-                                plannerMode === 'backup'
-                                    ? 'bg-indigo-600 text-white shadow-sm'
-                                    : 'text-slate-400 hover:text-slate-200'
-                            }`}
-                        >
-                            Backup Mode
-                        </button>
-                        <button
-                            onClick={() => {
-                                setPlannerMode('conflict');
-                                const keptEntries = [];
-                                const removedEntries = [];
+                    <div className="flex items-center bg-white/5 rounded-xl p-1 border border-white/5 flex-shrink-0 self-start md:self-auto gap-1">
+                        
+                        {/* Backup Mode Tooltip Wrapper */}
+                        <div className="relative group">
+                            <button
+                                onClick={() => setPlannerMode('backup')}
+                                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 ${
+                                    plannerMode === 'backup'
+                                        ? 'bg-indigo-600 text-white shadow-sm'
+                                        : 'text-slate-400 hover:text-slate-200'
+                                }`}
+                            >
+                                Backup Mode
+                            </button>
+                            <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-48 p-2.5 bg-slate-900 border border-white/10 rounded-lg shadow-xl text-[10px] text-slate-300 leading-normal invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all duration-250 z-50 pointer-events-none text-center">
+                                <span className="font-bold text-white block mb-0.5">Backup Mode</span>
+                                Allows course overlaps. Ideal for planning alternative sections or schedules.
+                                <div className="absolute bottom-full left-1/2 -translate-x-1/2 border-4 border-transparent border-b-slate-900" />
+                            </div>
+                        </div>
 
-                                for (const entry of routine) {
-                                    let hasConflict = false;
-                                    for (const kept of keptEntries) {
-                                        if (entriesOverlap(entry, kept)) {
-                                            hasConflict = true;
-                                            break;
+                        {/* Conflict Mode Tooltip Wrapper */}
+                        <div className="relative group">
+                            <button
+                                onClick={() => {
+                                    setPlannerMode('conflict');
+                                    const keptEntries = [];
+                                    const removedEntries = [];
+
+                                    for (const entry of routine) {
+                                        let hasConflict = false;
+                                        for (const kept of keptEntries) {
+                                            if (entriesOverlap(entry, kept)) {
+                                                hasConflict = true;
+                                                break;
+                                            }
+                                        }
+                                        if (hasConflict) {
+                                            removedEntries.push(entry);
+                                        } else {
+                                            keptEntries.push(entry);
                                         }
                                     }
-                                    if (hasConflict) {
-                                        removedEntries.push(entry);
-                                    } else {
-                                        keptEntries.push(entry);
-                                    }
-                                }
 
-                                if (removedEntries.length > 0) {
-                                    setRoutine(keptEntries);
-                                    const removedNames = removedEntries.map(e => `${e.code} Sec ${e.section}`).join(', ');
-                                    showToast(`Conflict Mode: Removed overlapping sections: ${removedNames}`, 'warning');
-                                }
-                            }}
-                            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 ${
-                                plannerMode === 'conflict'
-                                    ? 'bg-red-600/90 text-white shadow-sm shadow-red-900/20'
-                                    : 'text-slate-400 hover:text-slate-200'
-                            }`}
-                        >
-                            Conflict Mode
-                        </button>
+                                    if (removedEntries.length > 0) {
+                                        setRoutine(keptEntries);
+                                        const removedNames = removedEntries.map(e => `${e.code} Sec ${e.section}`).join(', ');
+                                        showToast(`Conflict Mode: Removed overlapping sections: ${removedNames}`, 'warning');
+                                    }
+                                }}
+                                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 ${
+                                    plannerMode === 'conflict'
+                                        ? 'bg-red-600/90 text-white shadow-sm shadow-red-900/20'
+                                        : 'text-slate-400 hover:text-slate-200'
+                                }`}
+                            >
+                                Conflict Mode
+                            </button>
+                            <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-48 p-2.5 bg-slate-900 border border-white/10 rounded-lg shadow-xl text-[10px] text-slate-300 leading-normal invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all duration-250 z-50 pointer-events-none text-center">
+                                <span className="font-bold text-red-400 block mb-0.5">Conflict Mode</span>
+                                Prevents overlapping courses. Automatically drops any clashing sections.
+                                <div className="absolute bottom-full left-1/2 -translate-x-1/2 border-4 border-transparent border-b-slate-900" />
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
