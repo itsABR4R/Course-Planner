@@ -138,8 +138,9 @@ function CustomSelect({ value, onChange, options, placeholder = 'Any', icon: Ico
 
 
 /* ─── Section row ─── */
-function SectionRow({ courseCode, courseName, section, onAdd, showCourseName = false, isAdded }) {
+function SectionRow({ courseCode, courseName, section, onAdd, showCourseName = false, isAdded, getExamInfo }) {
     const hasTBA = !section.slots || section.slots.length === 0;
+    const exam = getExamInfo ? getExamInfo(courseCode) : null;
 
     return (
         <div
@@ -154,15 +155,22 @@ function SectionRow({ courseCode, courseName, section, onAdd, showCourseName = f
             `}
             onClick={() => !hasTBA && !isAdded && onAdd(section)}
         >
-            <div className="flex items-center gap-3 min-w-0">
+            <div className="flex items-center gap-3 min-w-0 flex-1">
                 <span className="text-xs font-bold text-indigo-300 w-8 flex-shrink-0">
                     {section.section}
                 </span>
-                <div className="min-w-0">
+                <div className="min-w-0 flex-1">
                     {showCourseName && (
-                        <p className="text-[10px] font-semibold text-indigo-400 truncate">
-                            {courseCode} — {courseName}
-                        </p>
+                        <div className="flex items-center gap-2">
+                            <p className="text-[10px] font-semibold text-indigo-400 break-words whitespace-normal">
+                                {courseCode} — {courseName}
+                            </p>
+                            {exam && (
+                                <span className="text-[8px] font-bold px-1 py-0.25 rounded bg-white/5 text-slate-300 border border-white/10 flex-shrink-0">
+                                    {exam.day} / {exam.slot}
+                                </span>
+                            )}
+                        </div>
                     )}
                     <div className="flex items-center gap-1.5 text-xs text-slate-300">
                         <User size={10} className="flex-shrink-0 text-slate-500" />
@@ -205,11 +213,13 @@ function SectionRow({ courseCode, courseName, section, onAdd, showCourseName = f
 }
 
 /* ─── Collapsible course item ─── */
-function CourseItem({ courseGroup, onAddSection, defaultExpanded = false, routine }) {
+function CourseItem({ courseGroup, onAddSection, defaultExpanded = false, routine, getExamInfo }) {
     const [expanded, setExpanded] = useState(defaultExpanded);
 
     // If defaultExpanded flips (e.g. suggestion selected), sync state
     useEffect(() => { setExpanded(defaultExpanded); }, [defaultExpanded]);
+
+    const exam = getExamInfo ? getExamInfo(courseGroup.code) : null;
 
     return (
         <div className="glass rounded-xl overflow-hidden border border-white/10 mb-2">
@@ -223,7 +233,14 @@ function CourseItem({ courseGroup, onAddSection, defaultExpanded = false, routin
                         <span className="text-sm font-bold text-indigo-300">{courseGroup.code}</span>
                         <span className="text-xs text-slate-500">({courseGroup.sections.length} sections)</span>
                     </div>
-                    <p className="text-xs text-slate-300 mt-0.5 line-clamp-1">{courseGroup.name}</p>
+                    <p className="text-xs text-slate-300 mt-0.5 break-words whitespace-normal">{courseGroup.name}</p>
+                    {exam && (
+                        <div className="mt-1">
+                            <span className="inline-block text-[9px] font-bold px-1.5 py-0.5 rounded bg-white/5 text-slate-300 border border-white/10">
+                                {exam.day} / {exam.slot}
+                            </span>
+                        </div>
+                    )}
                 </div>
                 {expanded
                     ? <ChevronUp size={15} className="text-slate-400 flex-shrink-0 ml-2" />
@@ -251,7 +268,7 @@ function CourseItem({ courseGroup, onAddSection, defaultExpanded = false, routin
 }
 
 /* ─── Advanced flat results ─── */
-function AdvancedResults({ results, onAddSection, routine }) {
+function AdvancedResults({ results, onAddSection, routine, getExamInfo }) {
     if (results === null) return null;
     if (results.length === 0) {
         return <div className="text-center text-slate-500 text-sm py-8">No sections found.</div>;
@@ -269,6 +286,7 @@ function AdvancedResults({ results, onAddSection, routine }) {
                             showCourseName={true}
                             isAdded={isAdded}
                             onAdd={() => onAddSection({ ...courseGroup, ...section })}
+                            getExamInfo={getExamInfo}
                         />
                     </div>
                 );
@@ -278,7 +296,7 @@ function AdvancedResults({ results, onAddSection, routine }) {
 }
 
 /* ─── Main export ─── */
-export default function CourseSearch({ courseMap, onAddCourse, routine }) {
+export default function CourseSearch({ courseMap, onAddCourse, routine, getExamInfo }) {
     const [query, setQuery] = useState('');
     const [showSugg, setShowSugg] = useState(false);
     const [pinned, setPinned] = useState(null); // pinned course code (from suggestion click)
@@ -323,14 +341,8 @@ export default function CourseSearch({ courseMap, onAddCourse, routine }) {
 
     /* Unique days & time-slots derived from currently filtered courses */
     const uniqueDays = useMemo(() => {
-        const days = new Set();
-        for (const cg of filtered)
-            for (const sec of cg.sections)
-                for (const s of sec.slots) days.add(s.day);
-        // desired order
-        const ORDER = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
-        return ORDER.filter(d => days.has(d));
-    }, [filtered]);
+        return ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday'];
+    }, []);
 
     const uniqueTimes = useMemo(() => {
         const times = new Set();
@@ -549,7 +561,7 @@ export default function CourseSearch({ courseMap, onAddCourse, routine }) {
             {!(showSugg && suggestions.length > 0) && (
                 <div className="overflow-y-auto max-h-[calc(100vh-300px)] pr-1">
                     {advOpen && (advMode === 'faculty' ? advQuery : (advDay || advTime)) ? (
-                        <AdvancedResults results={advResults} onAddSection={onAddCourse} routine={routine} />
+                        <AdvancedResults results={advResults} onAddSection={onAddCourse} routine={routine} getExamInfo={getExamInfo} />
                     ) : (
                         <>
                             {!query && !pinned && !advOpen && (
@@ -569,6 +581,7 @@ export default function CourseSearch({ courseMap, onAddCourse, routine }) {
                                         onAddSection={onAddCourse}
                                         defaultExpanded={pinned === cg.code}
                                         routine={routine}
+                                        getExamInfo={getExamInfo}
                                     />
                                 ))
                             )}

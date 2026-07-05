@@ -8,8 +8,9 @@ import React from 'react';
 import { X, FlaskConical } from 'lucide-react';
 import { getCourseRole } from '../hooks/useRoutine';
 
-export default function CourseCard({ entry, onRemove, compact = false, timeSlot, routine }) {
+export default function CourseCard({ entry, onRemove, compact = false, timeSlot, routine, getExamInfo }) {
     const { code, name, section, room, faculty, color } = entry;
+    const exam = getExamInfo ? getExamInfo(code) : null;
     
     // Dynamically calculate the role details
     const roleInfo = routine 
@@ -148,6 +149,14 @@ export default function CourseCard({ entry, onRemove, compact = false, timeSlot,
                                     {timeLabel}
                                 </p>
                             </>
+                        )}
+
+                        {exam && (
+                            <div className="mt-1.5 flex select-none">
+                                <span className="px-1.5 py-0.5 rounded text-[8px] font-black bg-black/35 text-slate-200 border border-white/10 uppercase tracking-wide">
+                                    {exam.day} / {exam.slot}
+                                </span>
+                            </div>
                         )}
                     </div>
 

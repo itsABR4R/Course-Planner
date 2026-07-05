@@ -1,0 +1,160 @@
+{
+  "department": "BSS in Media Studies and Journalism (BSSMSJ)",
+  "slug": "bssmsj",
+  "lastUpdated": "2026-05-11",
+  "courses": [
+    {
+      "id": 1,
+      "code": "URC 4001",
+      "title": "Employment Readiness Skills",
+      "shortName": "Employment Readin...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 2,
+      "code": "URC 1001",
+      "title": "Soft Skills and Art of Presentation",
+      "shortName": "Soft Skills and A...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 3,
+      "code": "MSJ 1102",
+      "title": "Information Gathering and News Writing",
+      "shortName": "Information Gathe...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 4,
+      "code": "MSJ 1103",
+      "title": "Introduction to Editing",
+      "shortName": "Introduction to E...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 5,
+      "code": "MSJ 2104",
+      "title": "News Reporting",
+      "shortName": "News Reporting",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 6,
+      "code": "MSJ 2204",
+      "title": "Video Production Lab",
+      "shortName": "Video Production Lab",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 7,
+      "code": "MSJ 2205",
+      "title": "Media Laws and Ethics",
+      "shortName": "Media Laws and Et...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 8,
+      "code": "MSJ 3301",
+      "title": "Advertising and Content Creation",
+      "shortName": "Advertising and C...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 9,
+      "code": "MSJ 4303",
+      "title": "Digital Marketing",
+      "shortName": "Digital Marketing",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 10,
+      "code": "MSJ 4304",
+      "title": "Digital Marketing Lab",
+      "shortName": "Digital Marketing...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 11,
+      "code": "MSJ 4407",
+      "title": "Theories of Communication",
+      "shortName": "Theories of Commu...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 12,
+      "code": "MSJ 2002",
+      "title": "Media Industry and Business Planning",
+      "shortName": "Media Industry an...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 13,
+      "code": "MSJ 2004",
+      "title": "Animation in Journalism",
+      "shortName": "Animation in Jour...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 14,
+      "code": "MSJ 1301",
+      "title": "Introduction to Human Communication",
+      "shortName": "Introduction to H...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 15,
+      "code": "MSJ 1204",
+      "title": "Media and Communication Technology",
+      "shortName": "Media and Communi...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 16,
+      "code": "MSJ 1104",
+      "title": "Information Gathering and Reporting",
+      "shortName": "Information Gathe...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 17,
+      "code": "MSJ 1303",
+      "title": "Social and Digital Media Communication",
+      "shortName": "Social and Digita...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    }
+  ]
+}

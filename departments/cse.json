@@ -1,0 +1,718 @@
+{
+  "department": "Computer Science & Engineering",
+  "slug": "cse",
+  "lastUpdated": "2026-05-17",
+  "courses": [
+    {
+      "id": 1,
+      "code": "ENG 1011",
+      "title": "English I",
+      "shortName": "Eng I",
+      "day": "Day 1",
+      "slot": "T1",
+      "prerequisite": "X"
+    },
+    {
+      "id": 2,
+      "code": "BDS 1201",
+      "title": "History of the Emergence of BDS",
+      "shortName": "History",
+      "day": "Day 6",
+      "slot": "T1",
+      "prerequisite": "X"
+    },
+    {
+      "id": 3,
+      "code": "CSE 1110",
+      "title": "Introduction to Computer Systems",
+      "shortName": "ICS",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 4,
+      "code": "MATH 1151",
+      "title": "Fundamental Calculus",
+      "shortName": "Calculus",
+      "day": "Day 2",
+      "slot": "T2",
+      "prerequisite": "X"
+    },
+    {
+      "id": 5,
+      "code": "ENG 1013",
+      "title": "English II",
+      "shortName": "Eng II",
+      "day": "Day 1",
+      "slot": "T2",
+      "prerequisite": "ENG 1011"
+    },
+    {
+      "id": 6,
+      "code": "CSE 1111",
+      "title": "Structured Programming Language",
+      "shortName": "SPL",
+      "day": "Day 4",
+      "slot": "T2",
+      "prerequisite": "CSE 1110"
+    },
+    {
+      "id": 7,
+      "code": "CSE 1112",
+      "title": "Structured Programming Language Lab",
+      "shortName": "SPL Lab",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "CSE 1110"
+    },
+    {
+      "id": 8,
+      "code": "CSE 2213",
+      "title": "Discrete Mathematics",
+      "shortName": "DM",
+      "day": "Day 3",
+      "slot": "T2",
+      "prerequisite": "X"
+    },
+    {
+      "id": 9,
+      "code": "MATH 2183",
+      "title": "Calculus and Linear Algebra",
+      "shortName": "Lin Alg",
+      "day": "Day 1",
+      "slot": "T3",
+      "prerequisite": "MATH 1151"
+    },
+    {
+      "id": 10,
+      "code": "PHY 2105",
+      "title": "Physics",
+      "shortName": "Physics",
+      "day": "Day 7",
+      "slot": "T3",
+      "prerequisite": "X"
+    },
+    {
+      "id": 11,
+      "code": "PHY 2106",
+      "title": "Physics Lab",
+      "shortName": "Phy Lab",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 12,
+      "code": "CSE 2215",
+      "title": "Data Structure and Algorithms I",
+      "shortName": "DSA I",
+      "day": "Day 4",
+      "slot": "T2",
+      "prerequisite": "CSE 1111"
+    },
+    {
+      "id": 13,
+      "code": "CSE 2216",
+      "title": "Data Structure and Algorithms I Lab",
+      "shortName": "DSA I Lab",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "CSE 1112"
+    },
+    {
+      "id": 14,
+      "code": "MATH 2201",
+      "title": "Coordinate Geometry and Vector",
+      "shortName": "Geometry",
+      "day": "Day 5",
+      "slot": "T1",
+      "prerequisite": "MATH 1151"
+    },
+    {
+      "id": 15,
+      "code": "CSE 1325",
+      "title": "Digital Logic Design",
+      "shortName": "DLD",
+      "day": "Day 3",
+      "slot": "T3",
+      "prerequisite": "X"
+    },
+    {
+      "id": 16,
+      "code": "CSE 1326",
+      "title": "Digital Logic Design Lab",
+      "shortName": "DLD Lab",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 17,
+      "code": "CSE 1115",
+      "title": "Object Oriented Programming",
+      "shortName": "OOP",
+      "day": "Day 6",
+      "slot": "T2",
+      "prerequisite": "CSE 2215"
+    },
+    {
+      "id": 18,
+      "code": "CSE 1116",
+      "title": "Object Oriented Programming Lab",
+      "shortName": "OOP Lab",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "CSE 2216"
+    },
+    {
+      "id": 19,
+      "code": "MATH 2205",
+      "title": "Probability and Statistics",
+      "shortName": "Stats",
+      "day": "Day 2",
+      "slot": "T3",
+      "prerequisite": "MATH 1151"
+    },
+    {
+      "id": 20,
+      "code": "SOC 2101",
+      "title": "Society, Technology and Engineering",
+      "shortName": "Society",
+      "day": "Day 1",
+      "slot": "T3",
+      "prerequisite": "X"
+    },
+    {
+      "id": 21,
+      "code": "CSE 2217",
+      "title": "Data Structure and Algorithms II",
+      "shortName": "DSA II",
+      "day": "Day 5",
+      "slot": "T2",
+      "prerequisite": "CSE 2215"
+    },
+    {
+      "id": 22,
+      "code": "CSE 2218",
+      "title": "Data Structure and Algorithms II Lab",
+      "shortName": "DSA II Lab",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "CSE 2216"
+    },
+    {
+      "id": 23,
+      "code": "EEE 2113",
+      "title": "Electrical Circuits",
+      "shortName": "Circuits",
+      "day": "Day 6",
+      "slot": "T3",
+      "prerequisite": "X"
+    },
+    {
+      "id": 24,
+      "code": "CSE 3521",
+      "title": "Database Management Systems",
+      "shortName": "DBMS",
+      "day": "Day 2",
+      "slot": "T1",
+      "prerequisite": "CSE 2215"
+    },
+    {
+      "id": 25,
+      "code": "CSE 3522",
+      "title": "Database Management Systems Lab",
+      "shortName": "DBMS Lab",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "CSE 2216"
+    },
+    {
+      "id": 26,
+      "code": "EEE 2123",
+      "title": "Electronics",
+      "shortName": "Electronics",
+      "day": "Day 6",
+      "slot": "T3",
+      "prerequisite": "EEE 2113"
+    },
+    {
+      "id": 27,
+      "code": "EEE 2124",
+      "title": "Electronics Lab",
+      "shortName": "Elec Lab",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 28,
+      "code": "CSE 4165",
+      "title": "Web Programming",
+      "shortName": "Web",
+      "day": "Day 7",
+      "slot": "T1",
+      "prerequisite": "CSE 1115, CSE 1116"
+    },
+    {
+      "id": 29,
+      "code": "CSE 3313",
+      "title": "Computer Architecture",
+      "shortName": "Comp Arch",
+      "day": "Day 1",
+      "slot": "T3",
+      "prerequisite": "CSE 1325"
+    },
+    {
+      "id": 30,
+      "code": "CSE 2118",
+      "title": "Advanced Object Oriented Lab",
+      "shortName": "Adv OOP",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "CSE 1116"
+    },
+    {
+      "id": 31,
+      "code": "BIO 3105",
+      "title": "Biology for Engineers",
+      "shortName": "Bio",
+      "day": "Day 3",
+      "slot": "T3",
+      "prerequisite": "X"
+    },
+    {
+      "id": 32,
+      "code": "CSE 3411",
+      "title": "System Analysis and Design",
+      "shortName": "SAD",
+      "day": "Day 5",
+      "slot": "T1",
+      "prerequisite": "CSE 3521"
+    },
+    {
+      "id": 33,
+      "code": "CSE 3412",
+      "title": "System Analysis and Design Lab",
+      "shortName": "SAD Lab",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "CSE 3522"
+    },
+    {
+      "id": 34,
+      "code": "CSE 4325",
+      "title": "Microprocessors and Interfacing",
+      "shortName": "Micro",
+      "day": "Day 2",
+      "slot": "T2",
+      "prerequisite": "CSE 3313"
+    },
+    {
+      "id": 35,
+      "code": "CSE 4326",
+      "title": "Microprocessors Lab",
+      "shortName": "Micro Lab",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "EEE 2124"
+    },
+    {
+      "id": 36,
+      "code": "CSE 3421",
+      "title": "Software Engineering",
+      "shortName": "SE",
+      "day": "Day 5",
+      "slot": "T3",
+      "prerequisite": "CSE 3411"
+    },
+    {
+      "id": 37,
+      "code": "CSE 3422",
+      "title": "Software Engineering Lab",
+      "shortName": "SE Lab",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "CSE 3412"
+    },
+    {
+      "id": 38,
+      "code": "CSE 3811",
+      "title": "Artificial Intelligence",
+      "shortName": "AI",
+      "day": "Day 3",
+      "slot": "T1",
+      "prerequisite": "MATH 2205, CSE 2217"
+    },
+    {
+      "id": 39,
+      "code": "CSE 3812",
+      "title": "Artificial Intelligence Lab",
+      "shortName": "AI Lab",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "MATH 2205, CSE 2218"
+    },
+    {
+      "id": 40,
+      "code": "CSE 2233",
+      "title": "Theory of Computation",
+      "shortName": "TOC",
+      "day": "Day 7",
+      "slot": "T2",
+      "prerequisite": "X"
+    },
+    {
+      "id": 41,
+      "code": "PMG 4101",
+      "title": "Project Management",
+      "shortName": "PM",
+      "day": "Day 3",
+      "slot": "T2",
+      "prerequisite": "CSE 3411"
+    },
+    {
+      "id": 42,
+      "code": "CSE 3711",
+      "title": "Computer Networks",
+      "shortName": "CN",
+      "day": "Day 4",
+      "slot": "T3",
+      "prerequisite": "CSE 2217"
+    },
+    {
+      "id": 43,
+      "code": "CSE 3712",
+      "title": "Computer Networks Lab",
+      "shortName": "CN Lab",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 44,
+      "code": "CSE 4509",
+      "title": "Operating Systems",
+      "shortName": "OS",
+      "day": "Day 1",
+      "slot": "T1",
+      "prerequisite": "CSE 2217, CSE 3313"
+    },
+    {
+      "id": 45,
+      "code": "CSE 4510",
+      "title": "Operating Systems Laboratory",
+      "shortName": "OS Lab",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "CSE 2218"
+    },
+    {
+      "id": 46,
+      "code": "CSE 4531",
+      "title": "Computer Security",
+      "shortName": "Security",
+      "day": "Day 6",
+      "slot": "T3",
+      "prerequisite": "CSE 3711, CSE 4509"
+    },
+    {
+      "id": 47,
+      "code": "EEE 4261",
+      "title": "Green Computing",
+      "shortName": "Green Comp",
+      "day": "Day 5",
+      "slot": "T1",
+      "prerequisite": "X"
+    },
+    {
+      "id": 48,
+      "code": "CSE 4611",
+      "title": "Compiler Design",
+      "shortName": "Compiler",
+      "day": "Day 4",
+      "slot": "T1",
+      "prerequisite": "CSE 2233"
+    },
+    {
+      "id": 49,
+      "code": "CSE 4621",
+      "title": "Computer Graphics",
+      "shortName": "Graphics",
+      "day": "Day 2",
+      "slot": "T1",
+      "prerequisite": "MATH 2183, MATH 2201"
+    },
+    {
+      "id": 50,
+      "code": "GED OPT1",
+      "title": "General Education Optional I",
+      "shortName": "GED I",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 51,
+      "code": "GED OPT2",
+      "title": "General Education Optional II",
+      "shortName": "GED II",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 52,
+      "code": "GED OPT3",
+      "title": "General Education Optional III",
+      "shortName": "GED III",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 53,
+      "code": "CSE 4000 A",
+      "title": "Final Year Design Project I",
+      "shortName": "FYDP I",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "Minimum Completed Credit 85"
+    },
+    {
+      "id": 54,
+      "code": "CSE 4000 B",
+      "title": "Final Year Design Project II",
+      "shortName": "FYDP II",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "CSE 4000 A"
+    },
+    {
+      "id": 55,
+      "code": "CSE 4000 C",
+      "title": "Final Year Design Project III",
+      "shortName": "FYDP III",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "CSE 4000 A & CSE 4000 B"
+    },
+    {
+      "id": 56,
+      "code": "ECO 4101",
+      "title": "Economics",
+      "shortName": "Economics",
+      "day": "Day 6",
+      "slot": "T1",
+      "prerequisite": "X"
+    },
+    {
+      "id": 57,
+      "code": "ACT 2111",
+      "title": "Financial and Managerial Accounting",
+      "shortName": "Accounting",
+      "day": "Day 2",
+      "slot": "T3",
+      "prerequisite": "X"
+    },
+    {
+      "id": 58,
+      "code": "IPE 3401",
+      "title": "Industrial and Operational Management",
+      "shortName": "IOM",
+      "day": "Day 1",
+      "slot": "T1",
+      "prerequisite": "X"
+    },
+    {
+      "id": 59,
+      "code": "CSE 4783",
+      "title": "Cryptography",
+      "shortName": "Crypto",
+      "day": "Day 6",
+      "slot": "T2",
+      "prerequisite": "CSE 4531"
+    },
+    {
+      "id": 60,
+      "code": "CSE 4777",
+      "title": "Network Security",
+      "shortName": "Net Sec",
+      "day": "Day 3",
+      "slot": "T3",
+      "prerequisite": "CSE 4531"
+    },
+    {
+      "id": 61,
+      "code": "CSE 4587",
+      "title": "Cloud Computing",
+      "shortName": "Cloud",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "CSE 4509, CSE 3711"
+    },
+    {
+      "id": 62,
+      "code": "CSE 4889",
+      "title": "Machine Learning",
+      "shortName": "ML",
+      "day": "Day 1",
+      "slot": "T3",
+      "prerequisite": "CSE 3811, CSE 3812, MATH 2183"
+    },
+    {
+      "id": 63,
+      "code": "CSE 4817",
+      "title": "Big Data Analytics",
+      "shortName": "Big Data",
+      "day": "Day 5",
+      "slot": "T3",
+      "prerequisite": "CSE 4889"
+    },
+    {
+      "id": 64,
+      "code": "CSE 4893",
+      "title": "Introduction to Bioinformatics",
+      "shortName": "Bioinfo",
+      "day": "Day 4",
+      "slot": "T3",
+      "prerequisite": "CSE 4889"
+    },
+    {
+      "id": 65,
+      "code": "CSE 4883",
+      "title": "Digital Image Processing",
+      "shortName": "DIP",
+      "day": "Day 4",
+      "slot": "T1",
+      "prerequisite": "CSE 4889"
+    },
+    {
+      "id": 66,
+      "code": "CSE 4451",
+      "title": "Human Computer Interaction",
+      "shortName": "HCI",
+      "day": "Day 3",
+      "slot": "T1",
+      "prerequisite": "X"
+    },
+    {
+      "id": 67,
+      "code": "CSE 4435",
+      "title": "Software Architecture",
+      "shortName": "Architecture",
+      "day": "Day 4",
+      "slot": "T2",
+      "prerequisite": "X"
+    },
+    {
+      "id": 68,
+      "code": "CSE 4181",
+      "title": "Mobile Application Development",
+      "shortName": "Mobile",
+      "day": "Day 6",
+      "slot": "T3",
+      "prerequisite": "CSE 4165"
+    },
+    {
+      "id": 69,
+      "code": "CSE 4495",
+      "title": "Software Testing and Quality",
+      "shortName": "QA",
+      "day": "Day 7",
+      "slot": "T3",
+      "prerequisite": "CSE 3421"
+    },
+    {
+      "id": 70,
+      "code": "CSE 4379",
+      "title": "Real-time Embedded Systems",
+      "shortName": "Embedded",
+      "day": "Day 1",
+      "slot": "T2",
+      "prerequisite": "CSE 4325"
+    },
+    {
+      "id": 71,
+      "code": "CSE 4945",
+      "title": "UI: Concepts and Design",
+      "shortName": "UI Design",
+      "day": "Day 1",
+      "slot": "T2",
+      "prerequisite": "X"
+    },
+    {
+      "id": 72,
+      "code": "CSE 4891",
+      "title": "Data Mining",
+      "shortName": "Data Mining",
+      "day": "Day 7",
+      "slot": "T1",
+      "prerequisite": "X"
+    },
+    {
+      "id": 73,
+      "code": "CSE 3715",
+      "title": "Data Communication",
+      "shortName": "Data Comm",
+      "day": "Day 1",
+      "slot": "T1",
+      "prerequisite": "X"
+    },
+    {
+      "id": 74,
+      "code": "CSE 4327",
+      "title": "VLSI Design",
+      "shortName": "VLSI",
+      "day": "Day 4",
+      "slot": "T1",
+      "prerequisite": "X"
+    },
+    {
+      "id": 75,
+      "code": "CSE 4000A",
+      "title": "Final Year Design Project - I",
+      "shortName": "Final Year Design...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 76,
+      "code": "CSE 4000B",
+      "title": "Final Year Design Project - II",
+      "shortName": "Final Year Design...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 77,
+      "code": "TEC 2499",
+      "title": "Technology Entrepreneurship",
+      "shortName": "Technology Entrep...",
+      "day": "Day 3",
+      "slot": "T2",
+      "prerequisite": "X"
+    },
+    {
+      "id": 78,
+      "code": "CSE 4000C",
+      "title": "Final Year Design Project - III",
+      "shortName": "Final Year Design...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 79,
+      "code": "BIO 3107",
+      "title": "Biology",
+      "shortName": "Biology",
+      "day": "Day 3",
+      "slot": "T3",
+      "prerequisite": "X"
+    }
+  ]
+}

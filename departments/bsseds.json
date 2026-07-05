@@ -1,0 +1,241 @@
+{
+  "department": "BSS in Environment and Development Studies (BSSEDS)",
+  "slug": "bsseds",
+  "lastUpdated": "2026-05-11",
+  "courses": [
+    {
+      "id": 1,
+      "code": "ENG 1011",
+      "title": "English I",
+      "shortName": "English I",
+      "day": "Day 1",
+      "slot": "T1",
+      "prerequisite": "X"
+    },
+    {
+      "id": 2,
+      "code": "ENG 1013",
+      "title": "English II",
+      "shortName": "English II",
+      "day": "Day 1",
+      "slot": "T2",
+      "prerequisite": "X"
+    },
+    {
+      "id": 3,
+      "code": "EDS 1102",
+      "title": "Population, Poverty and the Environment",
+      "shortName": "Population, Pover...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 4,
+      "code": "EDS 2401",
+      "title": "Gender and Sustainable Development",
+      "shortName": "Gender and Sustai...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 5,
+      "code": "EDS 3602",
+      "title": "Urban Development and Environmental Management",
+      "shortName": "Urban Development...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 6,
+      "code": "EDS 4801",
+      "title": "Techniques of Environmental Valuation",
+      "shortName": "Techniques of Env...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 7,
+      "code": "EDS 2403",
+      "title": "Environmental Law",
+      "shortName": "Environmental Law",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 8,
+      "code": "EDS 2404",
+      "title": "Environmental Biology, Ecology and Conservation",
+      "shortName": "Environmental Bio...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 9,
+      "code": "EDS 3503",
+      "title": "Environmental Ethics",
+      "shortName": "Environmental Ethics",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 10,
+      "code": "EDS 3604",
+      "title": "Environment, Health and Safety",
+      "shortName": "Environment, Heal...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 11,
+      "code": "EDS 3605",
+      "title": "Environmental Economics",
+      "shortName": "Environmental Eco...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 12,
+      "code": "GEN 1201",
+      "title": "Bangladesh Studies",
+      "shortName": "Bangladesh Studies",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 13,
+      "code": "EDS 3509",
+      "title": "Environmental Analysis",
+      "shortName": "Environmental Ana...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 14,
+      "code": "EDS 4709",
+      "title": "Environmental Hazards and Disaster Management",
+      "shortName": "Environmental Haz...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 15,
+      "code": "EDS 4805",
+      "title": "Environmental and Social Impact Assessment",
+      "shortName": "Environmental and...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 16,
+      "code": "EDS 4710",
+      "title": "Qualitative Research Methodology",
+      "shortName": "Qualitative Resea...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 17,
+      "code": "EDS 1104",
+      "title": "Introduction to Environmental Studies",
+      "shortName": "Introduction to E...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 18,
+      "code": "EDS 1204",
+      "title": "Introduction to Development Studies",
+      "shortName": "Introduction to D...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 19,
+      "code": "EDS 1103",
+      "title": "Population and Poverty Lab",
+      "shortName": "Population and Po...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 20,
+      "code": "EDS 4810",
+      "title": "Research Project/Monograph I",
+      "shortName": "Research Project/...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 21,
+      "code": "EDS 4811",
+      "title": "Research Project/Monograph II",
+      "shortName": "Research Project/...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 22,
+      "code": "EDS 4812",
+      "title": "Practicum and Internship I",
+      "shortName": "Practicum and Int...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 23,
+      "code": "EDS 4813",
+      "title": "Practicum and Internship II",
+      "shortName": "Practicum and Int...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 24,
+      "code": "STAT 2405",
+      "title": "Statistics",
+      "shortName": "Statistics",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 25,
+      "code": "EDS 2407",
+      "title": "Environmental Biology Lab",
+      "shortName": "Environmental Bio...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 26,
+      "code": "EDS 4711",
+      "title": "Coastal Zone Management",
+      "shortName": "Coastal Zone Mana...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    }
+  ]
+}

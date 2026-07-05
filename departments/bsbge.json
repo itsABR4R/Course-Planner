@@ -1,0 +1,241 @@
+{
+  "department": "B.Sc. in Biotechnology and Genetic Engineering (BSBGE)",
+  "slug": "bsbge",
+  "lastUpdated": "2026-05-11",
+  "courses": [
+    {
+      "id": 1,
+      "code": "ENG 1011",
+      "title": "English I",
+      "shortName": "English I",
+      "day": "Day 1",
+      "slot": "T1",
+      "prerequisite": "X"
+    },
+    {
+      "id": 2,
+      "code": "BDS 1202",
+      "title": "History of the Emergence of Bangladesh",
+      "shortName": "History of the Em...",
+      "day": "Day 6",
+      "slot": "T1",
+      "prerequisite": "X"
+    },
+    {
+      "id": 3,
+      "code": "MATH 1105",
+      "title": "Fundamentals of Mathematics",
+      "shortName": "Fundamentals of M...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 4,
+      "code": "CHEM 1103",
+      "title": "Biophysical Chemistry",
+      "shortName": "Biophysical Chemi...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 5,
+      "code": "BGE 1001",
+      "title": "General Biology",
+      "shortName": "General Biology",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 6,
+      "code": "BGE 1002",
+      "title": "Basic Biochemistry",
+      "shortName": "Basic Biochemistry",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 7,
+      "code": "BGE 1008",
+      "title": "Lab Experiments-I",
+      "shortName": "Lab Experiments-I",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 8,
+      "code": "BGE 1003",
+      "title": "Introductory Biotechnology and Genetic Engineering",
+      "shortName": "Introductory Biot...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 9,
+      "code": "BGE 1004",
+      "title": "Basic Microbiology",
+      "shortName": "Basic Microbiology",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 10,
+      "code": "BGE 2001",
+      "title": "Enzymes and Enzyme Kinetics",
+      "shortName": "Enzymes and Enzym...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 11,
+      "code": "BGE 2002",
+      "title": "Basics of Molecular Biology",
+      "shortName": "Basics of Molecul...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 12,
+      "code": "BGE 2003",
+      "title": "Protein Structure and Function",
+      "shortName": "Protein Structure...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 13,
+      "code": "BGE 2004",
+      "title": "Molecular Genetics",
+      "shortName": "Molecular Genetics",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 14,
+      "code": "BGE 2005",
+      "title": "Bioenergetics and Metabolism",
+      "shortName": "Bioenergetics and...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 15,
+      "code": "BGE 2006",
+      "title": "Cell Biology",
+      "shortName": "Cell Biology",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 16,
+      "code": "BGE 2007",
+      "title": "Human Physiology",
+      "shortName": "Human Physiology",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 17,
+      "code": "BGE 3002",
+      "title": "Basic Immunology",
+      "shortName": "Basic Immunology",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 18,
+      "code": "BGE 3003",
+      "title": "Genomics, Proteomic and Bioinformatics",
+      "shortName": "Genomics, Proteom...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 19,
+      "code": "BGE 1010",
+      "title": "Lab Experiments-II",
+      "shortName": "Lab Experiments-II",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 20,
+      "code": "BGE 2008",
+      "title": "Lab Experiments-III",
+      "shortName": "Lab Experiments-III",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 21,
+      "code": "BGE 2010",
+      "title": "Lab Experiments-IV",
+      "shortName": "Lab Experiments-IV",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 22,
+      "code": "BGE 3010",
+      "title": "Laboratory Experiments-V",
+      "shortName": "Laboratory Experi...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 23,
+      "code": "CHEM 2103",
+      "title": "Bioorganic Chemistry",
+      "shortName": "Bioorganic Chemistry",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 24,
+      "code": "CSE 2001",
+      "title": "Basics of Computing and Information Technology",
+      "shortName": "Basics of Computi...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 25,
+      "code": "MATH 3101",
+      "title": "Biostatistics",
+      "shortName": "Biostatistics",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 26,
+      "code": "PHY 1203",
+      "title": "Physics for Biologists-I",
+      "shortName": "Physics for Biolo...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    }
+  ]
+}

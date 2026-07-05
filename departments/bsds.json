@@ -1,0 +1,439 @@
+{
+  "department": "B.Sc. in Data Science (BSDS)",
+  "slug": "bsds",
+  "lastUpdated": "2026-05-12",
+  "courses": [
+    {
+      "id": 1,
+      "code": "DS 1501",
+      "title": "Programming for Data Science",
+      "shortName": "Prog for DS",
+      "day": "Day 4",
+      "slot": "T2",
+      "prerequisite": "X"
+    },
+    {
+      "id": 2,
+      "code": "DS 1502",
+      "title": "Programming for Data Science Laboratory",
+      "shortName": "Prog DS Lab",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 3,
+      "code": "ENG 1011",
+      "title": "English I",
+      "shortName": "Eng I",
+      "day": "Day 1",
+      "slot": "T1",
+      "prerequisite": "X"
+    },
+    {
+      "id": 4,
+      "code": "BDS 1201",
+      "title": "History of the Emergence of Bangladesh",
+      "shortName": "History",
+      "day": "Day 6",
+      "slot": "T1",
+      "prerequisite": "X"
+    },
+    {
+      "id": 5,
+      "code": "ENG 1013",
+      "title": "English II",
+      "shortName": "Eng II",
+      "day": "Day 1",
+      "slot": "T2",
+      "prerequisite": "ENG 1011"
+    },
+    {
+      "id": 6,
+      "code": "MATH 1151",
+      "title": "Fundamental Calculus",
+      "shortName": "Calculus",
+      "day": "Day 2",
+      "slot": "T2",
+      "prerequisite": "X"
+    },
+    {
+      "id": 7,
+      "code": "DS 1115",
+      "title": "Object Oriented Programming for Data Science",
+      "shortName": "OOP DS",
+      "day": "Day 6",
+      "slot": "T2",
+      "prerequisite": "DS 1501, DS 1502"
+    },
+    {
+      "id": 8,
+      "code": "DS 1116",
+      "title": "Object Oriented Programming for Data Science Laboratory",
+      "shortName": "OOP DS Lab",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "DS 1501, DS 1502"
+    },
+    {
+      "id": 9,
+      "code": "DS 1101",
+      "title": "Fundamentals of Data Science",
+      "shortName": "FDS",
+      "day": "Day 5",
+      "slot": "T2",
+      "prerequisite": "DS 1115, DS 1116"
+    },
+    {
+      "id": 10,
+      "code": "BIO 3107",
+      "title": "Biology",
+      "shortName": "Biology",
+      "day": "Day 3",
+      "slot": "T3",
+      "prerequisite": "X"
+    },
+    {
+      "id": 11,
+      "code": "MATH 2107",
+      "title": "Linear Algebra",
+      "shortName": "Lin Alg",
+      "day": "Day 1",
+      "slot": "T3",
+      "prerequisite": "MATH 1151"
+    },
+    {
+      "id": 12,
+      "code": "PHY 2105",
+      "title": "Physics",
+      "shortName": "Physics",
+      "day": "Day 7",
+      "slot": "T3",
+      "prerequisite": "X"
+    },
+    {
+      "id": 13,
+      "code": "PHY 2106",
+      "title": "Physics Lab",
+      "shortName": "Phy Lab",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 14,
+      "code": "CSE 2215",
+      "title": "Data Structures and Algorithms I",
+      "shortName": "DSA I",
+      "day": "Day 4",
+      "slot": "T2",
+      "prerequisite": "DS 1115, DS 1116"
+    },
+    {
+      "id": 15,
+      "code": "CSE 2216",
+      "title": "Data Structures and Algorithms I Laboratory",
+      "shortName": "DSA I Lab",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "DS 1115, DS 1116"
+    },
+    {
+      "id": 16,
+      "code": "MATH 1153",
+      "title": "Advanced Calculus",
+      "shortName": "Adv Calculus",
+      "day": "Day 5",
+      "slot": "T1",
+      "prerequisite": "MATH 1151"
+    },
+    {
+      "id": 17,
+      "code": "CSE 2213",
+      "title": "Discrete Mathematics",
+      "shortName": "DM",
+      "day": "Day 3",
+      "slot": "T2",
+      "prerequisite": "X"
+    },
+    {
+      "id": 18,
+      "code": "ACT 2111",
+      "title": "Financial and Managerial Accounting",
+      "shortName": "Accounting",
+      "day": "Day 2",
+      "slot": "T3",
+      "prerequisite": "X"
+    },
+    {
+      "id": 19,
+      "code": "ECO 4101",
+      "title": "Economics",
+      "shortName": "Economics",
+      "day": "Day 6",
+      "slot": "T1",
+      "prerequisite": "X"
+    },
+    {
+      "id": 20,
+      "code": "IPE 3401",
+      "title": "Industrial and Operational Management",
+      "shortName": "IOM",
+      "day": "Day 1",
+      "slot": "T1",
+      "prerequisite": "X"
+    },
+    {
+      "id": 21,
+      "code": "SOC 2102",
+      "title": "Society, Environment and Computing Ethics",
+      "shortName": "Ethics",
+      "day": "Day 1",
+      "slot": "T3",
+      "prerequisite": "X"
+    },
+    {
+      "id": 22,
+      "code": "TEC 2499",
+      "title": "Technology Entrepreneurship",
+      "shortName": "Entrep",
+      "day": "Day 3",
+      "slot": "T2",
+      "prerequisite": "X"
+    },
+    {
+      "id": 23,
+      "code": "CSE 2217",
+      "title": "Data Structures and Algorithms II",
+      "shortName": "DSA II",
+      "day": "Day 5",
+      "slot": "T2",
+      "prerequisite": "CSE 2215, CSE 2216"
+    },
+    {
+      "id": 24,
+      "code": "CSE 2218",
+      "title": "Data Structures and Algorithms II Laboratory",
+      "shortName": "DSA II Lab",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "CSE 2215, CSE 2216"
+    },
+    {
+      "id": 25,
+      "code": "MATH 2205",
+      "title": "Probability and Statistics",
+      "shortName": "Stats",
+      "day": "Day 2",
+      "slot": "T3",
+      "prerequisite": "MATH 1151"
+    },
+    {
+      "id": 26,
+      "code": "DS 3885",
+      "title": "Data Wrangling",
+      "shortName": "Wrangling",
+      "day": "Day 1",
+      "slot": "T2",
+      "prerequisite": "DS 1101"
+    },
+    {
+      "id": 27,
+      "code": "CSE 3521",
+      "title": "Database Management Systems",
+      "shortName": "DBMS",
+      "day": "Day 2",
+      "slot": "T1",
+      "prerequisite": "CSE 2215"
+    },
+    {
+      "id": 28,
+      "code": "CSE 3522",
+      "title": "Database Management Systems Laboratory",
+      "shortName": "DBMS Lab",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "CSE 2216"
+    },
+    {
+      "id": 29,
+      "code": "DS 3101",
+      "title": "Advanced Probability and Statistics",
+      "shortName": "Adv Stats",
+      "day": "Day 4",
+      "slot": "T3",
+      "prerequisite": "MATH 2205, MATH 2107"
+    },
+    {
+      "id": 30,
+      "code": "DS 3521",
+      "title": "Data Visualization",
+      "shortName": "Data Viz",
+      "day": "Day 6",
+      "slot": "T1",
+      "prerequisite": "DS 3885"
+    },
+    {
+      "id": 31,
+      "code": "DS 3522",
+      "title": "Data Visualization Lab",
+      "shortName": "Viz Lab",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "DS 3885"
+    },
+    {
+      "id": 32,
+      "code": "DS 4889",
+      "title": "Machine Learning",
+      "shortName": "ML",
+      "day": "Day 1",
+      "slot": "T3",
+      "prerequisite": "MATH 1151, MATH 2107, MATH 2205"
+    },
+    {
+      "id": 33,
+      "code": "DS 4523",
+      "title": "Simulation and Modeling",
+      "shortName": "Sim Mod",
+      "day": "Day 4",
+      "slot": "T3",
+      "prerequisite": "MATH 2107, MATH 2205"
+    },
+    {
+      "id": 34,
+      "code": "DS 4891",
+      "title": "Data Analytics",
+      "shortName": "Analytics",
+      "day": "Day 7",
+      "slot": "T1",
+      "prerequisite": "DS 3885"
+    },
+    {
+      "id": 35,
+      "code": "DS 4892",
+      "title": "Data Analytics Laboratory",
+      "shortName": "Analytic Lab",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "DS 3885"
+    },
+    {
+      "id": 36,
+      "code": "DS 3120",
+      "title": "Technical Report Writing and Presentation",
+      "shortName": "TRW",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "Minimum Completed Credit 55"
+    },
+    {
+      "id": 37,
+      "code": "DS 4429",
+      "title": "Machine Learning Systems Design",
+      "shortName": "MLSD",
+      "day": "Day 1",
+      "slot": "T1",
+      "prerequisite": "DS 4889"
+    },
+    {
+      "id": 38,
+      "code": "DS 2251",
+      "title": "Bayesian Statistics",
+      "shortName": "Bayesian",
+      "day": "Day 4",
+      "slot": "T2",
+      "prerequisite": "DS 1101, MATH 1151"
+    },
+    {
+      "id": 39,
+      "code": "CSE 4511",
+      "title": "Operating Systems and Scripting",
+      "shortName": "OS Scripting",
+      "day": "Day 5",
+      "slot": "T1",
+      "prerequisite": "CSE 2217"
+    },
+    {
+      "id": 40,
+      "code": "CSE 3411",
+      "title": "System Analysis and Design",
+      "shortName": "SAD",
+      "day": "Day 5",
+      "slot": "T1",
+      "prerequisite": "CSE 3521"
+    },
+    {
+      "id": 41,
+      "code": "DS 3881",
+      "title": "Regression and Multivariate Analysis",
+      "shortName": "Regression",
+      "day": "Day 7",
+      "slot": "T3",
+      "prerequisite": "DS 1101, MATH 1151"
+    },
+    {
+      "id": 42,
+      "code": "DS 4211",
+      "title": "Deep Learning",
+      "shortName": "Deep Learning",
+      "day": "Day 1",
+      "slot": "T3",
+      "prerequisite": "DS 4889"
+    },
+    {
+      "id": 43,
+      "code": "CSE 4587",
+      "title": "Cloud Computing",
+      "shortName": "Cloud",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "CSE 4511"
+    },
+    {
+      "id": 44,
+      "code": "CSE 3421",
+      "title": "Software Engineering",
+      "shortName": "SE",
+      "day": "Day 5",
+      "slot": "T3",
+      "prerequisite": "CSE 3411"
+    },
+    {
+      "id": 45,
+      "code": "DS 4229",
+      "title": "Data Warehousing",
+      "shortName": "Warehousing",
+      "day": "Day 7",
+      "slot": "T2",
+      "prerequisite": "CSE 3521"
+    },
+    {
+      "id": 46,
+      "code": "DS 4123",
+      "title": "Human Computer Interaction",
+      "shortName": "HCI",
+      "day": "Day 3",
+      "slot": "T1",
+      "prerequisite": "Minimum Completed Credit 70"
+    },
+    {
+      "id": 47,
+      "code": "BIO 3105",
+      "title": "Biology for Engineers",
+      "shortName": "Biology for Engin...",
+      "day": "Day 3",
+      "slot": "T3",
+      "prerequisite": "X"
+    },
+    {
+      "id": 48,
+      "code": "DS 4491",
+      "title": "Machine Learning Systems Design",
+      "shortName": "Machine Learning ...",
+      "day": "Day 1",
+      "slot": "T1",
+      "prerequisite": "X"
+    }
+  ]
+}

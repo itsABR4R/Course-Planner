@@ -1,0 +1,331 @@
+{
+  "department": "B.Sc. in Civil Engineering (CE)",
+  "slug": "ce",
+  "lastUpdated": "2026-05-11",
+  "courses": [
+    {
+      "id": 1,
+      "code": "PHY 1202",
+      "title": "Physics Lab",
+      "shortName": "Physics Lab",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 2,
+      "code": "MATH 1101",
+      "title": "Differential and Integral Calculus",
+      "shortName": "Differential and ...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 3,
+      "code": "CE 1101",
+      "title": "Engineering Mechanics",
+      "shortName": "Engineering Mecha...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 4,
+      "code": "ENG 1011",
+      "title": "English I",
+      "shortName": "English I",
+      "day": "Day 1",
+      "slot": "T1",
+      "prerequisite": "X"
+    },
+    {
+      "id": 5,
+      "code": "BDS 1201",
+      "title": "History of the Emergence of Bangladesh",
+      "shortName": "History of the Em...",
+      "day": "Day 6",
+      "slot": "T1",
+      "prerequisite": "X"
+    },
+    {
+      "id": 6,
+      "code": "MATH 1201",
+      "title": "Linear Algebra, Ordinary and Partial Differential Equations",
+      "shortName": "Linear Algebra, O...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 7,
+      "code": "EEE 1201",
+      "title": "Basic Electrical Engineering",
+      "shortName": "Basic Electrical ...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 8,
+      "code": "CE 2111",
+      "title": "Mechanics of Solids I",
+      "shortName": "Mechanics of Soli...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 9,
+      "code": "CE 2201",
+      "title": "Engineering Geology and Geomorphology",
+      "shortName": "Engineering Geolo...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 10,
+      "code": "CE 2211",
+      "title": "Mechanics of Solids II",
+      "shortName": "Mechanics of Soli...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 11,
+      "code": "CE 1100",
+      "title": "Civil Engineering Drawing I",
+      "shortName": "Civil Engineering...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 12,
+      "code": "CE 1201",
+      "title": "Surveying",
+      "shortName": "Surveying",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 13,
+      "code": "CE 2101",
+      "title": "Engineering Materials",
+      "shortName": "Engineering Mater...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 14,
+      "code": "CE 1202",
+      "title": "Practical Surveying",
+      "shortName": "Practical Surveying",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 15,
+      "code": "CE 2102",
+      "title": "Engineering Materials Laboratory",
+      "shortName": "Engineering Mater...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 16,
+      "code": "CE 2104",
+      "title": "GIS and Remote Sensing Lab",
+      "shortName": "GIS and Remote Se...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 17,
+      "code": "CE 2172",
+      "title": "Fluid Mechanics Laboratory",
+      "shortName": "Fluid Mechanics L...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 18,
+      "code": "CE 2212",
+      "title": "Structural Mechanics and Materials Laboratory",
+      "shortName": "Structural Mechan...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 19,
+      "code": "CE 3211",
+      "title": "Design of Steel Structures",
+      "shortName": "Design of Steel S...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 20,
+      "code": "CE 4111",
+      "title": "Structural Analysis and Design II",
+      "shortName": "Structural Analys...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 21,
+      "code": "CE 3112",
+      "title": "Reinforced Concrete Structure Design Laboratory",
+      "shortName": "Reinforced Concre...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 22,
+      "code": "CE 3212",
+      "title": "Steel Structure Design Laboratory",
+      "shortName": "Steel Structure D...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 23,
+      "code": "CE 4110",
+      "title": "Computer Applications in Civil Engineering",
+      "shortName": "Computer Applicat...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 24,
+      "code": "CE 3131",
+      "title": "Water Supply Engineering",
+      "shortName": "Water Supply Engi...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 25,
+      "code": "CE 3231",
+      "title": "Wastewater Engineering",
+      "shortName": "Wastewater Engine...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 26,
+      "code": "CE 3241",
+      "title": "Soil Mechanics",
+      "shortName": "Soil Mechanics",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 27,
+      "code": "CE 4141",
+      "title": "Foundation Engineering",
+      "shortName": "Foundation Engine...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 28,
+      "code": "CE 3251",
+      "title": "Transportation Planning and Traffic Engineering",
+      "shortName": "Transportation Pl...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 29,
+      "code": "CE 3171",
+      "title": "Open Channel Flow",
+      "shortName": "Open Channel Flow",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 30,
+      "code": "CE 4171",
+      "title": "Irrigation and Flood Control",
+      "shortName": "Irrigation and Fl...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 31,
+      "code": "CE 4231",
+      "title": "Solid and Hazardous Waste Management",
+      "shortName": "Solid and Hazardo...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 32,
+      "code": "CE 4251",
+      "title": "Traffic Engineering Design and Management",
+      "shortName": "Traffic Engineeri...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 33,
+      "code": "CE 4201",
+      "title": "Engineering Ethics and Professional Practices",
+      "shortName": "Engineering Ethic...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 34,
+      "code": "ARCH 3200",
+      "title": "Architectural, Engineering & Planning Appreciation",
+      "shortName": "Architectural, En...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 35,
+      "code": "CE 4202",
+      "title": "Industrial Attachment and Professional Practices",
+      "shortName": "Industrial Attach...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 36,
+      "code": "CE 4100C",
+      "title": "Final Year Design Project III",
+      "shortName": "Final Year Design...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    }
+  ]
+}

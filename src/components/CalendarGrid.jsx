@@ -32,7 +32,7 @@ function getRowIndex(startMin) {
     return 5;                                   // 15:11 starts (Slot 6)
 }
 
-export default function CalendarGrid({ routine, onRemoveCourse }) {
+export default function CalendarGrid({ routine, onRemoveCourse, getExamInfo }) {
     const numRows = SLOT_ROWS.length;
 
     return (
@@ -98,16 +98,12 @@ export default function CalendarGrid({ routine, onRemoveCourse }) {
                         // Sort by routine addition order to maintain choice priority visually
                         cellItems.sort((a, b) => routine.indexOf(a.entry) - routine.indexOf(b.entry));
 
-                        // Check if this cell contains a Lab course
-                        const hasLab = cellItems.some(({ entry }) => {
-                            const name = entry.name.toLowerCase();
-                            const room = entry.room ? entry.room.toLowerCase() : '';
-                            return name.includes('laboratory') || name.includes('lab') || room.includes('lab');
-                        });
+                        // Check if this cell contains a long course (duration >= 110 minutes)
+                        const isLongClass = cellItems.some(({ slot }) => (slot.endMin - slot.startMin) >= 110);
 
                         // Check if the slot directly below on this day is empty
                         let nextSlotEmpty = false;
-                        if (hasLab && rowIndex < numRows - 1) {
+                        if (isLongClass && rowIndex < numRows - 1) {
                             const nextSlotItems = [];
                             for (const entry of routine) {
                                 for (const slot of entry.slots.filter(s => s.day === day)) {
@@ -150,6 +146,7 @@ export default function CalendarGrid({ routine, onRemoveCourse }) {
                                             compact={cellItems.length > 1}
                                             timeSlot={slot}
                                             routine={routine}
+                                            getExamInfo={getExamInfo}
                                         />
                                     </div>
                                 ))}

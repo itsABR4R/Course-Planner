@@ -3,7 +3,7 @@
  * Main application component — wires together all parts of the Course Planner.
  */
 import React, { useState, useEffect } from 'react';
-import { BookOpen, Trash2, GraduationCap, Calendar, Sparkles, X, Download, Github, Wrench, Settings } from 'lucide-react';
+import { BookOpen, Trash2, GraduationCap, Calendar, Sparkles, X, Download, Github, Wrench, Settings, RotateCcw, AlertCircle } from 'lucide-react';
 import { loadCourseData, groupCoursesByCode } from './utils/parser';
 import { useRoutine, getCourseRole, entriesOverlap } from './hooks/useRoutine';
 import CalendarGrid from './components/CalendarGrid';
@@ -11,6 +11,60 @@ import CourseSearch from './components/CourseSearch';
 import Toast from './components/Toast';
 import { toPng } from 'html-to-image';
 import { Analytics } from '@vercel/analytics/react';
+
+// Import exam data JSON files
+import baengExams from '../departments/baeng.json';
+import bbaExams from '../departments/bba.json';
+import bbaaisExams from '../departments/bbaais.json';
+import bsbgeExams from '../departments/bsbge.json';
+import ceExams from '../departments/ce.json';
+import cseExams from '../departments/cse.json';
+import bsdsExams from '../departments/bsds.json';
+import bsecoExams from '../departments/bseco.json';
+import eeeExams from '../departments/eee.json';
+import bssedsExams from '../departments/bsseds.json';
+import bssmsjExams from '../departments/bssmsj.json';
+
+const EXAM_DATA_MAP = {
+    BA_ENG: baengExams,
+    BBA: bbaExams,
+    BBA_AIS: bbaaisExams,
+    BSBGE: bsbgeExams,
+    BSCE: ceExams,
+    BSCSE: cseExams,
+    BSDS: bsdsExams,
+    BSECO: bsecoExams,
+    BSEEE: eeeExams,
+    BSSEDS: bssedsExams,
+    BSSMSJ: bssmsjExams,
+};
+
+function getExamInfo(courseCode, selectedDept) {
+    if (!courseCode) return null;
+    const cleanCode = courseCode.replace(/\s+/g, '').toLowerCase();
+
+    // 1. Try selected department first
+    const selectedData = EXAM_DATA_MAP[selectedDept];
+    if (selectedData && selectedData.courses) {
+        const match = selectedData.courses.find(c => c.code.replace(/\s+/g, '').toLowerCase() === cleanCode);
+        if (match && match.day !== 'N/A' && match.slot !== 'N/A') {
+            return match;
+        }
+    }
+
+    // 2. Fallback: Try all other departments
+    for (const deptId of Object.keys(EXAM_DATA_MAP)) {
+        if (deptId === selectedDept) continue;
+        const data = EXAM_DATA_MAP[deptId];
+        if (data && data.courses) {
+            const match = data.courses.find(c => c.code.replace(/\s+/g, '').toLowerCase() === cleanCode);
+            if (match && match.day !== 'N/A' && match.slot !== 'N/A') {
+                return match;
+            }
+        }
+    }
+    return null;
+}
 
 const DEPARTMENTS = [
     { id: 'BA_ENG', label: 'BA in English', csv: '/BA_ENG_Courses.csv' },
@@ -134,6 +188,50 @@ export default function App() {
             });
         }, 100);
     };
+
+    // Calculate the exam schedule grid data and identify conflicts & warnings
+    const examGrid = {};
+    let hasExamConflict = false;
+    let hasExamWarning = false;
+    const conflictSlots = {};
+    const warningDays = {};
+
+    for (let d = 1; d <= 7; d++) {
+        examGrid[`Day ${d}`] = { T1: [], T2: [], T3: [] };
+    }
+
+    routine.forEach(entry => {
+        const exam = getExamInfo(entry.code, selectedDept);
+        if (exam && exam.day !== 'N/A' && exam.slot !== 'N/A') {
+            const dayKey = exam.day;
+            const slotKey = exam.slot;
+            if (examGrid[dayKey] && examGrid[dayKey][slotKey]) {
+                if (!examGrid[dayKey][slotKey].some(c => c.code === entry.code)) {
+                    examGrid[dayKey][slotKey].push({
+                        code: entry.code,
+                        title: exam.shortName || exam.title || entry.name
+                    });
+                }
+            }
+        }
+    });
+
+    for (let d = 1; d <= 7; d++) {
+        const dayKey = `Day ${d}`;
+        const t1Count = examGrid[dayKey].T1.length;
+        const t2Count = examGrid[dayKey].T2.length;
+        const t3Count = examGrid[dayKey].T3.length;
+        const totalOnDay = t1Count + t2Count + t3Count;
+
+        if (t1Count >= 2) { hasExamConflict = true; conflictSlots[dayKey] = { ...conflictSlots[dayKey], T1: true }; }
+        if (t2Count >= 2) { hasExamConflict = true; conflictSlots[dayKey] = { ...conflictSlots[dayKey], T2: true }; }
+        if (t3Count >= 2) { hasExamConflict = true; conflictSlots[dayKey] = { ...conflictSlots[dayKey], T3: true }; }
+
+        if (totalOnDay >= 2) {
+            hasExamWarning = true;
+            warningDays[dayKey] = true;
+        }
+    }
 
     return (
         <div className="min-h-screen flex flex-col">
@@ -344,7 +442,7 @@ export default function App() {
                                 <p className="text-xs text-slate-500 mt-1">{error}</p>
                             </div>
                         ) : (
-                            <CourseSearch courseMap={courseMap} onAddCourse={handleAddCourse} routine={routine} />
+                            <CourseSearch courseMap={courseMap} onAddCourse={handleAddCourse} routine={routine} getExamInfo={(code) => getExamInfo(code, selectedDept)} />
                         )}
                     </div>
                 </aside>
@@ -454,8 +552,131 @@ export default function App() {
                             <CalendarGrid 
                                 routine={routine} 
                                 onRemoveCourse={removeCourse} 
+                                getExamInfo={(code) => getExamInfo(code, selectedDept)}
                             />
                         )}
+                    </div>
+
+                    {/* Exam Schedule */}
+                    <div className="flex flex-col gap-3 mt-4">
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                                <GraduationCap size={15} className="text-indigo-400" />
+                                <h2 className="text-sm font-semibold text-slate-200">Exam Schedule</h2>
+                            </div>
+                            {routine.length > 0 && (
+                                <button
+                                    onClick={clearRoutine}
+                                    className="flex items-center gap-1.5 text-xs text-red-500 hover:text-red-400 transition-all font-bold hover:scale-[1.02]"
+                                >
+                                    <RotateCcw size={12} />
+                                    Reset
+                                </button>
+                            )}
+                        </div>
+
+                        {/* Warnings / Conflicts Alert Box */}
+                        {hasExamConflict && (
+                            <div className="flex items-center gap-3 p-4 bg-red-950/20 border border-red-500/30 rounded-xl text-left animate-fade-in">
+                                <div className="w-6 h-6 rounded-full bg-red-600 flex items-center justify-center text-white flex-shrink-0">
+                                    <X size={12} strokeWidth={3} />
+                                </div>
+                                <div>
+                                    <h4 className="text-sm font-bold text-red-400">Conflict Detected</h4>
+                                    <p className="text-xs text-red-500/80">Exams scheduled at the exact same time!</p>
+                                </div>
+                            </div>
+                        )}
+
+                        {hasExamWarning && (
+                            <div className="flex items-center gap-3 p-4 bg-yellow-950/20 border border-yellow-500/30 rounded-xl text-left animate-fade-in">
+                                <div className="w-6 h-6 rounded-full bg-yellow-600 flex items-center justify-center text-white flex-shrink-0">
+                                    <AlertCircle size={14} className="text-white" />
+                                </div>
+                                <div>
+                                    <h4 className="text-sm font-bold text-yellow-400">Warning</h4>
+                                    <p className="text-xs text-yellow-500/80">Multiple exams on the same day!</p>
+                                </div>
+                            </div>
+                        )}
+
+                        <div className="w-full overflow-x-auto rounded-2xl border border-white/10 no-scrollbar glass">
+                            <div 
+                                className="grid text-slate-300"
+                                style={{
+                                    gridTemplateColumns: '90px repeat(3, minmax(180px, 1fr))',
+                                    gridTemplateRows: 'auto repeat(7, minmax(90px, auto))',
+                                    minWidth: '640px',
+                                }}
+                            >
+                                {/* Header Row */}
+                                <div className="py-4 px-3 text-center border-r border-b border-white/10 bg-white/5 font-semibold text-slate-400 text-xs uppercase tracking-wider flex items-center justify-center">
+                                    Day
+                                </div>
+                                <div className="py-3 px-3 text-center border-r border-b border-white/10 bg-white/5 font-semibold text-slate-300 text-xs flex flex-col justify-center">
+                                    <span className="font-bold">Slot T1</span>
+                                    <span className="text-[10px] text-amber-500/80 font-medium mt-0.5">09:00 - 11:00</span>
+                                </div>
+                                <div className="py-3 px-3 text-center border-r border-b border-white/10 bg-white/5 font-semibold text-slate-300 text-xs flex flex-col justify-center">
+                                    <span className="font-bold">Slot T2</span>
+                                    <span className="text-[10px] text-amber-500/80 font-medium mt-0.5">11:30 - 13:30</span>
+                                </div>
+                                <div className="py-3 px-3 text-center border-b border-white/10 bg-white/5 font-semibold text-slate-300 text-xs flex flex-col justify-center">
+                                    <span className="font-bold">Slot T3</span>
+                                    <span className="text-[10px] text-amber-500/80 font-medium mt-0.5">14:00 - 16:00</span>
+                                </div>
+
+                                {/* Data Rows */}
+                                {[1, 2, 3, 4, 5, 6, 7].map(dayNum => {
+                                    const dayKey = `Day ${dayNum}`;
+                                    return (
+                                        <React.Fragment key={dayNum}>
+                                            {/* Day Label */}
+                                            <div className="py-4 px-3 text-center border-r border-b border-white/10 bg-white/[0.02] font-semibold text-slate-300 text-xs flex items-center justify-center">
+                                                Day {dayNum}
+                                            </div>
+                                            
+                                            {/* Slots */}
+                                            {['T1', 'T2', 'T3'].map((slotKey, idx) => {
+                                                const courses = examGrid[dayKey][slotKey];
+                                                const isConflict = conflictSlots[dayKey]?.[slotKey];
+                                                const isWarning = warningDays[dayKey] && courses.length > 0;
+                                                
+                                                let highlightStyle = {};
+                                                if (isConflict) {
+                                                    highlightStyle = { border: '2px solid #ef4444', zIndex: 10 };
+                                                } else if (isWarning) {
+                                                    highlightStyle = { border: '2px solid #eab308', zIndex: 10 };
+                                                }
+
+                                                return (
+                                                    <div
+                                                        key={slotKey}
+                                                        className={`p-2 bg-slate-950/10 flex flex-col justify-center gap-1.5 min-h-[90px] relative`}
+                                                        style={{
+                                                            ...highlightStyle,
+                                                            borderRight: (isConflict || isWarning) ? '2px solid' : (idx === 2 ? 'none' : '1px solid rgba(255,255,255,0.1)'),
+                                                            borderBottom: (isConflict || isWarning) ? '2px solid' : '1px solid rgba(255,255,255,0.1)',
+                                                            borderColor: isConflict ? '#ef4444' : isWarning ? '#eab308' : undefined,
+                                                        }}
+                                                    >
+                                                        {courses.map((course, cIdx) => (
+                                                            <div
+                                                                key={cIdx}
+                                                                className="bg-orange-600 text-white text-[10px] font-bold px-3 py-2 rounded-lg shadow-sm flex flex-col items-start gap-0.5 border border-orange-700/40 select-none animate-scale-in"
+                                                            >
+                                                                <span className="font-extrabold">{course.code}:</span>
+                                                                <span className="opacity-90 font-medium leading-none">{course.title}</span>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                );
+                                            })}
+                                        </React.Fragment>
+                                    );
+                                })}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </main>

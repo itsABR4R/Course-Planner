@@ -1,0 +1,160 @@
+{
+  "department": "Bachelor of Science in Economics",
+  "slug": "bseco",
+  "lastUpdated": "2026-05-11",
+  "courses": [
+    {
+      "id": 1,
+      "code": "ECO 2365",
+      "title": "Environmental Economics",
+      "shortName": "Environmental Eco...",
+      "day": "Day 5",
+      "slot": "T2",
+      "prerequisite": "X"
+    },
+    {
+      "id": 2,
+      "code": "ECO 3301",
+      "title": "Intermediate Microeconomics II",
+      "shortName": "Intermediate Micr...",
+      "day": "Day 1",
+      "slot": "T3",
+      "prerequisite": "X"
+    },
+    {
+      "id": 3,
+      "code": "ECO 3311",
+      "title": "Public Finance",
+      "shortName": "Public Finance",
+      "day": "Day 3",
+      "slot": "T3",
+      "prerequisite": "X"
+    },
+    {
+      "id": 4,
+      "code": "ECO 3326",
+      "title": "International Trade",
+      "shortName": "International Trade",
+      "day": "Day 2",
+      "slot": "T2",
+      "prerequisite": "X"
+    },
+    {
+      "id": 5,
+      "code": "ECO 3371",
+      "title": "Econometrics II",
+      "shortName": "Econometrics II",
+      "day": "Day 6",
+      "slot": "T3",
+      "prerequisite": "X"
+    },
+    {
+      "id": 6,
+      "code": "ECO 4394",
+      "title": "Guided Research / Internship",
+      "shortName": "Guided Research /...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 7,
+      "code": "ECO 3331",
+      "title": "Economics of Cost Benefit Analysis",
+      "shortName": "Economics of Cost...",
+      "day": "Day 6",
+      "slot": "T1",
+      "prerequisite": "X"
+    },
+    {
+      "id": 8,
+      "code": "ECO 1334",
+      "title": "Statistics for Business and Economics I",
+      "shortName": "Statistics for Bu...",
+      "day": "Day 6",
+      "slot": "T2",
+      "prerequisite": "X"
+    },
+    {
+      "id": 9,
+      "code": "ECO 2302",
+      "title": "Intermediate Macroeconomic Theory I",
+      "shortName": "Intermediate Macr...",
+      "day": "Day 4",
+      "slot": "T1",
+      "prerequisite": "X"
+    },
+    {
+      "id": 10,
+      "code": "ECO 2303",
+      "title": "Mathematics for Business and Economics II",
+      "shortName": "Mathematics for B...",
+      "day": "Day 7",
+      "slot": "T3",
+      "prerequisite": "X"
+    },
+    {
+      "id": 11,
+      "code": "ECO 3310",
+      "title": "Money and Banking",
+      "shortName": "Money and Banking",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 12,
+      "code": "ECO 3360",
+      "title": "Socioeconomic Profiles of Bangladesh",
+      "shortName": "Socioeconomic Pro...",
+      "day": "Day 4",
+      "slot": "T1",
+      "prerequisite": "X"
+    },
+    {
+      "id": 13,
+      "code": "ECO 4350",
+      "title": "Labor Economics",
+      "shortName": "Labor Economics",
+      "day": "Day 4",
+      "slot": "T3",
+      "prerequisite": "X"
+    },
+    {
+      "id": 14,
+      "code": "ECO 4353",
+      "title": "Game Theory and Applications",
+      "shortName": "Game Theory and A...",
+      "day": "Day 7",
+      "slot": "T2",
+      "prerequisite": "X"
+    },
+    {
+      "id": 15,
+      "code": "ECO 4380",
+      "title": "Urban Economics",
+      "shortName": "Urban Economics",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 16,
+      "code": "ECO 4388",
+      "title": "Economics of Climate Change",
+      "shortName": "Economics of Clim...",
+      "day": "Day 5",
+      "slot": "T3",
+      "prerequisite": "X"
+    },
+    {
+      "id": 17,
+      "code": "ECO 4391",
+      "title": "Welfare Economics",
+      "shortName": "Welfare Economics",
+      "day": "Day 1",
+      "slot": "T3",
+      "prerequisite": "X"
+    }
+  ]
+}

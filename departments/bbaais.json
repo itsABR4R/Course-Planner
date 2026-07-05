@@ -1,0 +1,34 @@
+{
+  "department": "BBA in Accounting & Information Systems (BBA in AIS)",
+  "slug": "bbaais",
+  "lastUpdated": "2026-05-11",
+  "courses": [
+    {
+      "id": 1,
+      "code": "AIS 4208",
+      "title": "Advanced Accounting-III",
+      "shortName": "Advanced Accounti...",
+      "day": "Day 5",
+      "slot": "T1",
+      "prerequisite": "X"
+    },
+    {
+      "id": 2,
+      "code": "AIS 4441",
+      "title": "Internship/Project",
+      "shortName": "Internship/Project",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 3,
+      "code": "MGT 2208",
+      "title": "Human Resource Management & Organizational Behavior",
+      "shortName": "Human Resource Ma...",
+      "day": "Day 2",
+      "slot": "T1",
+      "prerequisite": "X"
+    }
+  ]
+}

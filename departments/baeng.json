@@ -1,0 +1,268 @@
+{
+  "department": "Department of English",
+  "slug": "baeng",
+  "lastUpdated": "2026-04-12",
+  "courses": [
+    {
+      "id": 1,
+      "code": "ENG 1011",
+      "title": "English I",
+      "shortName": "English I",
+      "day": "Day 1",
+      "slot": "T1",
+      "prerequisite": "X"
+    },
+    {
+      "id": 2,
+      "code": "ENG 1013",
+      "title": "English II",
+      "shortName": "English II",
+      "day": "Day 1",
+      "slot": "T2",
+      "prerequisite": "X"
+    },
+    {
+      "id": 3,
+      "code": "CSE 1105",
+      "title": "Introduction to Computer",
+      "shortName": "Introduction to C...",
+      "day": "Day 3",
+      "slot": "T3",
+      "prerequisite": "X"
+    },
+    {
+      "id": 4,
+      "code": "GED 2005",
+      "title": "Bangla Language and Literature",
+      "shortName": "Bangla Language a...",
+      "day": "Day 7",
+      "slot": "T3",
+      "prerequisite": "X"
+    },
+    {
+      "id": 5,
+      "code": "BDS 1202",
+      "title": "History of the Emergence of Bangladesh",
+      "shortName": "History of the Em...",
+      "day": "Day 6",
+      "slot": "T1",
+      "prerequisite": "X"
+    },
+    {
+      "id": 6,
+      "code": "ENG 1102",
+      "title": "Introduction to Literature",
+      "shortName": "Introduction to L...",
+      "day": "Day 4",
+      "slot": "T2",
+      "prerequisite": "X"
+    },
+    {
+      "id": 7,
+      "code": "ENG 1103",
+      "title": "Introduction to Linguistics",
+      "shortName": "Introduction to L...",
+      "day": "Day 6",
+      "slot": "T3",
+      "prerequisite": "X"
+    },
+    {
+      "id": 8,
+      "code": "ENG 1202",
+      "title": "Phonetics and Phonology",
+      "shortName": "Phonetics and Pho...",
+      "day": "Day 6",
+      "slot": "T3",
+      "prerequisite": "X"
+    },
+    {
+      "id": 9,
+      "code": "ENG 1203",
+      "title": "Introduction to Poetry",
+      "shortName": "Introduction to P...",
+      "day": "Day 4",
+      "slot": "T2",
+      "prerequisite": "X"
+    },
+    {
+      "id": 10,
+      "code": "ENG 1205",
+      "title": "Introduction to Drama",
+      "shortName": "Introduction to D...",
+      "day": "Day 1",
+      "slot": "T3",
+      "prerequisite": "X"
+    },
+    {
+      "id": 11,
+      "code": "ENG 2101",
+      "title": "Introduction to Prose: Fiction and Non-fiction",
+      "shortName": "Introduction to P...",
+      "day": "Day 3",
+      "slot": "T1",
+      "prerequisite": "X"
+    },
+    {
+      "id": 12,
+      "code": "ENG 2102",
+      "title": "Romantic Literature",
+      "shortName": "Romantic Literature",
+      "day": "Day 6",
+      "slot": "T3",
+      "prerequisite": "X"
+    },
+    {
+      "id": 13,
+      "code": "ENG 2103",
+      "title": "Victorian Prose and Poetry",
+      "shortName": "Victorian Prose a...",
+      "day": "Day 7",
+      "slot": "T1",
+      "prerequisite": "X"
+    },
+    {
+      "id": 14,
+      "code": "ENG 2201",
+      "title": "16th and17th Century Literature",
+      "shortName": "16th and17th Cent...",
+      "day": "Day 6",
+      "slot": "T2",
+      "prerequisite": "X"
+    },
+    {
+      "id": 15,
+      "code": "ENG 2202",
+      "title": "Morphology",
+      "shortName": "Morphology",
+      "day": "Day 6",
+      "slot": "T2",
+      "prerequisite": "X"
+    },
+    {
+      "id": 16,
+      "code": "ENG 2203",
+      "title": "Old and Middle English Literature",
+      "shortName": "Old and Middle En...",
+      "day": "Day 4",
+      "slot": "T1",
+      "prerequisite": "X"
+    },
+    {
+      "id": 17,
+      "code": "ENG 3101",
+      "title": "Restoration and18th Century Literature",
+      "shortName": "Restoration and18...",
+      "day": "Day 1",
+      "slot": "T3",
+      "prerequisite": "X"
+    },
+    {
+      "id": 18,
+      "code": "ENG 3102",
+      "title": "Syntax and Semantics",
+      "shortName": "Syntax and Semantics",
+      "day": "Day 3",
+      "slot": "T3",
+      "prerequisite": "X"
+    },
+    {
+      "id": 19,
+      "code": "ENG 3104",
+      "title": "Research Methodology",
+      "shortName": "Research Methodology",
+      "day": "Day 2",
+      "slot": "T3",
+      "prerequisite": "X"
+    },
+    {
+      "id": 20,
+      "code": "ENG 3201",
+      "title": "Shakespeare: Poetry and Drama",
+      "shortName": "Shakespeare: Poet...",
+      "day": "Day 5",
+      "slot": "T3",
+      "prerequisite": "X"
+    },
+    {
+      "id": 21,
+      "code": "ENG 3202",
+      "title": "Psycholinguistics and SLA",
+      "shortName": "Psycholinguistics...",
+      "day": "Day 1",
+      "slot": "T2",
+      "prerequisite": "X"
+    },
+    {
+      "id": 22,
+      "code": "ENG 3203",
+      "title": "Sociolinguistics",
+      "shortName": "Sociolinguistics",
+      "day": "Day 4",
+      "slot": "T3",
+      "prerequisite": "X"
+    },
+    {
+      "id": 23,
+      "code": "GED 2103",
+      "title": "English for Specific Purposes",
+      "shortName": "English for Speci...",
+      "day": "Day 2",
+      "slot": "T2",
+      "prerequisite": "X"
+    },
+    {
+      "id": 24,
+      "code": "ENG 2205",
+      "title": "English in the Workplace",
+      "shortName": "English in the Wo...",
+      "day": "Day 2",
+      "slot": "T2",
+      "prerequisite": "X"
+    },
+    {
+      "id": 25,
+      "code": "GED 3101",
+      "title": "Introduction to Sociology and Psychology",
+      "shortName": "Introduction to S...",
+      "day": "Day 3",
+      "slot": "T2",
+      "prerequisite": "X"
+    },
+    {
+      "id": 26,
+      "code": "ENG 2104",
+      "title": "History of English Literature",
+      "shortName": "History of Englis...",
+      "day": "Day 5",
+      "slot": "T3",
+      "prerequisite": "X"
+    },
+    {
+      "id": 27,
+      "code": "ENG 2206",
+      "title": "Language Acquisition & Development",
+      "shortName": "Language Acquisit...",
+      "day": "Day 7",
+      "slot": "T1",
+      "prerequisite": "X"
+    },
+    {
+      "id": 28,
+      "code": "ENG 3105",
+      "title": "English in Media",
+      "shortName": "English in Media",
+      "day": "Day 7",
+      "slot": "T3",
+      "prerequisite": "X"
+    },
+    {
+      "id": 29,
+      "code": "ENG 3205",
+      "title": "Introduction to Critical Theories",
+      "shortName": "Introduction to C...",
+      "day": "Day 6",
+      "slot": "T2",
+      "prerequisite": "X"
+    }
+  ]
+}

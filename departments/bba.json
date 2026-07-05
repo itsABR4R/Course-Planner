@@ -1,0 +1,538 @@
+{
+  "department": "Business Administration",
+  "slug": "bba",
+  "lastUpdated": "2026-05-11",
+  "courses": [
+    {
+      "id": 1,
+      "code": "BUS 3339",
+      "title": "Business Research Methodology",
+      "shortName": "Business Research...",
+      "day": "Day 4",
+      "slot": "T3",
+      "prerequisite": "X"
+    },
+    {
+      "id": 2,
+      "code": "SOC 1105",
+      "title": "Sociology and Psychology",
+      "shortName": "Sociology and Psy...",
+      "day": "Day 3",
+      "slot": "T2",
+      "prerequisite": "X"
+    },
+    {
+      "id": 3,
+      "code": "ACN 2215",
+      "title": "Management Accounting",
+      "shortName": "Management Accoun...",
+      "day": "Day 5",
+      "slot": "T3",
+      "prerequisite": "X"
+    },
+    {
+      "id": 4,
+      "code": "CST 2321",
+      "title": "Business Analytics",
+      "shortName": "Business Analytics",
+      "day": "Day 6",
+      "slot": "T1",
+      "prerequisite": "X"
+    },
+    {
+      "id": 5,
+      "code": "ACN 4135",
+      "title": "Taxation",
+      "shortName": "Taxation",
+      "day": "Day 1",
+      "slot": "T2",
+      "prerequisite": "X"
+    },
+    {
+      "id": 6,
+      "code": "ACN 4136",
+      "title": "Advanced Financial Accounting - I",
+      "shortName": "Advanced Financia...",
+      "day": "Day 5",
+      "slot": "T1",
+      "prerequisite": "X"
+    },
+    {
+      "id": 7,
+      "code": "MIS 2218",
+      "title": "Advanced Computer Applications in Business",
+      "shortName": "Advanced Computer...",
+      "day": "Day 4",
+      "slot": "T3",
+      "prerequisite": "X"
+    },
+    {
+      "id": 8,
+      "code": "ENG 1011",
+      "title": "English I",
+      "shortName": "English I",
+      "day": "Day 1",
+      "slot": "T1",
+      "prerequisite": "X"
+    },
+    {
+      "id": 9,
+      "code": "ENG 1013",
+      "title": "English II",
+      "shortName": "English II",
+      "day": "Day 1",
+      "slot": "T2",
+      "prerequisite": "X"
+    },
+    {
+      "id": 10,
+      "code": "BDS 1201",
+      "title": "History of the Emergence of Bangladesh",
+      "shortName": "History of the Em...",
+      "day": "Day 6",
+      "slot": "T1",
+      "prerequisite": "X"
+    },
+    {
+      "id": 11,
+      "code": "BUS 4201",
+      "title": "Employability and Entrepreneurial Success",
+      "shortName": "Employability and...",
+      "day": "Day 1",
+      "slot": "T3",
+      "prerequisite": "X"
+    },
+    {
+      "id": 12,
+      "code": "MKT 4314",
+      "title": "Marketing Analytics",
+      "shortName": "Marketing Analytics",
+      "day": "Day 5",
+      "slot": "T3",
+      "prerequisite": "X"
+    },
+    {
+      "id": 13,
+      "code": "FIN 4331",
+      "title": "Financial Modeling",
+      "shortName": "Financial Modeling",
+      "day": "Day 7",
+      "slot": "T1",
+      "prerequisite": "X"
+    },
+    {
+      "id": 14,
+      "code": "HRM 4269",
+      "title": "Learning and Development Management",
+      "shortName": "Learning and Deve...",
+      "day": "Day 5",
+      "slot": "T1",
+      "prerequisite": "X"
+    },
+    {
+      "id": 15,
+      "code": "HRM 4368",
+      "title": "Human Resources Analytics",
+      "shortName": "Human Resources A...",
+      "day": "Day 7",
+      "slot": "T2",
+      "prerequisite": "X"
+    },
+    {
+      "id": 16,
+      "code": "SCM 4103",
+      "title": "Global Sourcing and Procurement",
+      "shortName": "Global Sourcing a...",
+      "day": "Day 4",
+      "slot": "T2",
+      "prerequisite": "X"
+    },
+    {
+      "id": 17,
+      "code": "SCM 4102",
+      "title": "Logistics Management",
+      "shortName": "Logistics Management",
+      "day": "Day 2",
+      "slot": "T2",
+      "prerequisite": "X"
+    },
+    {
+      "id": 18,
+      "code": "SCM 4313",
+      "title": "Service Operation Management",
+      "shortName": "Service Operation...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 19,
+      "code": "BSA 4101",
+      "title": "Business Database System Development",
+      "shortName": "Business Database...",
+      "day": "Day 2",
+      "slot": "T3",
+      "prerequisite": "X"
+    },
+    {
+      "id": 20,
+      "code": "BSA 4401",
+      "title": "Business Analytics Capstone",
+      "shortName": "Business Analytic...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 21,
+      "code": "ACN 4238",
+      "title": "Advanced Financial Accounting - II",
+      "shortName": "Advanced Financia...",
+      "day": "Day 5",
+      "slot": "T1",
+      "prerequisite": "X"
+    },
+    {
+      "id": 22,
+      "code": "ACN 4344",
+      "title": "Advanced Management Accounting",
+      "shortName": "Advanced Manageme...",
+      "day": "Day 2",
+      "slot": "T3",
+      "prerequisite": "X"
+    },
+    {
+      "id": 23,
+      "code": "CST 1206",
+      "title": "Computer Applications",
+      "shortName": "Computer Applicat...",
+      "day": "Day 4",
+      "slot": "T1",
+      "prerequisite": "X"
+    },
+    {
+      "id": 24,
+      "code": "ECN 2111",
+      "title": "Microeconomics",
+      "shortName": "Microeconomics",
+      "day": "Day 7",
+      "slot": "T2",
+      "prerequisite": "X"
+    },
+    {
+      "id": 25,
+      "code": "ECN 2214",
+      "title": "Macroeconomics",
+      "shortName": "Macroeconomics",
+      "day": "Day 7",
+      "slot": "T1",
+      "prerequisite": "X"
+    },
+    {
+      "id": 26,
+      "code": "FIN 2319",
+      "title": "Principles of Finance",
+      "shortName": "Principles of Fin...",
+      "day": "Day 4",
+      "slot": "T1",
+      "prerequisite": "X"
+    },
+    {
+      "id": 27,
+      "code": "FIN 3123",
+      "title": "Managerial Finance",
+      "shortName": "Managerial Finance",
+      "day": "Day 4",
+      "slot": "T1",
+      "prerequisite": "X"
+    },
+    {
+      "id": 28,
+      "code": "FIN 4117",
+      "title": "Corporate Finance",
+      "shortName": "Corporate Finance",
+      "day": "Day 6",
+      "slot": "T1",
+      "prerequisite": "X"
+    },
+    {
+      "id": 29,
+      "code": "FIN 4218",
+      "title": "Financial Statements Analysis",
+      "shortName": "Financial Stateme...",
+      "day": "Day 4",
+      "slot": "T1",
+      "prerequisite": "X"
+    },
+    {
+      "id": 30,
+      "code": "BMT 1103",
+      "title": "Business Mathematics I",
+      "shortName": "Business Mathemat...",
+      "day": "Day 7",
+      "slot": "T1",
+      "prerequisite": "X"
+    },
+    {
+      "id": 31,
+      "code": "FIN 4322",
+      "title": "International Financial Management",
+      "shortName": "International Fin...",
+      "day": "Day 1",
+      "slot": "T1",
+      "prerequisite": "X"
+    },
+    {
+      "id": 32,
+      "code": "BMT 2113",
+      "title": "Business Mathematics II",
+      "shortName": "Business Mathemat...",
+      "day": "Day 1",
+      "slot": "T1",
+      "prerequisite": "X"
+    },
+    {
+      "id": 33,
+      "code": "HRM 4152",
+      "title": "Compensation Management",
+      "shortName": "Compensation Mana...",
+      "day": "Day 6",
+      "slot": "T2",
+      "prerequisite": "X"
+    },
+    {
+      "id": 34,
+      "code": "HRM 4358",
+      "title": "Performance Appraisal and Management",
+      "shortName": "Performance Appra...",
+      "day": "Day 3",
+      "slot": "T2",
+      "prerequisite": "X"
+    },
+    {
+      "id": 35,
+      "code": "ACN 1205",
+      "title": "Financial Accounting I",
+      "shortName": "Financial Account...",
+      "day": "Day 5",
+      "slot": "T1",
+      "prerequisite": "X"
+    },
+    {
+      "id": 36,
+      "code": "IBS 3121",
+      "title": "International Business",
+      "shortName": "International Bus...",
+      "day": "Day 7",
+      "slot": "T1",
+      "prerequisite": "X"
+    },
+    {
+      "id": 37,
+      "code": "INT 4399",
+      "title": "Internship/Project",
+      "shortName": "Internship/Project",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 38,
+      "code": "LAW 4151",
+      "title": "Business Law",
+      "shortName": "Business Law",
+      "day": "Day 3",
+      "slot": "T3",
+      "prerequisite": "X"
+    },
+    {
+      "id": 39,
+      "code": "ACN 1309",
+      "title": "Financial Accounting II",
+      "shortName": "Financial Account...",
+      "day": "Day 5",
+      "slot": "T2",
+      "prerequisite": "X"
+    },
+    {
+      "id": 40,
+      "code": "BST 1308",
+      "title": "Business Statistics I",
+      "shortName": "Business Statisti...",
+      "day": "Day 6",
+      "slot": "T2",
+      "prerequisite": "X"
+    },
+    {
+      "id": 41,
+      "code": "MGT 1307",
+      "title": "Principles of Management",
+      "shortName": "Principles of Man...",
+      "day": "Day 2",
+      "slot": "T2",
+      "prerequisite": "X"
+    },
+    {
+      "id": 42,
+      "code": "MGT 2318",
+      "title": "Organizational Behavior",
+      "shortName": "Organizational Be...",
+      "day": "Day 2",
+      "slot": "T1",
+      "prerequisite": "X"
+    },
+    {
+      "id": 43,
+      "code": "MGT 3122",
+      "title": "Human Resources Management",
+      "shortName": "Human Resources M...",
+      "day": "Day 2",
+      "slot": "T1",
+      "prerequisite": "X"
+    },
+    {
+      "id": 44,
+      "code": "MGT 3224",
+      "title": "Production and Operations Management",
+      "shortName": "Production and Op...",
+      "day": "Day 1",
+      "slot": "T1",
+      "prerequisite": "X"
+    },
+    {
+      "id": 45,
+      "code": "MGT 3225",
+      "title": "E-Business",
+      "shortName": "E-Business",
+      "day": "Day 6",
+      "slot": "T2",
+      "prerequisite": "X"
+    },
+    {
+      "id": 46,
+      "code": "BST 2216",
+      "title": "Business Statistics II",
+      "shortName": "Business Statisti...",
+      "day": "Day 6",
+      "slot": "T3",
+      "prerequisite": "X"
+    },
+    {
+      "id": 47,
+      "code": "MGT 3341",
+      "title": "Project Management",
+      "shortName": "Project Management",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 48,
+      "code": "MGT 3342",
+      "title": "Business Ethics",
+      "shortName": "Business Ethics",
+      "day": "Day 5",
+      "slot": "T2",
+      "prerequisite": "X"
+    },
+    {
+      "id": 49,
+      "code": "MGT 4356",
+      "title": "Strategic Management",
+      "shortName": "Strategic Management",
+      "day": "Day 2",
+      "slot": "T1",
+      "prerequisite": "X"
+    },
+    {
+      "id": 50,
+      "code": "MIS 4283",
+      "title": "Data Communication System",
+      "shortName": "Data Communicatio...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 51,
+      "code": "MIS 4394",
+      "title": "Network Resource Management",
+      "shortName": "Network Resource ...",
+      "day": "N/A",
+      "slot": "N/A",
+      "prerequisite": "X"
+    },
+    {
+      "id": 52,
+      "code": "BUS 1102",
+      "title": "Introduction to Business",
+      "shortName": "Introduction to B...",
+      "day": "Day 3",
+      "slot": "T1",
+      "prerequisite": "X"
+    },
+    {
+      "id": 53,
+      "code": "MKT 2320",
+      "title": "Introduction to Marketing",
+      "shortName": "Introduction to M...",
+      "day": "Day 3",
+      "slot": "T2",
+      "prerequisite": "X"
+    },
+    {
+      "id": 54,
+      "code": "MKT 3336",
+      "title": "Marketing Management",
+      "shortName": "Marketing Management",
+      "day": "Day 3",
+      "slot": "T1",
+      "prerequisite": "X"
+    },
+    {
+      "id": 55,
+      "code": "MKT 4102",
+      "title": "Services Marketing",
+      "shortName": "Services Marketing",
+      "day": "Day 1",
+      "slot": "T2",
+      "prerequisite": "X"
+    },
+    {
+      "id": 56,
+      "code": "MKT 4203",
+      "title": "Integrated Communication",
+      "shortName": "Integrated Commun...",
+      "day": "Day 3",
+      "slot": "T1",
+      "prerequisite": "X"
+    },
+    {
+      "id": 57,
+      "code": "BUS 2112",
+      "title": "Business Communications",
+      "shortName": "Business Communic...",
+      "day": "Day 4",
+      "slot": "T3",
+      "prerequisite": "X"
+    },
+    {
+      "id": 58,
+      "code": "MKT 4308",
+      "title": "Supply Chain Management",
+      "shortName": "Supply Chain Mana...",
+      "day": "Day 7",
+      "slot": "T3",
+      "prerequisite": "X"
+    },
+    {
+      "id": 59,
+      "code": "MKT 4311",
+      "title": "Brand Management",
+      "shortName": "Brand Management",
+      "day": "Day 6",
+      "slot": "T3",
+      "prerequisite": "X"
+    }
+  ]
+}

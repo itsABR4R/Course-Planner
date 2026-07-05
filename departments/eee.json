@@ -1,0 +1,376 @@
+{
+  "department": "Electrical & Electronic Engineering",
+  "slug": "eee",
+  "lastUpdated": "2026-04-12",
+  "courses": [
+    {
+      "id": 1,
+      "code": "ENG 1011",
+      "title": "ENG 1011",
+      "shortName": "ENG 1011",
+      "day": "Day 1",
+      "slot": "T1",
+      "prerequisite": "X"
+    },
+    {
+      "id": 2,
+      "code": "ENG 1013",
+      "title": "ENG 1013",
+      "shortName": "ENG 1013",
+      "day": "Day 1",
+      "slot": "T2",
+      "prerequisite": "X"
+    },
+    {
+      "id": 3,
+      "code": "MAT 1101",
+      "title": "MAT 1101",
+      "shortName": "MAT 1101",
+      "day": "Day 3",
+      "slot": "T1",
+      "prerequisite": "X"
+    },
+    {
+      "id": 4,
+      "code": "EEE 1001",
+      "title": "EEE 1001",
+      "shortName": "EEE 1001",
+      "day": "Day 5",
+      "slot": "T1",
+      "prerequisite": "X"
+    },
+    {
+      "id": 5,
+      "code": "BDS 1201",
+      "title": "BDS 1201",
+      "shortName": "BDS 1201",
+      "day": "Day 6",
+      "slot": "T1",
+      "prerequisite": "X"
+    },
+    {
+      "id": 6,
+      "code": "MAT 1103",
+      "title": "MAT 1103",
+      "shortName": "MAT 1103",
+      "day": "Day 2",
+      "slot": "T1",
+      "prerequisite": "X"
+    },
+    {
+      "id": 7,
+      "code": "EEE 1003",
+      "title": "EEE 1003",
+      "shortName": "EEE 1003",
+      "day": "Day 4",
+      "slot": "T1",
+      "prerequisite": "X"
+    },
+    {
+      "id": 8,
+      "code": "PHY 1101",
+      "title": "PHY 1101",
+      "shortName": "PHY 1101",
+      "day": "Day 6",
+      "slot": "T3",
+      "prerequisite": "X"
+    },
+    {
+      "id": 9,
+      "code": "EEE 2101",
+      "title": "EEE 2101",
+      "shortName": "EEE 2101",
+      "day": "Day 1",
+      "slot": "T3",
+      "prerequisite": "X"
+    },
+    {
+      "id": 10,
+      "code": "PHY 1103",
+      "title": "PHY 1103",
+      "shortName": "PHY 1103",
+      "day": "Day 3",
+      "slot": "T2",
+      "prerequisite": "X"
+    },
+    {
+      "id": 11,
+      "code": "MAT 2105",
+      "title": "MAT 2105",
+      "shortName": "MAT 2105",
+      "day": "Day 5",
+      "slot": "T2",
+      "prerequisite": "X"
+    },
+    {
+      "id": 12,
+      "code": "EEE 2103",
+      "title": "EEE 2103",
+      "shortName": "EEE 2103",
+      "day": "Day 2",
+      "slot": "T2",
+      "prerequisite": "X"
+    },
+    {
+      "id": 13,
+      "code": "CHE 2101",
+      "title": "CHE 2101",
+      "shortName": "CHE 2101",
+      "day": "Day 4",
+      "slot": "T2",
+      "prerequisite": "X"
+    },
+    {
+      "id": 14,
+      "code": "MAT 2107",
+      "title": "MAT 2107",
+      "shortName": "MAT 2107",
+      "day": "Day 6",
+      "slot": "T2",
+      "prerequisite": "X"
+    },
+    {
+      "id": 15,
+      "code": "MAT 2109",
+      "title": "MAT 2109",
+      "shortName": "MAT 2109",
+      "day": "Day 1",
+      "slot": "T3",
+      "prerequisite": "X"
+    },
+    {
+      "id": 16,
+      "code": "EEE 2401",
+      "title": "EEE 2401",
+      "shortName": "EEE 2401",
+      "day": "Day 3",
+      "slot": "T3",
+      "prerequisite": "X"
+    },
+    {
+      "id": 17,
+      "code": "ECO 2101",
+      "title": "ECO 2101",
+      "shortName": "ECO 2101",
+      "day": "Day 5",
+      "slot": "T3",
+      "prerequisite": "X"
+    },
+    {
+      "id": 18,
+      "code": "EEE 2301",
+      "title": "EEE 2301",
+      "shortName": "EEE 2301",
+      "day": "Day 7",
+      "slot": "T1",
+      "prerequisite": "X"
+    },
+    {
+      "id": 19,
+      "code": "EEE 3107",
+      "title": "EEE 3107",
+      "shortName": "EEE 3107",
+      "day": "Day 1",
+      "slot": "T2",
+      "prerequisite": "X"
+    },
+    {
+      "id": 20,
+      "code": "EEE 2201",
+      "title": "EEE 2201",
+      "shortName": "EEE 2201",
+      "day": "Day 2",
+      "slot": "T3",
+      "prerequisite": "X"
+    },
+    {
+      "id": 21,
+      "code": "EEE 2105",
+      "title": "EEE 2105",
+      "shortName": "EEE 2105",
+      "day": "Day 4",
+      "slot": "T3",
+      "prerequisite": "X"
+    },
+    {
+      "id": 22,
+      "code": "EEE 3303",
+      "title": "EEE 3303",
+      "shortName": "EEE 3303",
+      "day": "Day 6",
+      "slot": "T3",
+      "prerequisite": "X"
+    },
+    {
+      "id": 23,
+      "code": "EEE 2203",
+      "title": "EEE 2203",
+      "shortName": "EEE 2203",
+      "day": "Day 3",
+      "slot": "T1",
+      "prerequisite": "X"
+    },
+    {
+      "id": 24,
+      "code": "EEE 3309",
+      "title": "EEE 3309",
+      "shortName": "EEE 3309",
+      "day": "Day 5",
+      "slot": "T1",
+      "prerequisite": "X"
+    },
+    {
+      "id": 25,
+      "code": "ACT 3101",
+      "title": "ACT 3101",
+      "shortName": "ACT 3101",
+      "day": "Day 7",
+      "slot": "T2",
+      "prerequisite": "X"
+    },
+    {
+      "id": 26,
+      "code": "SOC 3101",
+      "title": "SOC 3101",
+      "shortName": "SOC 3101",
+      "day": "Day 2",
+      "slot": "T1",
+      "prerequisite": "X"
+    },
+    {
+      "id": 27,
+      "code": "EEE 3305",
+      "title": "EEE 3305",
+      "shortName": "EEE 3305",
+      "day": "Day 4",
+      "slot": "T1",
+      "prerequisite": "X"
+    },
+    {
+      "id": 28,
+      "code": "EEE 3307",
+      "title": "EEE 3307",
+      "shortName": "EEE 3307",
+      "day": "Day 6",
+      "slot": "T1",
+      "prerequisite": "X"
+    },
+    {
+      "id": 29,
+      "code": "EEE 3205",
+      "title": "EEE 3205",
+      "shortName": "EEE 3205",
+      "day": "Day 1",
+      "slot": "T2",
+      "prerequisite": "X"
+    },
+    {
+      "id": 30,
+      "code": "EEE 3403",
+      "title": "EEE 3403",
+      "shortName": "EEE 3403",
+      "day": "Day 3",
+      "slot": "T2",
+      "prerequisite": "X"
+    },
+    {
+      "id": 31,
+      "code": "EEE 3207",
+      "title": "EEE 3207",
+      "shortName": "EEE 3207",
+      "day": "Day 5",
+      "slot": "T2",
+      "prerequisite": "X"
+    },
+    {
+      "id": 32,
+      "code": "IPE 4101",
+      "title": "IPE 4101",
+      "shortName": "IPE 4101",
+      "day": "Day 2",
+      "slot": "T2",
+      "prerequisite": "X"
+    },
+    {
+      "id": 33,
+      "code": "EEE 4109",
+      "title": "EEE 4109",
+      "shortName": "EEE 4109",
+      "day": "Day 4",
+      "slot": "T2",
+      "prerequisite": "X"
+    },
+    {
+      "id": 34,
+      "code": "EEE 4211",
+      "title": "EEE 4211",
+      "shortName": "EEE 4211",
+      "day": "Day 6",
+      "slot": "T2",
+      "prerequisite": "X"
+    },
+    {
+      "id": 35,
+      "code": "EEE 4111",
+      "title": "EEE 4111",
+      "shortName": "EEE 4111",
+      "day": "Day 3",
+      "slot": "T3",
+      "prerequisite": "X"
+    },
+    {
+      "id": 36,
+      "code": "EEE 4331",
+      "title": "EEE 4331",
+      "shortName": "EEE 4331",
+      "day": "Day 5",
+      "slot": "T3",
+      "prerequisite": "X"
+    },
+    {
+      "id": 37,
+      "code": "EEE 4521",
+      "title": "EEE 4521",
+      "shortName": "EEE 4521",
+      "day": "Day 7",
+      "slot": "T2",
+      "prerequisite": "X"
+    },
+    {
+      "id": 38,
+      "code": "EEE 4217",
+      "title": "EEE 4217",
+      "shortName": "EEE 4217",
+      "day": "Day 1",
+      "slot": "T3",
+      "prerequisite": "X"
+    },
+    {
+      "id": 39,
+      "code": "EEE 4121",
+      "title": "EEE 4121",
+      "shortName": "EEE 4121",
+      "day": "Day 2",
+      "slot": "T3",
+      "prerequisite": "X"
+    },
+    {
+      "id": 40,
+      "code": "EEE 4413",
+      "title": "EEE 4413",
+      "shortName": "EEE 4413",
+      "day": "Day 4",
+      "slot": "T1",
+      "prerequisite": "X"
+    },
+    {
+      "id": 41,
+      "code": "EEE 4323",
+      "title": "EEE 4323",
+      "shortName": "EEE 4323",
+      "day": "Day 6",
+      "slot": "T3",
+      "prerequisite": "X"
+    }
+  ]
+}
