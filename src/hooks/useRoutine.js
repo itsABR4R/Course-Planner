@@ -158,6 +158,7 @@ export function useRoutine() {
 
     return {
         routine,
+        setRoutine,
         toast,
         addCourse,
         removeCourse,

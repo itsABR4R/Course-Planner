@@ -5,7 +5,7 @@
 import React, { useState, useEffect } from 'react';
 import { BookOpen, Trash2, GraduationCap, Calendar, Sparkles, X, Download, Github, Wrench, Settings } from 'lucide-react';
 import { loadCourseData, groupCoursesByCode } from './utils/parser';
-import { useRoutine, getCourseRole } from './hooks/useRoutine';
+import { useRoutine, getCourseRole, entriesOverlap } from './hooks/useRoutine';
 import CalendarGrid from './components/CalendarGrid';
 import CourseSearch from './components/CourseSearch';
 import Toast from './components/Toast';
@@ -28,11 +28,13 @@ const DEPARTMENTS = [
 
 export default function App() {
     const [selectedDept, setSelectedDept] = useState('BSCSE');
+    const [mobileTab, setMobileTab] = useState('catalogue'); // 'catalogue' or 'schedule'
     const [courseMap, setCourseMap] = useState({});
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [isDeptDisabled, setIsDeptDisabled] = useState(false);
-    const { routine, toast, addCourse, removeCourse, clearRoutine, showToast } = useRoutine();
+    const [plannerMode, setPlannerMode] = useState('backup'); // 'backup' or 'conflict'
+    const { routine, setRoutine, toast, addCourse, removeCourse, clearRoutine, showToast } = useRoutine();
 
     // Load CSV whenever selectedDept changes
     useEffect(() => {
@@ -69,6 +71,32 @@ export default function App() {
     }, [selectedDept]);
 
     const handleAddCourse = (courseEntry) => {
+        if (plannerMode === 'conflict') {
+            // Check for time slot overlap with any course already in the routine
+            for (const entry of routine) {
+                // Skip if same course section is already added (handled separately by useRoutine)
+                if (entry.code === courseEntry.code && entry.section === courseEntry.section) {
+                    continue;
+                }
+                for (const newSlot of courseEntry.slots) {
+                    for (const existingSlot of entry.slots) {
+                        if (newSlot.day === existingSlot.day) {
+                            const overlap = Math.max(newSlot.startMin, existingSlot.startMin) < Math.min(newSlot.endMin, existingSlot.endMin);
+                            if (overlap) {
+                                const dayStr = newSlot.day;
+                                const timeStr = `${existingSlot.startStr}-${existingSlot.endStr}`;
+                                showToast(
+                                    `Conflict: ${courseEntry.code} Sec ${courseEntry.section} overlaps with ${entry.code} Sec ${entry.section} on ${dayStr} (${timeStr})`, 
+                                    'error'
+                                );
+                                return; // Stop and do not add
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         addCourse({
             code: courseEntry.code,
             name: courseEntry.name,
@@ -110,45 +138,53 @@ export default function App() {
     return (
         <div className="min-h-screen flex flex-col">
             {/* ── Header ── */}
-            <header className="glass-dark border-b border-white/8 px-6 py-4 sticky top-0 z-40">
+            <header className="glass-dark border-b border-white/8 px-4 md:px-6 py-3.5 md:py-4 sticky top-0 z-40">
                 <div className="max-w-screen-2xl mx-auto flex items-center justify-between relative">
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-2.5 md:gap-3">
                         <img 
                             src="https://uiu.ucamcloud.com/assets/uiu-logo.webp" 
                             alt="UIU Logo" 
-                            className="h-9 w-auto object-contain flex-shrink-0"
+                            className="h-8 md:h-9 w-auto object-contain flex-shrink-0"
                         />
                         <div>
-                            <h1 className="text-base font-bold text-white leading-tight">UIU Course Planner</h1>
-                            <p className="text-[11px] text-slate-400 leading-tight mt-0.5">Routine Maker & Conflict Detector</p>
+                            <div className="flex items-center gap-1.5 md:gap-2">
+                                <h1 className="text-sm md:text-base font-bold text-white leading-tight">UIU Course Planner</h1>
+                                <span className="md:hidden text-[7px] font-black px-1.5 py-0.5 rounded-full border animate-pulse-glow flex-shrink-0">
+                                    Summer-2026
+                                </span>
+                            </div>
+                            <p className="text-[10px] md:text-[11px] text-slate-400 leading-tight mt-0.5">Routine Maker & Conflict Detector</p>
                         </div>
                     </div>
 
-                    <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+                    {/* Absolute Centered Semester Label */}
+                    <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 hidden md:block">
                         <span className="text-xs font-black px-5 py-2 rounded-full uppercase tracking-widest border shadow-lg animate-pulse-glow">
                             Summer-2026
                         </span>
                     </div>
 
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-2 md:gap-3">
                         {routine.length > 0 && (
                             <>
-                                <span className="text-xs text-slate-400">
+                                <span className="text-xs text-slate-400 hidden lg:inline">
                                     <span className="text-indigo-300 font-semibold">{routine.length}</span> course{routine.length !== 1 ? 's' : ''} added
                                 </span>
                                 <button
                                     onClick={handleSaveImage}
-                                    className="flex items-center gap-1.5 text-xs text-indigo-300 hover:text-indigo-200 border border-indigo-500/30 hover:border-indigo-400/50 px-3 py-1.5 rounded-lg transition-all"
+                                    className="flex items-center gap-1.5 text-xs text-indigo-300 hover:text-indigo-200 border border-indigo-500/30 hover:border-indigo-400/50 px-2.5 py-1.5 md:px-3 rounded-lg transition-all"
+                                    title="Save schedule as image"
                                 >
                                     <Download size={13} />
-                                    Save as Image
+                                    <span className="hidden sm:inline">Save as Image</span>
                                 </button>
                                 <button
                                     onClick={clearRoutine}
-                                    className="flex items-center gap-1.5 text-xs text-red-400 hover:text-red-300 border border-red-500/30 hover:border-red-400/50 px-3 py-1.5 rounded-lg transition-all"
+                                    className="flex items-center gap-1.5 text-xs text-red-400 hover:text-red-300 border border-red-500/30 hover:border-red-400/50 px-2.5 py-1.5 md:px-3 rounded-lg transition-all"
+                                    title="Clear routine"
                                 >
                                     <Trash2 size={13} />
-                                    Clear Routine
+                                    <span className="hidden sm:inline">Clear Routine</span>
                                 </button>
                             </>
                         )}
@@ -156,42 +192,128 @@ export default function App() {
                             href="https://github.com/itsABR4R"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="w-9 h-9 rounded-full bg-white flex items-center justify-center shadow-md hover:scale-105 transition-all text-[#181717] hover:bg-slate-100 flex-shrink-0"
+                            className="w-8 h-8 md:w-9 md:h-9 rounded-full bg-white flex items-center justify-center shadow-md hover:scale-105 transition-all text-[#181717] hover:bg-slate-100 flex-shrink-0"
                             title="View GitHub Profile"
                         >
-                            <Github size={30} fill="currentColor" />
+                            <Github className="w-4.5 h-4.5 md:w-5.5 md:h-5.5" fill="currentColor" />
                         </a>
                     </div>
                 </div>
             </header>
 
-            {/* ── Department Selector ── */}
+            {/* ── Department Selector & Mode Toggle ── */}
             <div className="max-w-screen-2xl w-full mx-auto px-4 lg:px-6 pt-4 lg:pt-6">
-                <div className="glass-dark rounded-2xl p-2.5 border border-white/8 flex items-center gap-2 overflow-x-auto no-scrollbar scroll-smooth">
-                    {DEPARTMENTS.map(dept => {
-                        const isActive = selectedDept === dept.id;
-                        return (
-                            <button
-                                key={dept.id}
-                                onClick={() => setSelectedDept(dept.id)}
-                                className={`px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all duration-200 ${
-                                    isActive 
-                                        ? 'bg-indigo-600/20 text-indigo-300 border border-indigo-500/40 shadow-sm shadow-indigo-500/10 scale-[1.02]' 
-                                        : 'bg-transparent border border-transparent text-slate-400 hover:text-slate-200 hover:bg-white/5'
-                                }`}
-                            >
-                                {dept.label}
-                            </button>
-                        );
-                    })}
+                <div className="glass-dark rounded-2xl p-2.5 border border-white/8 flex flex-col md:flex-row md:items-center gap-3 justify-between">
+                    {/* Left: Department Tabs (scrollable) */}
+                    <div className="flex items-center gap-2 overflow-x-auto no-scrollbar scroll-smooth flex-1 w-full">
+                        {DEPARTMENTS.map(dept => {
+                            const isActive = selectedDept === dept.id;
+                            return (
+                                <button
+                                    key={dept.id}
+                                    onClick={() => setSelectedDept(dept.id)}
+                                    className={`px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all duration-200 ${
+                                        isActive 
+                                            ? 'bg-indigo-600/20 text-indigo-300 border border-indigo-500/40 shadow-sm shadow-indigo-500/10 scale-[1.02]' 
+                                            : 'bg-transparent border border-transparent text-slate-400 hover:text-slate-200 hover:bg-white/5'
+                                    }`}
+                                >
+                                    {dept.label}
+                                </button>
+                            );
+                        })}
+                    </div>
+
+                    {/* Divider line (desktop only) */}
+                    <div className="hidden md:block w-px h-6 bg-white/10 flex-shrink-0" />
+
+                    {/* Right: Mode Toggle */}
+                    <div className="flex items-center bg-white/5 rounded-xl p-1 border border-white/5 flex-shrink-0 self-start md:self-auto">
+                        <button
+                            onClick={() => setPlannerMode('backup')}
+                            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 ${
+                                plannerMode === 'backup'
+                                    ? 'bg-indigo-600 text-white shadow-sm'
+                                    : 'text-slate-400 hover:text-slate-200'
+                            }`}
+                        >
+                            Backup Mode
+                        </button>
+                        <button
+                            onClick={() => {
+                                setPlannerMode('conflict');
+                                const keptEntries = [];
+                                const removedEntries = [];
+
+                                for (const entry of routine) {
+                                    let hasConflict = false;
+                                    for (const kept of keptEntries) {
+                                        if (entriesOverlap(entry, kept)) {
+                                            hasConflict = true;
+                                            break;
+                                        }
+                                    }
+                                    if (hasConflict) {
+                                        removedEntries.push(entry);
+                                    } else {
+                                        keptEntries.push(entry);
+                                    }
+                                }
+
+                                if (removedEntries.length > 0) {
+                                    setRoutine(keptEntries);
+                                    const removedNames = removedEntries.map(e => `${e.code} Sec ${e.section}`).join(', ');
+                                    showToast(`Conflict Mode: Removed overlapping sections: ${removedNames}`, 'warning');
+                                }
+                            }}
+                            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 ${
+                                plannerMode === 'conflict'
+                                    ? 'bg-red-600/90 text-white shadow-sm shadow-red-900/20'
+                                    : 'text-slate-400 hover:text-slate-200'
+                            }`}
+                        >
+                            Conflict Mode
+                        </button>
+                    </div>
                 </div>
             </div>
 
+            {/* Mobile Tab Switcher (visible only under lg) */}
+            <div className="flex lg:hidden w-full px-4 pt-3 gap-2 max-w-screen-2xl mx-auto">
+                <button
+                    onClick={() => setMobileTab('catalogue')}
+                    className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-xs font-bold transition-all border ${
+                        mobileTab === 'catalogue'
+                            ? 'bg-indigo-600/20 text-indigo-300 border-indigo-500/40 shadow-sm'
+                            : 'bg-white/5 border-white/5 text-slate-400'
+                    }`}
+                >
+                    <BookOpen size={14} />
+                    Course Catalogue
+                </button>
+                <button
+                    onClick={() => setMobileTab('schedule')}
+                    className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-xs font-bold transition-all border relative ${
+                        mobileTab === 'schedule'
+                            ? 'bg-indigo-600/20 text-indigo-300 border-indigo-500/40 shadow-sm'
+                            : 'bg-white/5 border-white/5 text-slate-400'
+                    }`}
+                >
+                    <Calendar size={14} />
+                    Weekly Schedule
+                    {routine.length > 0 && (
+                        <span className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-indigo-600 text-white text-[10px] font-bold flex items-center justify-center border border-[#050814] animate-scale-in">
+                            {routine.length}
+                        </span>
+                    )}
+                </button>
+            </div>
+
             {/* ── Body ── */}
-            <main className="flex-1 max-w-screen-2xl w-full mx-auto p-4 lg:p-6 pt-2 lg:pt-4 flex gap-4 lg:gap-6">
+            <main className="flex-1 max-w-screen-2xl w-full mx-auto p-4 lg:p-6 pt-2 lg:pt-4 flex flex-col lg:flex-row gap-4 lg:gap-6">
 
                 {/* ── Left Sidebar: Course Search ── */}
-                <aside className="w-72 xl:w-80 flex-shrink-0 flex flex-col gap-4">
+                <aside className={`w-full lg:w-72 xl:w-80 flex-shrink-0 flex flex-col gap-4 ${mobileTab === 'catalogue' ? 'block' : 'hidden lg:block'}`}>
                     <div className="glass rounded-2xl p-4 border border-white/10 flex flex-col gap-3 flex-1">
                         <div className="flex items-center gap-2">
                             <BookOpen size={15} className="text-indigo-400" />
@@ -228,7 +350,7 @@ export default function App() {
                 </aside>
 
                 {/* ── Main Content: Routine Grid + Added list ── */}
-                <div className="flex-1 flex flex-col gap-4 min-w-0">
+                <div className={`flex-1 flex flex-col gap-4 min-w-0 ${mobileTab === 'schedule' ? 'block' : 'hidden lg:block'}`}>
 
                     {/* Routine summary chips */}
                     {routine.length > 0 && (

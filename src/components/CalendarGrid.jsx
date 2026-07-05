@@ -36,14 +36,16 @@ export default function CalendarGrid({ routine, onRemoveCourse }) {
     const numRows = SLOT_ROWS.length;
 
     return (
-        <div 
-            id="weekly-schedule-grid"
-            className="grid border border-white/10 rounded-2xl overflow-hidden glass"
-            style={{
-                gridTemplateColumns: '95px repeat(5, 1fr)',
-                gridTemplateRows: `auto repeat(${numRows}, minmax(110px, auto))`,
-            }}
-        >
+        <div className="w-full overflow-x-auto rounded-2xl border border-white/10 no-scrollbar glass">
+            <div 
+                id="weekly-schedule-grid"
+                className="grid"
+                style={{
+                    gridTemplateColumns: '90px repeat(5, minmax(120px, 1fr))',
+                    gridTemplateRows: `auto repeat(${numRows}, minmax(110px, auto))`,
+                    minWidth: '700px',
+                }}
+            >
             {/* ── Column Header Row ── */}
             <div 
                 className="py-3 px-2 text-center border-r border-b border-white/10 bg-white/5 font-semibold text-slate-400 text-xs uppercase tracking-wider" 
@@ -157,5 +159,6 @@ export default function CalendarGrid({ routine, onRemoveCourse }) {
                 </React.Fragment>
             ))}
         </div>
+    </div>
     );
 }
