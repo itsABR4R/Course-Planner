@@ -1,21 +1,24 @@
 # UIU Course Planner
 
-A visual weekly routine builder for United International University (UIU) students. Search courses, detect time conflicts, and build your semester schedule on an interactive calendar grid.
+A visual weekly routine builder and exam schedule planner for United International University (UIU) students. Search courses, detect time conflicts, select backup choices, and view combined class & exam schedules on an interactive dark-themed glassmorphism interface.
 
 ---
 
-## Features
+## Latest Features
 
-- **Course Search** — Search by course code or name, expand to see all available sections with their schedule and faculty
-- **Drag-free Scheduling** — Click a section to add it instantly to the weekly grid
-- **Conflict Detection** — Automatically blocks any section that overlaps with an already-added course
-- **Primary & Backup Sections** — Add multiple sections of the same course; the first is _Primary_, the rest are _Backups_
-  - **Same day, same time** → Backup cards appear in a click-to-expand dropdown under the primary card
-  - **Same day, different time** → Backup cards appear side-by-side in separate lane columns
-  - **Different day** → Backup cards render as standalone cards with a dashed "Backup" style
-- **Lane Layout** — Multiple courses at the same time on the same day are automatically split into side-by-side sub-columns (no overlapping cards)
-- **Toast Notifications** — Success, warning, and conflict alerts with auto-dismiss
-- **Clear Routine** — One-click reset of the entire schedule
+- **Multi-Department Support** — Choose between 11 major UIU departments (including CSE, BBA, BA in English, BSDS, BSEEE, etc.) with automatic schedule catalogues loaded dynamically from CSV files.
+- **Conflict & Backup Mode Switcher** — Toggle between:
+  - **Backup Mode (Default)**: Allows adding overlapping sections. Clashing slots render side-by-side or stacked in dropdown menus.
+  - **Conflict Mode**: Strictly prevents adding clashing sections and automatically drops overlapping courses when switched on. Comes with explanatory hover tooltips.
+- **Weekly Schedule Calendar Grid** — Displays class locations, faculty names, and slots (`08:30` - `16:30`, Sat-Wed).
+- **Exam Schedule Grid** — Displays midterm/final exam slots (T1: `09:00-11:00`, T2: `11:30-13:30`, T3: `14:00-16:00` across Days 1-7) below the weekly routine.
+- **Double Exam Badges** — Displays `Day X / Slot Y` (e.g. `Day 3 / T3`) badges on both the Course Catalogue search items and the weekly schedule calendar cards simultaneously.
+- **Exam Warning & Conflict Banners** — Warns users with distinct alerts and border highlights:
+  - **Conflict Detected (Red Border)**: Triggers when multiple exams clash in the exact same day and slot.
+  - **Warning (Yellow Border)**: Triggers when multiple exams occur on the same day but in different slots.
+- **Duration-Based Row Spanning** — Identifies any course slot running for 110 minutes or longer (such as 150-minute lab sessions or 2.5-hour theory classes) and expands the card to span 2 rows if the slot below is free.
+- **Mobile Optimizations** — Seamless mobile responsiveness featuring a navigation tab switcher for toggling between "Course Catalogue" and "Weekly Schedule" on iOS and smaller screen widths.
+- **Save as Image** — Render and download your weekly calendar routine directly as a high-quality `.png` image with a single click.
 
 ---
 
@@ -24,30 +27,30 @@ A visual weekly routine builder for United International University (UIU) studen
 | Layer | Technology |
 |---|---|
 | Framework | React 18 + Vite |
-| Styling | Tailwind CSS (glassmorphism dark theme) |
+| Styling | Tailwind CSS (Premium Glassmorphism Dark Theme) |
 | Icons | Lucide React |
 | CSV Parsing | PapaParse |
-| Font | Inter (Google Fonts) |
+| Font | Outfit & Inter (Google Fonts) |
+| Image Render | html-to-image |
 
 ---
 
 ## Project Structure
 
 ```
+departments/          # Dynamic department exam schedule configurations (JSON)
+public/               # Departmental CSV catalogues (e.g. CSE_Courses.csv)
 src/
 ├── components/
 │   ├── CalendarGrid.jsx     # Weekly grid with lane layout & dropdown stacks
-│   ├── CourseCard.jsx       # Individual course card (primary & backup styles)
-│   ├── CourseCardStack.jsx  # Primary card with click-to-expand backup dropdown
-│   ├── CourseSearch.jsx     # Searchable course list with section expansion
-│   └── Toast.jsx            # Notification toasts
+│   ├── CourseCard.jsx       # Course card with time slots and exam badges
+│   ├── CourseCardStack.jsx  # Primary card with backup dropdown stacks
+│   ├── CourseSearch.jsx     # Search & advanced day/time filter panel
+│   └── Toast.jsx            # Dynamic toast alerts
 ├── hooks/
-│   └── useRoutine.js        # State: add/remove courses, conflict detection, roles
+│   └── useRoutine.js        # Routine hook with conflict checks
 └── utils/
-    └── parser.js            # CSV parse, schedule string parser, room normalizer
-
-public/
-└── CSE_Courses.csv          # Schedule data (UIU CSE department)
+    └── parser.js            # PapaParse helper and string normalizers
 ```
 
 ---
@@ -71,43 +74,8 @@ npm run dev
 
 Open [http://localhost:5173](http://localhost:5173) in your browser.
 
-### Build for Production
-
-```bash
-npm run build
-```
-
 ---
 
-## CSV Data Format
+## Acknowledgements
 
-The app reads from `public/CSE_Courses.csv`. Expected columns:
-
-| Column | Example |
-|---|---|
-| `Course Code` | `CSE 1111` |
-| `Course Name` | `Structured Programming Language` |
-| `Section` | `A` |
-| `Faculty` | `Dr. John Doe` |
-| `Schedule` | `Sat 08:30-09:50 \| Tue 08:30-09:50 \| 304` |
-| `Room` | `304` or `727 - Computer Lab` |
-
-The `Schedule` field is parsed to extract days, times, and room number. Lab rooms like `727 - Computer Lab` are normalized to `727 (Lab)`.
-
-To switch datasets, update the CSV path in `src/App.jsx`:
-
-```js
-loadCourseData('/YourFile.csv')
-```
-
----
-
-## How Conflict Detection Works
-
-Two sections conflict if they share the same day **and** their time intervals overlap using the standard interval overlap condition:
-
-```
-start_A < end_B  AND  start_B < end_A
-```
-
-Backup sections of the **same course** are exempt from cross-section conflict checks (since you'd only attend one).
+Special thanks to [Kawsar (kawsarcodes)](https://github.com/kawsarcodes) for providing the departments JSON folder and exam data configs, which helped massively in making the Exam Schedule feature possible.
