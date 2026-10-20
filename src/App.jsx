@@ -3,11 +3,12 @@
  * Main application component — wires together all parts of the Course Planner.
  */
 import React, { useState, useEffect } from 'react';
-import { BookOpen, Trash2, GraduationCap, Calendar, Sparkles, X, Download, Github, Wrench, Settings, RotateCcw, AlertCircle } from 'lucide-react';
+import { BookOpen, Trash2, GraduationCap, Calendar, Sparkles, X, Download, Github, Wrench, Settings, RotateCcw, AlertCircle, AlertTriangle } from 'lucide-react';
 import { loadCourseData, groupCoursesByCode } from './utils/parser';
 import { useRoutine, getCourseRole, entriesOverlap } from './hooks/useRoutine';
 import CalendarGrid from './components/CalendarGrid';
 import CourseSearch from './components/CourseSearch';
+import EmptyScheduleState from './components/EmptyScheduleState';
 import Toast from './components/Toast';
 import { toPng } from 'html-to-image';
 import { Analytics } from '@vercel/analytics/react';
@@ -245,7 +246,7 @@ export default function App() {
     return (
         <div className="min-h-screen flex flex-col">
             {/* ── Header ── */}
-            <header className="glass-dark border-b border-white/8 px-4 md:px-6 py-3.5 md:py-4 sticky top-0 z-40">
+            <header className="bg-[#070914]/90 backdrop-blur-md border-b border-[#161a2f] px-4 md:px-6 py-3 sticky top-0 z-40">
                 <div className="max-w-screen-2xl mx-auto flex items-center justify-between relative">
                     <div className="flex items-center gap-2.5 md:gap-3">
                         <img 
@@ -254,20 +255,12 @@ export default function App() {
                             className="h-8 md:h-9 w-auto object-contain flex-shrink-0"
                         />
                         <div>
-                            <div className="flex items-center gap-1.5 md:gap-2">
-                                <h1 className="text-sm md:text-base font-bold text-white leading-tight">UIU Course Planner</h1>
-                                <span className="md:hidden text-[7px] font-black px-1.5 py-0.5 rounded-full border animate-pulse-glow flex-shrink-0">
-                                    Fall-2026
-                                </span>
-                            </div>
+                            <h1 className="text-sm md:text-base font-bold text-white leading-tight">UIU Course Planner</h1>
                             <p className="text-[10px] md:text-[11px] text-slate-400 leading-tight mt-0.5">Routine Maker & Conflict Detector</p>
                         </div>
-                    </div>
-
-                    {/* Absolute Centered Semester Label */}
-                    <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 hidden md:block">
-                        <span className="text-xs font-black px-5 py-2 rounded-full uppercase tracking-widest border shadow-lg animate-pulse-glow">
-                            Fall-2026
+                        <div className="hidden sm:block w-px h-6 bg-slate-800 mx-1 md:mx-2" />
+                        <span className="hidden sm:inline text-xs md:text-sm font-medium text-slate-400">
+                            United International University
                         </span>
                     </div>
 
@@ -275,11 +268,11 @@ export default function App() {
                         {routine.length > 0 && (
                             <>
                                 <span className="text-xs text-slate-400 hidden lg:inline">
-                                    <span className="text-indigo-300 font-semibold">{routine.length}</span> course{routine.length !== 1 ? 's' : ''} added
+                                    <span className="text-orange-400 font-semibold">{routine.length}</span> course{routine.length !== 1 ? 's' : ''} added
                                 </span>
                                 <button
                                     onClick={handleSaveImage}
-                                    className="flex items-center gap-1.5 text-xs text-indigo-300 hover:text-indigo-200 border border-indigo-500/30 hover:border-indigo-400/50 px-2.5 py-1.5 md:px-3 rounded-lg transition-all"
+                                    className="flex items-center gap-1.5 text-xs text-slate-300 hover:text-white bg-[#121629] border border-[#232a4a] hover:border-[#384377] px-2.5 py-1.5 md:px-3 rounded-lg transition-all"
                                     title="Save schedule as image"
                                 >
                                     <Download size={13} />
@@ -287,7 +280,7 @@ export default function App() {
                                 </button>
                                 <button
                                     onClick={clearRoutine}
-                                    className="flex items-center gap-1.5 text-xs text-red-400 hover:text-red-300 border border-red-500/30 hover:border-red-400/50 px-2.5 py-1.5 md:px-3 rounded-lg transition-all"
+                                    className="flex items-center gap-1.5 text-xs text-red-400 hover:text-red-300 bg-red-950/30 border border-red-500/30 hover:border-red-400/50 px-2.5 py-1.5 md:px-3 rounded-lg transition-all"
                                     title="Clear routine"
                                 >
                                     <Trash2 size={13} />
@@ -295,28 +288,45 @@ export default function App() {
                                 </button>
                             </>
                         )}
+                        <span className="text-xs font-semibold px-3 py-1 rounded-full border border-emerald-500/30 bg-[#0e2417] text-emerald-400 shadow-sm shadow-emerald-950/40 animate-pulse-glow flex-shrink-0">
+                            Fall-2026
+                        </span>
+                        
                         <a
                             href="https://github.com/itsABR4R"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="w-8 h-8 md:w-9 md:h-9 rounded-full bg-white flex items-center justify-center shadow-md hover:scale-105 transition-all text-[#181717] hover:bg-slate-100 flex-shrink-0"
-                            title="View GitHub Profile"
+                            title="Visit GitHub Profile"
+                            className="flex-shrink-0 transition-transform hover:scale-105"
                         >
-                            <Github className="w-4.5 h-4.5 md:w-5.5 md:h-5.5" fill="currentColor" />
+                            <img
+                                src="https://github.com/itsABR4R.png"
+                                alt="User Avatar"
+                                className="w-8 h-8 rounded-full border border-slate-700/60 hover:border-slate-400 object-cover shadow-sm transition-colors"
+                            />
                         </a>
+                        {/* <a
+                            href="https://github.com/itsABR4R/Course-Planner"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-[#181717] hover:bg-slate-200 transition-colors shadow-sm flex-shrink-0"
+                            title="View GitHub Repository"
+                        >
+                            <Github size={18} fill="currentColor" />
+                        </a> */}
                     </div>
                 </div>
             </header>
 
             {/* ── Top Notice Banner ── */}
             <div className="max-w-screen-2xl w-full mx-auto px-4 lg:px-6 pt-3 lg:pt-4 relative z-30">
-                <div className="glass rounded-xl p-3 md:px-4 md:py-2.5 border border-amber-500/30 bg-amber-950/20 flex items-center justify-between gap-3 shadow-lg shadow-amber-950/10 animate-fade-in">
+                <div className="rounded-xl px-4 py-2.5 border border-amber-500/35 bg-[#171207]/95 flex items-center justify-between gap-3 shadow-lg shadow-amber-950/15 animate-fade-in">
                     <div className="flex items-center gap-2.5 min-w-0">
-                        <div className="w-6 h-6 rounded-lg bg-amber-500/20 border border-amber-500/30 flex items-center justify-center flex-shrink-0 text-amber-400">
-                            <AlertCircle size={14} className="text-amber-400" />
+                        <div className="w-5 h-5 rounded-md flex items-center justify-center flex-shrink-0 text-amber-400">
+                            <AlertTriangle size={15} className="text-amber-400" />
                         </div>
                         <p className="text-xs text-amber-200/90 leading-normal">
-                            <span className="font-bold text-amber-300 mr-1.5 uppercase tracking-wide text-[10px] px-1.5 py-0.5 rounded bg-amber-500/20 border border-amber-500/30">
+                            <span className="font-bold text-amber-400 text-[10px] px-1.5 py-0.5 rounded bg-transparent border border-amber-500/50 uppercase tracking-wider mr-2">
                                 Notice
                             </span>
                             The <span className="font-semibold text-white">BA in English</span>, <span className="font-semibold text-white">BSBGE</span>, <span className="font-semibold text-white">BSCE</span>, <span className="font-semibold text-white">BSSEDS</span>, and <span className="font-semibold text-white">BSSMSJ</span> schedules need to be updated. Their options are temporarily disabled until further notice.
@@ -327,9 +337,9 @@ export default function App() {
 
             {/* ── Department Selector & Mode Toggle ── */}
             <div className="max-w-screen-2xl w-full mx-auto px-4 lg:px-6 pt-3 lg:pt-4 relative z-30">
-                <div className="glass-dark rounded-2xl p-2.5 border border-white/8 flex flex-col md:flex-row md:items-center gap-3 justify-between">
+                <div className="dark-panel rounded-2xl p-2 md:p-2.5 flex flex-col md:flex-row md:items-center gap-3 justify-between shadow-xl">
                     {/* Left: Department Tabs (scrollable) */}
-                    <div className="flex items-center gap-2 overflow-x-auto no-scrollbar scroll-smooth flex-1 w-full">
+                    <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar scroll-smooth flex-1 w-full">
                         {DEPARTMENTS.map(dept => {
                             const isActive = selectedDept === dept.id;
                             const isDisabled = dept.disabled;
@@ -340,10 +350,10 @@ export default function App() {
                                         key={dept.id}
                                         disabled
                                         title={`${dept.label} routine needs to be updated (Fall 2026 pending)`}
-                                        className="px-3 py-2 rounded-xl text-xs font-medium whitespace-nowrap transition-all duration-200 opacity-40 cursor-not-allowed bg-white/[0.02] border border-white/5 text-slate-500 hover:text-slate-500 hover:bg-white/[0.02] flex items-center gap-1.5 pointer-events-none select-none"
+                                        className="px-2.5 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all duration-200 opacity-40 cursor-not-allowed bg-transparent text-slate-500 flex items-center gap-1.5 pointer-events-none select-none"
                                     >
                                         <span>{dept.label}</span>
-                                        <span className="text-[9px] px-1 py-0.2 rounded bg-amber-500/15 text-amber-400/80 border border-amber-500/20 font-medium">
+                                        <span className="text-[9px] px-1.5 py-0.2 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20 font-semibold">
                                             Pending
                                         </span>
                                     </button>
@@ -354,10 +364,10 @@ export default function App() {
                                 <button
                                     key={dept.id}
                                     onClick={() => setSelectedDept(dept.id)}
-                                    className={`px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all duration-200 ${
+                                    className={`px-3 py-1.5 text-xs whitespace-nowrap transition-all duration-200 ${
                                         isActive 
-                                            ? 'bg-indigo-600/20 text-indigo-300 border border-indigo-500/40 shadow-sm shadow-indigo-500/10 scale-[1.02]' 
-                                            : 'bg-transparent border border-transparent text-slate-400 hover:text-slate-200 hover:bg-white/5'
+                                            ? 'text-white font-bold bg-[#14182b] border-b-2 border-orange-500 rounded-t-lg shadow-sm' 
+                                            : 'text-slate-400 font-semibold hover:text-slate-200 hover:bg-white/5 rounded-lg'
                                     }`}
                                 >
                                     {dept.label}
@@ -367,18 +377,18 @@ export default function App() {
                     </div>
 
                     {/* Divider line (desktop only) */}
-                    <div className="hidden md:block w-px h-6 bg-white/10 flex-shrink-0" />
+                    <div className="hidden md:block w-px h-6 bg-[#1f2644] flex-shrink-0" />
 
                     {/* Right: Mode Toggle */}
-                    <div className="flex items-center bg-white/5 rounded-xl p-1 border border-white/5 flex-shrink-0 self-start md:self-auto gap-1">
+                    <div className="flex items-center bg-[#070914] rounded-xl p-1 border border-[#1a1f36] flex-shrink-0 self-start md:self-auto gap-1">
                         
                         {/* Backup Mode Tooltip Wrapper */}
                         <div className="relative group">
                             <button
                                 onClick={() => setPlannerMode('backup')}
-                                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 ${
+                                className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 ${
                                     plannerMode === 'backup'
-                                        ? 'bg-indigo-600 text-white shadow-sm'
+                                        ? 'bg-gradient-to-r from-orange-500 to-amber-600 text-white shadow-md shadow-orange-950/40'
                                         : 'text-slate-400 hover:text-slate-200'
                                 }`}
                             >
@@ -420,9 +430,9 @@ export default function App() {
                                         showToast(`Conflict Mode: Removed overlapping sections: ${removedNames}`, 'warning');
                                     }
                                 }}
-                                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 ${
+                                className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 ${
                                     plannerMode === 'conflict'
-                                        ? 'bg-red-600/90 text-white shadow-sm shadow-red-900/20'
+                                        ? 'bg-gradient-to-r from-red-600 to-rose-600 text-white shadow-md shadow-red-950/40'
                                         : 'text-slate-400 hover:text-slate-200'
                                 }`}
                             >
@@ -475,12 +485,7 @@ export default function App() {
 
                 {/* ── Left Sidebar: Course Search ── */}
                 <aside className={`w-full lg:w-72 xl:w-80 flex-shrink-0 flex flex-col gap-4 ${mobileTab === 'catalogue' ? 'block' : 'hidden lg:block'}`}>
-                    <div className="glass rounded-2xl p-4 border border-white/10 flex flex-col gap-3 flex-1">
-                        <div className="flex items-center gap-2">
-                            <BookOpen size={15} className="text-indigo-400" />
-                            <h2 className="text-sm font-semibold text-slate-200">Course Catalogue</h2>
-                        </div>
-
+                    <div className="dark-panel rounded-2xl p-4 flex flex-col gap-3 flex-1 shadow-lg">
                         {isDeptDisabled ? (
                             <div className="flex flex-col items-center justify-center text-center p-6 py-12 bg-white/[0.01] border border-white/5 rounded-xl animate-fade-in my-auto">
                                 <div className="relative w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center border border-white/10 mb-6 shadow-inner">
@@ -496,7 +501,7 @@ export default function App() {
                             </div>
                         ) : loading ? (
                             <div className="flex flex-col items-center justify-center py-12 gap-3">
-                                <div className="w-8 h-8 rounded-full border-2 border-indigo-500 border-t-transparent animate-spin" />
+                                <div className="w-8 h-8 rounded-full border-2 border-orange-500 border-t-transparent animate-spin" />
                                 <p className="text-xs text-slate-500">Loading schedule…</p>
                             </div>
                         ) : error ? (
@@ -515,9 +520,9 @@ export default function App() {
 
                     {/* Routine summary chips */}
                     {routine.length > 0 && (
-                        <div className="glass rounded-xl border border-white/10 p-3">
+                        <div className="dark-panel rounded-xl p-3">
                             <div className="flex items-center gap-2 mb-2">
-                                <Sparkles size={13} className="text-indigo-400" />
+                                <Sparkles size={13} className="text-orange-400" />
                                 <span className="text-xs font-semibold text-slate-300">Selected Courses</span>
                             </div>
                             <div className="flex flex-wrap gap-2">
@@ -562,6 +567,14 @@ export default function App() {
                                             )}
                                             <span className="relative z-10">{entry.code}</span>
                                             <span className="opacity-70 relative z-10">§{entry.section}</span>
+                                            {roleInfo.type === 'primary' && (
+                                                <span 
+                                                    title="1st Choice Course" 
+                                                    className="relative z-10 flex items-center select-none text-[12px] filter drop-shadow-[0_0_5px_rgba(245,158,11,0.7)] transition-transform hover:scale-125"
+                                                >
+                                                    👑
+                                                </span>
+                                            )}
                                             {isBackup && (
                                                 <span
                                                     className="text-[8px] font-extrabold px-1.5 py-0.5 rounded uppercase tracking-wider relative z-10 text-white"
@@ -600,22 +613,19 @@ export default function App() {
                     {/* Calendar Grid */}
                     <div className="flex-1">
                         <div className="flex items-center gap-2 mb-3">
-                            <Calendar size={15} className="text-indigo-400" />
-                            <h2 className="text-sm font-semibold text-slate-200">Weekly Schedule</h2>
-                            <span className="text-xs text-slate-600">(Sat – Wed · 08:30 – 16:30)</span>
+                            <Calendar size={15} className="text-orange-400" />
+                            <h2 className="text-sm font-semibold text-white">Weekly Schedule</h2>
+                            <span className="text-xs text-slate-500 font-medium">(Sat – Wed · 08:30 – 16:30)</span>
                         </div>
 
                         {routine.length === 0 ? (
-                            <div className="glass rounded-2xl border border-white/10 border-dashed flex flex-col items-center justify-center py-24 gap-3">
-                                <Calendar size={36} className="text-slate-700" />
-                                <p className="text-slate-500 text-sm font-medium">Your routine is empty</p>
-                                <p className="text-slate-600 text-xs">Search for a course on the left and add sections to fill your week</p>
-                            </div>
+                            <EmptyScheduleState onDropSection={handleAddCourse} />
                         ) : (
                             <CalendarGrid 
                                 routine={routine} 
                                 onRemoveCourse={removeCourse} 
                                 getExamInfo={(code) => getExamInfo(code, selectedDept)}
+                                onDropSection={handleAddCourse}
                             />
                         )}
                     </div>
@@ -624,13 +634,13 @@ export default function App() {
                     <div className="flex flex-col gap-3 mt-4">
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2">
-                                <GraduationCap size={15} className="text-indigo-400" />
-                                <h2 className="text-sm font-semibold text-slate-200">Exam Schedule</h2>
+                                <GraduationCap size={15} className="text-orange-400" />
+                                <h2 className="text-sm font-semibold text-white">Exam Schedule</h2>
                             </div>
                             {routine.length > 0 && (
                                 <button
                                     onClick={clearRoutine}
-                                    className="flex items-center gap-1.5 text-xs text-red-500 hover:text-red-400 transition-all font-bold hover:scale-[1.02]"
+                                    className="flex items-center gap-1.5 text-xs text-red-400 hover:text-red-300 transition-all font-semibold"
                                 >
                                     <RotateCcw size={12} />
                                     Reset
@@ -663,7 +673,7 @@ export default function App() {
                             </div>
                         )}
 
-                        <div className="w-full overflow-x-auto rounded-2xl border border-white/10 no-scrollbar glass">
+                        <div className="w-full overflow-x-auto rounded-2xl border border-[#1a1f36] no-scrollbar dark-panel">
                             <div 
                                 className="grid text-slate-300"
                                 style={{
@@ -673,20 +683,29 @@ export default function App() {
                                 }}
                             >
                                 {/* Header Row */}
-                                <div className="py-4 px-3 text-center border-r border-b border-white/10 bg-white/5 font-semibold text-slate-400 text-xs uppercase tracking-wider flex items-center justify-center">
-                                    Day
+                                <div className="py-4 px-3 text-center border-r border-b border-[#1a1f36] bg-[#101322] font-bold text-slate-400 text-xs uppercase tracking-wider flex items-center justify-center">
+                                    DAY
                                 </div>
-                                <div className="py-3 px-3 text-center border-r border-b border-white/10 bg-white/5 font-semibold text-slate-300 text-xs flex flex-col justify-center">
-                                    <span className="font-bold">Slot T1</span>
-                                    <span className="text-[10px] text-amber-500/80 font-medium mt-0.5">09:00 - 11:00</span>
+                                <div 
+                                    className="py-3 px-3 text-center border-r border-b border-[#1a1f36] flex flex-col justify-center relative"
+                                    style={{ background: 'linear-gradient(135deg, #2b1410 0%, #3d1b14 100%)' }}
+                                >
+                                    <span className="font-bold text-white text-xs">Slot T1</span>
+                                    <span className="text-[10px] text-amber-500 font-medium mt-0.5">09:00 - 11:00</span>
                                 </div>
-                                <div className="py-3 px-3 text-center border-r border-b border-white/10 bg-white/5 font-semibold text-slate-300 text-xs flex flex-col justify-center">
-                                    <span className="font-bold">Slot T2</span>
-                                    <span className="text-[10px] text-amber-500/80 font-medium mt-0.5">11:30 - 13:30</span>
+                                <div 
+                                    className="py-3 px-3 text-center border-r border-b border-[#1a1f36] flex flex-col justify-center relative"
+                                    style={{ background: 'linear-gradient(135deg, #26220e 0%, #362e12 100%)' }}
+                                >
+                                    <span className="font-bold text-white text-xs">Slot T2</span>
+                                    <span className="text-[10px] text-yellow-500/90 font-medium mt-0.5">11:20 - 13:20</span>
                                 </div>
-                                <div className="py-3 px-3 text-center border-b border-white/10 bg-white/5 font-semibold text-slate-300 text-xs flex flex-col justify-center">
-                                    <span className="font-bold">Slot T3</span>
-                                    <span className="text-[10px] text-amber-500/80 font-medium mt-0.5">14:00 - 16:00</span>
+                                <div 
+                                    className="py-3 px-3 text-center border-b border-[#1a1f36] flex flex-col justify-center relative"
+                                    style={{ background: 'linear-gradient(135deg, #241a12 0%, #342418 100%)' }}
+                                >
+                                    <span className="font-bold text-white text-xs">Slot T3</span>
+                                    <span className="text-[10px] text-amber-500 font-medium mt-0.5">14:00 - 16:00</span>
                                 </div>
 
                                 {/* Data Rows */}
@@ -695,7 +714,7 @@ export default function App() {
                                     return (
                                         <React.Fragment key={dayNum}>
                                             {/* Day Label */}
-                                            <div className="py-4 px-3 text-center border-r border-b border-white/10 bg-white/[0.02] font-semibold text-slate-300 text-xs flex items-center justify-center">
+                                            <div className="py-4 px-3 text-center border-r border-b border-[#1a1f36] bg-[#0c0f1d] font-bold text-slate-300 text-xs flex items-center justify-center">
                                                 Day {dayNum}
                                             </div>
                                             
@@ -715,18 +734,18 @@ export default function App() {
                                                 return (
                                                     <div
                                                         key={slotKey}
-                                                        className={`p-2 bg-slate-950/10 flex flex-col justify-center gap-1.5 min-h-[90px] relative`}
+                                                        className={`p-2 dot-grid flex flex-col justify-center gap-1.5 min-h-[90px] relative`}
                                                         style={{
                                                             ...highlightStyle,
-                                                            borderRight: (isConflict || isWarning) ? '2px solid' : (idx === 2 ? 'none' : '1px solid rgba(255,255,255,0.1)'),
-                                                            borderBottom: (isConflict || isWarning) ? '2px solid' : '1px solid rgba(255,255,255,0.1)',
+                                                            borderRight: (isConflict || isWarning) ? '2px solid' : (idx === 2 ? 'none' : '1px solid #161a2f'),
+                                                            borderBottom: (isConflict || isWarning) ? '2px solid' : '1px solid #161a2f',
                                                             borderColor: isConflict ? '#ef4444' : isWarning ? '#eab308' : undefined,
                                                         }}
                                                     >
                                                         {courses.map((course, cIdx) => (
                                                             <div
                                                                 key={cIdx}
-                                                                className="bg-orange-600 text-white text-[10px] font-bold px-3 py-2 rounded-lg shadow-sm flex flex-col items-start gap-0.5 border border-orange-700/40 select-none animate-scale-in"
+                                                                className="bg-gradient-to-r from-orange-600 to-amber-600 text-white text-[10px] font-bold px-3 py-2 rounded-lg shadow-sm flex flex-col items-start gap-0.5 border border-orange-500/40 select-none animate-scale-in"
                                                             >
                                                                 <span className="font-extrabold">{course.code}:</span>
                                                                 <span className="opacity-90 font-medium leading-none">{course.title}</span>

@@ -81,7 +81,7 @@ export default function CourseCard({ entry, onRemove, compact = false, timeSlot,
                     paddingLeft: compact ? '11px' : '15px'
                 }}
             >
-                <div className="flex items-center justify-between gap-1 min-h-full h-fit">
+                <div className="flex items-start justify-between gap-1.5 min-h-full h-fit">
                     <div className="min-w-0 flex-1">
                         {/* Course code + Backup/Choice badge */}
                         <div className="flex items-center gap-1.5 flex-wrap">
@@ -103,7 +103,7 @@ export default function CourseCard({ entry, onRemove, compact = false, timeSlot,
                             {isBackup && (
                                 <span
                                     className="text-[8px] font-extrabold px-1.5 py-0.5 rounded uppercase tracking-wider flex-shrink-0 text-white"
-                                    style={{
+                                    style={{ 
                                         background: '#ef4444',
                                         boxShadow: '0 0 8px rgba(239, 68, 68, 0.4)',
                                     }}
@@ -114,7 +114,7 @@ export default function CourseCard({ entry, onRemove, compact = false, timeSlot,
                             {isChoice && (
                                 <span
                                     className="text-[8px] font-extrabold px-1.5 py-0.5 rounded uppercase tracking-wider flex-shrink-0"
-                                    style={{
+                                    style={{ 
                                         background: roleInfo.level === 2 ? '#06b6d4' : '#d946ef',
                                         color: roleInfo.level === 2 ? '#000' : '#fff',
                                         boxShadow: roleInfo.level === 2 
@@ -160,16 +160,30 @@ export default function CourseCard({ entry, onRemove, compact = false, timeSlot,
                         )}
                     </div>
 
-                    {/* Remove button */}
-                    {onRemove && (
-                        <button
-                            onClick={(e) => { e.stopPropagation(); onRemove(entry.id); }}
-                            className="opacity-0 group-hover:opacity-100 transition-opacity bg-white/20 hover:bg-white/40 rounded-full p-0.5 flex-shrink-0"
-                            title="Remove from routine"
-                        >
-                            <X size={10} />
-                        </button>
-                    )}
+                    {/* Top Right: Crown for 1st Choice + Remove button */}
+                    <div className="flex items-center gap-1.5 flex-shrink-0 self-start">
+                        {isPrimary && (
+                            <div
+                                className={`flex items-center justify-center rounded-full bg-gradient-to-br from-amber-400/30 via-amber-950/70 to-black/80 border border-amber-300/75 shadow-[0_0_10px_rgba(245,158,11,0.6),inset_0_1px_2px_rgba(255,255,255,0.35)] flex-shrink-0 transition-transform duration-200 group-hover:scale-115 select-none pointer-events-none ${
+                                    compact ? 'w-5 h-5 text-[11px]' : 'w-6 h-6 text-[13px]'
+                                }`}
+                                title="1st Choice Course"
+                            >
+                                <span className="leading-none drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] filter -translate-y-[0.5px]">
+                                    👑
+                                </span>
+                            </div>
+                        )}
+                        {onRemove && (
+                            <button
+                                onClick={(e) => { e.stopPropagation(); onRemove(entry.id); }}
+                                className="opacity-0 group-hover:opacity-100 transition-opacity bg-black/40 hover:bg-black/60 rounded-full p-1 flex-shrink-0 text-white"
+                                title="Remove from routine"
+                            >
+                                <X size={10} />
+                            </button>
+                        )}
+                    </div>
                 </div>
             </div>
         </div>

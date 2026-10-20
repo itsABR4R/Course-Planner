@@ -32,11 +32,48 @@ function getRowIndex(startMin) {
     return 5;                                   // 15:11 starts (Slot 6)
 }
 
-export default function CalendarGrid({ routine, onRemoveCourse, getExamInfo }) {
+export default function CalendarGrid({ routine, onRemoveCourse, getExamInfo, onDropSection }) {
     const numRows = SLOT_ROWS.length;
+    const [isDragOverGrid, setIsDragOverGrid] = React.useState(false);
+
+    const handleDragOver = (e) => {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'copy';
+        if (!isDragOverGrid) setIsDragOverGrid(true);
+    };
+
+    const handleDragLeave = (e) => {
+        if (e.currentTarget.contains(e.relatedTarget)) return;
+        setIsDragOverGrid(false);
+    };
+
+    const handleDrop = (e) => {
+        e.preventDefault();
+        setIsDragOverGrid(false);
+        try {
+            const raw = e.dataTransfer.getData('application/json');
+            if (raw) {
+                const data = JSON.parse(raw);
+                if (onDropSection) {
+                    onDropSection(data);
+                }
+            }
+        } catch (err) {
+            console.error('Failed to parse dropped course payload:', err);
+        }
+    };
 
     return (
-        <div className="w-full overflow-x-auto rounded-2xl border border-white/10 no-scrollbar glass">
+        <div 
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
+            className={`w-full overflow-x-auto rounded-2xl border no-scrollbar dark-panel transition-all duration-200 ${
+                isDragOverGrid 
+                    ? 'border-orange-500 ring-2 ring-orange-500/30 shadow-xl shadow-orange-950/40' 
+                    : 'border-[#1a1f36]'
+            }`}
+        >
             <div 
                 id="weekly-schedule-grid"
                 className="grid"
@@ -48,7 +85,7 @@ export default function CalendarGrid({ routine, onRemoveCourse, getExamInfo }) {
             >
             {/* ── Column Header Row ── */}
             <div 
-                className="py-3 px-2 text-center border-r border-b border-white/10 bg-white/5 font-semibold text-slate-400 text-xs uppercase tracking-wider" 
+                className="py-3 px-2 text-center border-r border-b border-[#1a1f36] bg-[#101322] font-bold text-slate-400 text-xs uppercase tracking-wider" 
                 style={{ gridRow: 1, gridColumn: 1 }}
             >
                 Time
@@ -56,11 +93,11 @@ export default function CalendarGrid({ routine, onRemoveCourse, getExamInfo }) {
             {DAYS.map((day, dayIndex) => (
                 <div 
                     key={day} 
-                    className="py-3 px-2 text-center border-b border-white/10 bg-white/5 font-semibold text-slate-300 text-xs uppercase tracking-wider"
+                    className="py-3 px-2 text-center border-b border-[#1a1f36] bg-[#101322] font-bold text-slate-300 text-xs uppercase tracking-wider"
                     style={{ 
                         gridRow: 1, 
                         gridColumn: dayIndex + 2,
-                        borderRight: dayIndex === DAYS.length - 1 ? 'none' : '1px solid rgba(255, 255, 255, 0.1)'
+                        borderRight: dayIndex === DAYS.length - 1 ? 'none' : '1px solid #1a1f36'
                     }}
                 >
                     {day.slice(0, 3)}
@@ -72,14 +109,14 @@ export default function CalendarGrid({ routine, onRemoveCourse, getExamInfo }) {
                 <React.Fragment key={`row-${rowIndex}`}>
                     {/* Left Slot Label Cell */}
                     <div 
-                        className="p-3 flex flex-col justify-center items-center border-r border-b border-white/10 bg-white/[0.02] text-center animate-fade-in"
+                        className="p-3 flex flex-col justify-center items-center border-r border-b border-[#1a1f36] bg-[#0c0f1d] text-center animate-fade-in"
                         style={{ 
                             gridRow: rowIndex + 2, 
                             gridColumn: 1,
-                            borderBottom: rowIndex === numRows - 1 ? 'none' : undefined
+                            borderBottom: rowIndex === numRows - 1 ? 'none' : '1px solid #1a1f36'
                         }}
                     >
-                        <span className="text-[9px] font-semibold text-slate-500 uppercase tracking-wider">{rowInfo.label}</span>
+                        <span className="text-[9px] font-bold text-slate-500 uppercase tracking-wider">{rowInfo.label}</span>
                         <span className="text-xs font-bold text-slate-200 mt-1">{rowInfo.timeRange}</span>
                     </div>
 
@@ -120,13 +157,12 @@ export default function CalendarGrid({ routine, onRemoveCourse, getExamInfo }) {
                         return (
                             <div 
                                 key={`cell-${day}-${rowIndex}`}
-                                className="p-3.5 flex flex-col gap-3 justify-start overflow-visible min-h-[110px]"
+                                className="p-3 dot-grid flex flex-col gap-2.5 justify-start overflow-visible min-h-[110px]"
                                 style={{ 
                                     gridRow: `${rowIndex + 2} / span ${rowSpan}`, 
                                     gridColumn: dayIndex + 2,
-                                    borderRight: dayIndex === DAYS.length - 1 ? 'none' : '1px solid rgba(255, 255, 255, 0.1)',
-                                    borderBottom: rowIndex === numRows - 1 ? 'none' : '1px solid rgba(255, 255, 255, 0.1)',
-                                    background: 'rgba(255, 255, 255, 0.005)',
+                                    borderRight: dayIndex === DAYS.length - 1 ? 'none' : '1px solid #161a2f',
+                                    borderBottom: rowIndex === numRows - 1 ? 'none' : '1px solid #161a2f',
                                     zIndex: rowSpan > 1 ? 10 : undefined,
                                 }}
                             >
