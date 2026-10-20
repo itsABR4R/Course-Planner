@@ -66,18 +66,19 @@ function getExamInfo(courseCode, selectedDept) {
     return null;
 }
 
+// Set disabled: true for departments whose Fall 2026 routine is pending
 const DEPARTMENTS = [
-    { id: 'BA_ENG', label: 'BA in English', csv: '/BA_ENG_Courses.csv' },
+    { id: 'BA_ENG', label: 'BA in English', csv: '/BA_ENG_Courses.csv', disabled: true },
     { id: 'BBA', label: 'BBA', csv: '/BBA_Courses.csv' },
     { id: 'BBA_AIS', label: 'BBA in AIS', csv: '/BBA_AIS_Courses.csv' },
-    { id: 'BSBGE', label: 'BSBGE', csv: '/BGE_Courses.csv' },
-    { id: 'BSCE', label: 'BSCE', csv: '/CE_Courses.csv' },
+    { id: 'BSBGE', label: 'BSBGE', csv: '/BGE_Courses.csv', disabled: true },
+    { id: 'BSCE', label: 'BSCE', csv: '/CE_Courses.csv', disabled: true },
     { id: 'BSCSE', label: 'BSCSE', csv: '/CSE_Courses.csv' },
     { id: 'BSDS', label: 'BSDS', csv: '/DS_Courses.csv' },
     { id: 'BSECO', label: 'BSECO', csv: '/ECO_Courses.csv' },
     { id: 'BSEEE', label: 'BSEEE', csv: '/EEE_Courses.csv' },
-    { id: 'BSSEDS', label: 'BSSEDS', csv: '/SEDS_Courses.csv' },
-    { id: 'BSSMSJ', label: 'BSSMSJ', csv: '/SMSJ_Courses.csv' },
+    { id: 'BSSEDS', label: 'BSSEDS', csv: '/SEDS_Courses.csv', disabled: true },
+    { id: 'BSSMSJ', label: 'BSSMSJ', csv: '/SMSJ_Courses.csv', disabled: true },
 ];
 
 export default function App() {
@@ -89,6 +90,14 @@ export default function App() {
     const [isDeptDisabled, setIsDeptDisabled] = useState(false);
     const [plannerMode, setPlannerMode] = useState('backup'); // 'backup' or 'conflict'
     const { routine, setRoutine, toast, addCourse, removeCourse, clearRoutine, showToast } = useRoutine();
+
+    // Fallback if a disabled department was somehow selected
+    useEffect(() => {
+        const dept = DEPARTMENTS.find(d => d.id === selectedDept);
+        if (dept?.disabled) {
+            setSelectedDept('BSCSE');
+        }
+    }, [selectedDept]);
 
     // Load CSV whenever selectedDept changes
     useEffect(() => {
@@ -299,13 +308,48 @@ export default function App() {
                 </div>
             </header>
 
+            {/* ── Top Notice Banner ── */}
+            <div className="max-w-screen-2xl w-full mx-auto px-4 lg:px-6 pt-3 lg:pt-4 relative z-30">
+                <div className="glass rounded-xl p-3 md:px-4 md:py-2.5 border border-amber-500/30 bg-amber-950/20 flex items-center justify-between gap-3 shadow-lg shadow-amber-950/10 animate-fade-in">
+                    <div className="flex items-center gap-2.5 min-w-0">
+                        <div className="w-6 h-6 rounded-lg bg-amber-500/20 border border-amber-500/30 flex items-center justify-center flex-shrink-0 text-amber-400">
+                            <AlertCircle size={14} className="text-amber-400" />
+                        </div>
+                        <p className="text-xs text-amber-200/90 leading-normal">
+                            <span className="font-bold text-amber-300 mr-1.5 uppercase tracking-wide text-[10px] px-1.5 py-0.5 rounded bg-amber-500/20 border border-amber-500/30">
+                                Notice
+                            </span>
+                            The <span className="font-semibold text-white">BA in English</span>, <span className="font-semibold text-white">BSBGE</span>, <span className="font-semibold text-white">BSCE</span>, <span className="font-semibold text-white">BSSEDS</span>, and <span className="font-semibold text-white">BSSMSJ</span> schedules need to be updated. Their options are temporarily disabled until further notice.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
             {/* ── Department Selector & Mode Toggle ── */}
-            <div className="max-w-screen-2xl w-full mx-auto px-4 lg:px-6 pt-4 lg:pt-6 relative z-30">
+            <div className="max-w-screen-2xl w-full mx-auto px-4 lg:px-6 pt-3 lg:pt-4 relative z-30">
                 <div className="glass-dark rounded-2xl p-2.5 border border-white/8 flex flex-col md:flex-row md:items-center gap-3 justify-between">
                     {/* Left: Department Tabs (scrollable) */}
                     <div className="flex items-center gap-2 overflow-x-auto no-scrollbar scroll-smooth flex-1 w-full">
                         {DEPARTMENTS.map(dept => {
                             const isActive = selectedDept === dept.id;
+                            const isDisabled = dept.disabled;
+
+                            if (isDisabled) {
+                                return (
+                                    <button
+                                        key={dept.id}
+                                        disabled
+                                        title={`${dept.label} routine needs to be updated (Fall 2026 pending)`}
+                                        className="px-3 py-2 rounded-xl text-xs font-medium whitespace-nowrap transition-all duration-200 opacity-40 cursor-not-allowed bg-white/[0.02] border border-white/5 text-slate-500 hover:text-slate-500 hover:bg-white/[0.02] flex items-center gap-1.5 pointer-events-none select-none"
+                                    >
+                                        <span>{dept.label}</span>
+                                        <span className="text-[9px] px-1 py-0.2 rounded bg-amber-500/15 text-amber-400/80 border border-amber-500/20 font-medium">
+                                            Pending
+                                        </span>
+                                    </button>
+                                );
+                            }
+
                             return (
                                 <button
                                     key={dept.id}
