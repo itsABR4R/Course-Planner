@@ -248,7 +248,7 @@ export default function App() {
                             <div className="flex items-center gap-1.5 md:gap-2">
                                 <h1 className="text-sm md:text-base font-bold text-white leading-tight">UIU Course Planner</h1>
                                 <span className="md:hidden text-[7px] font-black px-1.5 py-0.5 rounded-full border animate-pulse-glow flex-shrink-0">
-                                    Summer-2026
+                                    Fall-2026
                                 </span>
                             </div>
                             <p className="text-[10px] md:text-[11px] text-slate-400 leading-tight mt-0.5">Routine Maker & Conflict Detector</p>
@@ -258,7 +258,7 @@ export default function App() {
                     {/* Absolute Centered Semester Label */}
                     <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 hidden md:block">
                         <span className="text-xs font-black px-5 py-2 rounded-full uppercase tracking-widest border shadow-lg animate-pulse-glow">
-                            Summer-2026
+                            Fall-2026
                         </span>
                     </div>
 
