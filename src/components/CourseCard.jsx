@@ -141,7 +141,7 @@ export default function CourseCard({ entry, onRemove, compact = false, timeSlot,
                         {timeLabel && (
                             <>
                                 {faculty && (
-                                    <p className={`leading-tight truncate ${compact ? 'text-[8px] mt-0.5' : 'text-[9px] mt-1'}`} style={{ opacity: 0.75 }}>
+                                    <p className={`leading-tight break-words ${compact ? 'text-[8px] mt-0.5' : 'text-[9px] mt-1'}`} style={{ opacity: 0.75 }}>
                                         {faculty}
                                     </p>
                                 )}

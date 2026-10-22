@@ -566,7 +566,7 @@ export default function App() {
                                                 />
                                             )}
                                             <span className="relative z-10">{entry.code}</span>
-                                            <span className="opacity-70 relative z-10">§{entry.section}</span>
+                                            <span className="opacity-70 relative z-10 font-medium">{entry.section}</span>
                                             {roleInfo.type === 'primary' && (
                                                 <span 
                                                     title="1st Choice Course" 

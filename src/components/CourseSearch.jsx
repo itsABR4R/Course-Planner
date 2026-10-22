@@ -12,7 +12,7 @@ import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import {
     Search, ChevronDown, ChevronUp, BookOpen,
-    User, MapPin, Clock, SlidersHorizontal, X, Pin, Check, GripVertical,
+    User, MapPin, Clock, SlidersHorizontal, X, Pin, Check,
 } from 'lucide-react';
 
 /* ─── Color accent based on course prefix ─── */
@@ -184,16 +184,13 @@ function SectionRow({ courseCode, courseName, section, onAdd, showCourseName = f
             onClick={() => !hasTBA && !isAdded && onAdd(section)}
             title={!hasTBA && !isAdded ? "Click or drag to routine" : undefined}
         >
-            <div className="flex items-center gap-2 min-w-0 flex-1">
-                {!hasTBA && !isAdded && (
-                    <GripVertical size={13} className="text-slate-600 group-hover:text-slate-400 flex-shrink-0" />
-                )}
-                <span className="text-xs font-bold text-orange-400 w-7 flex-shrink-0">
-                    §{section.section}
+            <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                <span className="text-xs font-bold text-orange-400 min-w-[1.25rem] flex-shrink-0">
+                    {section.section}
                 </span>
                 <div className="min-w-0 flex-1">
                     {showCourseName && (
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 mb-1">
                             <p className="text-[10px] font-semibold text-slate-200 break-words whitespace-normal">
                                 {courseCode} — {courseName}
                             </p>
@@ -204,9 +201,9 @@ function SectionRow({ courseCode, courseName, section, onAdd, showCourseName = f
                             )}
                         </div>
                     )}
-                    <div className="flex items-center gap-1.5 text-xs text-slate-300">
-                        <User size={10} className="flex-shrink-0 text-slate-500" />
-                        <span className="truncate">{section.faculty}</span>
+                    <div className="flex items-start gap-1.5 text-xs text-slate-300">
+                        <User size={10} className="flex-shrink-0 text-slate-500 mt-0.5" />
+                        <span className="break-words leading-tight">{section.faculty}</span>
                     </div>
                     {section.slots.length > 0 && (
                         <div className="flex flex-col gap-0.5 mt-0.5">
