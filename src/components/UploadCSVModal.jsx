@@ -6,73 +6,7 @@ import {
 } from 'lucide-react';
 import { parseCSVText, groupCoursesByCode } from '../utils/parser';
 
-const BOOKMARKLET_CODE = [
-    'javascript:(function(){',
-    'const m={"Sat":"Saturday","Sun":"Sunday","Mon":"Monday","Tue":"Tuesday","Wed":"Wednesday","Thu":"Thursday","Fri":"Friday"};',
-    'const rows=[["Course Code","Course Name","Section","Faculty","Schedule","Room"]];',
-    'if(window.__fullDecryptedCatalog&&window.__fullDecryptedCatalog.courses){',
-    'window.__fullDecryptedCatalog.courses.forEach(c=>{',
-    'const code=c.formal_code||c.course_code||"";',
-    'const name=c.course_name||"";',
-    '(c.sections||[]).forEach(s=>{',
-    'const sec=s.section_name||"";',
-    'const fac=(s.faculty_name&&s.faculty_name.trim())?s.faculty_name.trim():"TBA";',
-    'const rm=(s.room_details&&s.room_details.trim())?s.room_details.trim():"TBA";',
-    'let parts=[];',
-    'if(Array.isArray(s.schedule)){',
-    's.schedule.forEach(sl=>{',
-    'let d=m[sl.day||sl.day_name]||(sl.day||sl.day_name||"");',
-    'let t=sl.time||sl.time_slot||(sl.start_time&&sl.end_time?(sl.start_time+"-"+sl.end_time):"");',
-    'if(d&&t)parts.push(d+" "+t);',
-    '});',
-    '}',
-    'let sc=parts.join(" | ");',
-    'sc=sc?(sc+" | "+rm):rm;',
-    'rows.push([code,name,sec,fac,sc,rm]);',
-    '});',
-    '});',
-    '}else{',
-    'const re=/^([A-Z]{2,4}\\s+\\d{4}[A-Za-z]?)(?:\\s+\\d+\\s*cr)?$/i;',
-    'Array.from(document.querySelectorAll("h2, h3, h4, div")).forEach(el=>{',
-    'const txt=el.innerText?el.innerText.trim():"";',
-    'if(el.children.length<=2&&re.test(txt)){',
-    'const code=txt.match(re)[1];',
-    'let name="";',
-    'let sib=el.nextElementSibling;',
-    'while(sib&&!name){',
-    'const st=sib.innerText?sib.innerText.trim():"";',
-    'if(st&&!st.includes("SECTION")&&!st.includes("FACULTY")){',
-    'name=st.split("\\n")[0].trim();',
-    'break;',
-    '}',
-    'sib=sib.nextElementSibling;',
-    '}',
-    'const tbl=(el.closest("section")||el.parentElement).querySelector("table");',
-    'if(tbl){',
-    'tbl.querySelectorAll("tbody tr, tr").forEach(tr=>{',
-    'const tds=Array.from(tr.querySelectorAll("td")).map(td=>td.innerText.trim());',
-    'if(tds.length>=4&&!tds[0].toUpperCase().includes("SECTION")){',
-    'const sec=tds[0];',
-    'const fac=tds[1].split("\\n")[0].trim()||"TBA";',
-    'const sch=tds[2].split("\\n").map(l=>l.trim()).filter(Boolean).map(l=>l.replace(/\\b(Sat|Sun|Mon|Tue|Wed|Thu|Fri)\\b/g,d=>m[d]||d)).join(" | ");',
-    'const rm=tds[3]||"TBA";',
-    'rows.push([code,name,sec,fac,sch+" | "+rm,rm]);',
-    '}',
-    '});',
-    '}',
-    '}',
-    '});',
-    '}',
-    'if(rows.length<=1){alert("No courses found on this page!");return;}',
-    'const blob=new Blob([rows.map(r=>r.map(c=>\'"\'+String(c||"").replace(/"/g,\'""\')+\'"\').join(",")).join("\\n")],{type:"text/csv;charset=utf-8;"});',
-    'const a=document.createElement("a");',
-    'a.href=URL.createObjectURL(blob);',
-    'a.download="Courses_"+new Date().toISOString().slice(0,10)+".csv";',
-    'document.body.appendChild(a);',
-    'a.click();',
-    'a.remove();',
-    '})();'
-].join('');
+const BOOKMARKLET_CODE = "javascript:(function(){const m={'Sat':'Saturday','Sun':'Sunday','Mon':'Monday','Tue':'Tuesday','Wed':'Wednesday','Thu':'Thursday','Fri':'Friday'};function isValidCatalog(obj){if(!obj)return false;const courses=Array.isArray(obj)?obj:(obj.courses||[]);if(!courses.length)return false;return courses.some(c=>Array.isArray(c.sections)&&c.sections.length>0&&c.sections[0].section_name!==undefined&&(c.sections[0].room_details!==undefined||c.sections[0].schedule!==undefined));}function downloadCSV(catalog){const courses=Array.isArray(catalog)?catalog:(catalog.courses||[]);const rows=[['Course Code','Course Name','Section','Faculty','Schedule','Room']];courses.forEach(c=>{const code=c.formal_code||c.course_code||'';const name=c.course_name||'';(c.sections||[]).forEach(s=>{const sec=s.section_name||'';const fac=(s.faculty_name&&s.faculty_name.trim())?s.faculty_name.trim():'TBA';const rm=(s.room_details&&s.room_details.trim())?s.room_details.trim():'TBA';let parts=[];if(Array.isArray(s.schedule)){s.schedule.forEach(sl=>{let d=m[sl.day||sl.day_name]||(sl.day||sl.day_name||'');let t=sl.time||sl.time_slot||'';if(!t&&sl.start_time&&sl.end_time)t=`${sl.start_time}-${sl.end_time}`;if(d&&t)parts.push(`${d} ${t}`);});}let sc=parts.join(' | ');sc=sc?(rm&&rm!=='TBA'?`${sc} | ${rm}`:sc):rm;rows.push([code,name,sec,fac,sc,rm]);});});const csv=rows.map(r=>r.map(c=>`\"${String(c??'').replace(/\"/g,'\"\"')}\"`).join(',')).join('\\n');const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;const dept=catalog.department?`Dept_${catalog.department}`:'Courses';const term=catalog.running_session||'catalog';a.download=`${dept}_${term}_Courses.csv`;document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);}function updateUI(ready){let btn=document.getElementById('bm-ucam-export-btn');if(!btn){btn=document.createElement('button');btn.id='bm-ucam-export-btn';btn.style.cssText='position:fixed;bottom:24px;right:24px;z-index:9999999;padding:12px 20px;color:#fff;font-size:13px;font-weight:bold;border:none;border-radius:8px;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,0.3);font-family:sans-serif;transition:all 0.2s;';btn.onclick=()=>{if(isValidCatalog(window.__fullDecryptedCatalog)){downloadCSV(window.__fullDecryptedCatalog);}else{alert('⚠️ Please click into Courses tab on UCAM first!');}};document.body.appendChild(btn);}if(ready){btn.innerText='📥 Download Courses CSV (Ready)';btn.style.backgroundColor='#16a34a';}else{btn.innerText='⏳ Open Courses Tab to Load CSV';btn.style.backgroundColor='#ea580c';}}if(!window.__ucamHooked){window.__ucamHooked=true;const origJSON=window.JSON.parse;window.JSON.parse=function(text,reviver){const res=origJSON.apply(this,arguments);try{if(typeof text==='string'&&text.length>500&&isValidCatalog(res)){window.__fullDecryptedCatalog=res;updateUI(true);}}catch(e){}return res;};}if(isValidCatalog(window.__fullDecryptedCatalog)){downloadCSV(window.__fullDecryptedCatalog);updateUI(true);}else{updateUI(false);const app=document.querySelector('#app')||document.querySelector('#__nuxt');const router=app?.__vue_app__?.config?.globalProperties?.$router;if(router){const cur=router.currentRoute.value.fullPath;router.push('/dashboard').then(()=>{setTimeout(()=>router.push(cur),250);});}else{alert('Hook armed! Click on your Courses tab once, then click Download.');}}})();";
 
 export default function UploadCSVModal({ 
     isOpen, 
@@ -425,8 +359,8 @@ export default function UploadCSVModal({
                                         <h4>Run in UCAM Cloud</h4>
                                     </div>
                                     <p className="text-slate-400 leading-relaxed">
-                                        Log into <a href="https://ucamcloud.uiu.ac.bd/" target="_blank" rel="noopener noreferrer" className="text-orange-400 font-semibold inline-flex items-center gap-1 hover:underline">UCAM Cloud <ExternalLink size={10} /></a>, open your active Course Offerings or Schedule page, and click your new <strong className="text-white">Export UCAM Courses</strong> bookmark. It will automatically download your <code className="px-1.5 py-0.5 rounded bg-[#171c33] text-orange-300 font-mono text-[10px]">Courses_YYYY-MM-DD.csv</code> file.
-                                    </p>
+                                        Log into <a href="https://ucamcloud.uiu.ac.bd/" target="_blank" rel="noopener noreferrer" className="text-orange-400 font-semibold inline-flex items-center gap-1 hover:underline">UCAM Cloud <ExternalLink size={10} /></a>, open the link and when at dashboard click your new <strong className="text-white">Export UCAM Courses</strong> bookmark. Then go to the Courses tab and click Download CSV at bottom right. It will automatically download your <code className="px-1.5 py-0.5 rounded bg-[#171c33] text-orange-300 font-mono text-[10px]">Courses_YYYY-MM-DD.csv</code> file.
+                                   </p>
                                 </div>
                             </div>
                         )}
