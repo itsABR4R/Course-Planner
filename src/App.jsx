@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import { loadCourseData, groupCoursesByCode, parseCSVText } from './utils/parser';
 import { useRoutine, getCourseRole, entriesOverlap } from './hooks/useRoutine';
+import { useAutoUpdate } from './hooks/useAutoUpdate';
 import CalendarGrid from './components/CalendarGrid';
 import CourseSearch from './components/CourseSearch';
 import EmptyScheduleState from './components/EmptyScheduleState';
@@ -87,16 +88,45 @@ const DEPARTMENTS = [
 ];
 
 export default function App() {
-    const [selectedDept, setSelectedDept] = useState('BSCSE');
+    useAutoUpdate();
+
+    const [selectedDept, setSelectedDept] = useState(() => {
+        try {
+            const saved = localStorage.getItem('uiu_selected_dept');
+            return saved && DEPARTMENTS.some(d => d.id === saved) ? saved : 'BSCSE';
+        } catch {
+            return 'BSCSE';
+        }
+    });
     const [mobileTab, setMobileTab] = useState('catalogue'); // 'catalogue' or 'schedule'
     const [courseMap, setCourseMap] = useState({});
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [plannerMode, setPlannerMode] = useState('backup'); // 'backup' or 'conflict'
+    const [plannerMode, setPlannerMode] = useState(() => {
+        try {
+            const saved = localStorage.getItem('uiu_planner_mode');
+            return saved === 'conflict' || saved === 'backup' ? saved : 'backup';
+        } catch {
+            return 'backup';
+        }
+    });
     const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
     const [modalShowDeptSelect, setModalShowDeptSelect] = useState(false);
     const [deptDragOver, setDeptDragOver] = useState(false);
     const deptFileInputRef = useRef(null);
+
+    // Persist selectedDept and plannerMode across reloads
+    useEffect(() => {
+        try {
+            localStorage.setItem('uiu_selected_dept', selectedDept);
+        } catch {}
+    }, [selectedDept]);
+
+    useEffect(() => {
+        try {
+            localStorage.setItem('uiu_planner_mode', plannerMode);
+        } catch {}
+    }, [plannerMode]);
 
     const [deptCSVs, setDeptCSVs] = useState(() => {
         try {

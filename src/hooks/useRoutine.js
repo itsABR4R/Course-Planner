@@ -16,7 +16,7 @@
  *   }>
  */
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 
 /** Palette of distinct colors for course cards */
 const COLOR_PALETTE = [
@@ -90,9 +90,33 @@ export function getCourseRole(entry, routine) {
 }
 
 export function useRoutine() {
-    const [routine, setRoutine] = useState([]);
+    const [routine, setRoutine] = useState(() => {
+        try {
+            const saved = localStorage.getItem('uiu_routine');
+            return saved ? JSON.parse(saved) : [];
+        } catch {
+            return [];
+        }
+    });
     const [toast, setToast] = useState(null); // { message, type }
-    const [colorIndex, setColorIndex] = useState(0);
+    const [colorIndex, setColorIndex] = useState(() => {
+        try {
+            const saved = localStorage.getItem('uiu_routine');
+            const arr = saved ? JSON.parse(saved) : [];
+            return arr.length;
+        } catch {
+            return 0;
+        }
+    });
+
+    // Keep localStorage in sync with routine changes
+    useEffect(() => {
+        try {
+            localStorage.setItem('uiu_routine', JSON.stringify(routine));
+        } catch (e) {
+            console.warn('LocalStorage save failed for routine:', e);
+        }
+    }, [routine]);
 
     /** Show a toast notification for a brief duration */
     const showToast = useCallback((message, type = 'info') => {
