@@ -95,7 +95,7 @@ export function useRoutine() {
     const [colorIndex, setColorIndex] = useState(0);
 
     /** Show a toast notification for a brief duration */
-    const showToast = useCallback((message, type = 'error') => {
+    const showToast = useCallback((message, type = 'info') => {
         setToast({ message, type, id: Date.now() });
         setTimeout(() => setToast(null), 4000);
     }, []);

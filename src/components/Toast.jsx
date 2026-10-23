@@ -8,13 +8,15 @@ import { AlertTriangle, CheckCircle, Info, X } from 'lucide-react';
 const icons = {
     error: <AlertTriangle size={18} className="text-red-400 flex-shrink-0" />,
     success: <CheckCircle size={18} className="text-green-400 flex-shrink-0" />,
-    warning: <Info size={18} className="text-amber-400 flex-shrink-0" />,
+    warning: <AlertTriangle size={18} className="text-amber-400 flex-shrink-0" />,
+    info: <Info size={18} className="text-sky-400 flex-shrink-0" />,
 };
 
 const styles = {
     error: 'border-red-500/40 bg-red-950/60',
     success: 'border-green-500/40 bg-green-950/60',
     warning: 'border-amber-500/40 bg-amber-950/60',
+    info: 'border-sky-500/40 bg-sky-950/60',
 };
 
 export default function Toast({ toast, onDismiss }) {

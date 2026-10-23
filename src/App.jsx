@@ -2,14 +2,19 @@
  * src/App.jsx
  * Main application component — wires together all parts of the Course Planner.
  */
-import React, { useState, useEffect } from 'react';
-import { BookOpen, Trash2, GraduationCap, Calendar, Sparkles, X, Download, Github, Wrench, Settings, RotateCcw, AlertCircle, AlertTriangle } from 'lucide-react';
-import { loadCourseData, groupCoursesByCode } from './utils/parser';
+import React, { useState, useEffect, useRef } from 'react';
+import { 
+    BookOpen, Trash2, GraduationCap, Calendar, Sparkles, X, Download, Github, 
+    Wrench, Settings, RotateCcw, AlertCircle, AlertTriangle, UploadCloud, 
+    Plus, ArrowRight, FileSpreadsheet 
+} from 'lucide-react';
+import { loadCourseData, groupCoursesByCode, parseCSVText } from './utils/parser';
 import { useRoutine, getCourseRole, entriesOverlap } from './hooks/useRoutine';
 import CalendarGrid from './components/CalendarGrid';
 import CourseSearch from './components/CourseSearch';
 import EmptyScheduleState from './components/EmptyScheduleState';
 import Toast from './components/Toast';
+import UploadCSVModal from './components/UploadCSVModal';
 import { toPng } from 'html-to-image';
 import { Analytics } from '@vercel/analytics/react';
 
@@ -67,19 +72,18 @@ function getExamInfo(courseCode, selectedDept) {
     return null;
 }
 
-// Set disabled: true for departments whose Fall 2026 routine is pending
 const DEPARTMENTS = [
-    { id: 'BA_ENG', label: 'BA in English', csv: '/BA_ENG_Courses.csv', disabled: true },
-    { id: 'BBA', label: 'BBA', csv: '/BBA_Courses.csv' },
-    { id: 'BBA_AIS', label: 'BBA in AIS', csv: '/BBA_AIS_Courses.csv' },
-    { id: 'BSBGE', label: 'BSBGE', csv: '/BGE_Courses.csv', disabled: true },
-    { id: 'BSCE', label: 'BSCE', csv: '/CE_Courses.csv', disabled: true },
+    { id: 'BA_ENG', label: 'BA in English' },
+    { id: 'BBA', label: 'BBA' },
+    { id: 'BBA_AIS', label: 'BBA in AIS' },
+    { id: 'BSBGE', label: 'BSBGE' },
+    { id: 'BSCE', label: 'BSCE' },
     { id: 'BSCSE', label: 'BSCSE', csv: '/CSE_Courses.csv' },
-    { id: 'BSDS', label: 'BSDS', csv: '/DS_Courses.csv' },
-    { id: 'BSECO', label: 'BSECO', csv: '/ECO_Courses.csv' },
-    { id: 'BSEEE', label: 'BSEEE', csv: '/EEE_Courses.csv' },
-    { id: 'BSSEDS', label: 'BSSEDS', csv: '/SEDS_Courses.csv', disabled: true },
-    { id: 'BSSMSJ', label: 'BSSMSJ', csv: '/SMSJ_Courses.csv', disabled: true },
+    { id: 'BSDS', label: 'BSDS' },
+    { id: 'BSECO', label: 'BSECO' },
+    { id: 'BSEEE', label: 'BSEEE' },
+    { id: 'BSSEDS', label: 'BSSEDS' },
+    { id: 'BSSMSJ', label: 'BSSMSJ' },
 ];
 
 export default function App() {
@@ -88,51 +92,195 @@ export default function App() {
     const [courseMap, setCourseMap] = useState({});
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [isDeptDisabled, setIsDeptDisabled] = useState(false);
     const [plannerMode, setPlannerMode] = useState('backup'); // 'backup' or 'conflict'
+    const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+    const [modalShowDeptSelect, setModalShowDeptSelect] = useState(false);
+    const [deptDragOver, setDeptDragOver] = useState(false);
+    const deptFileInputRef = useRef(null);
+
+    const [deptCSVs, setDeptCSVs] = useState(() => {
+        try {
+            const saved = localStorage.getItem('uiu_dept_csvs');
+            return saved ? JSON.parse(saved) : {};
+        } catch {
+            return {};
+        }
+    });
+
     const { routine, setRoutine, toast, addCourse, removeCourse, clearRoutine, showToast } = useRoutine();
 
-    // Fallback if a disabled department was somehow selected
+    const isAwaitingCSV = selectedDept !== 'BSCSE' && (!deptCSVs[selectedDept] || Object.keys(courseMap).length === 0);
+
+    // Clean up legacy custom CSV from earlier versions
     useEffect(() => {
-        const dept = DEPARTMENTS.find(d => d.id === selectedDept);
-        if (dept?.disabled) {
-            setSelectedDept('BSCSE');
+        try {
+            localStorage.removeItem('uiu_custom_course_csv');
+        } catch {}
+    }, []);
+
+    const handleDeptCSVUpload = async (deptId, fileOrText, filename) => {
+        try {
+            let text = typeof fileOrText === 'string' ? fileOrText : await fileOrText.text();
+            const name = filename || fileOrText.name || `${deptId}_Courses.csv`;
+            const courses = await parseCSVText(text);
+            if (!courses || courses.length === 0) {
+                showToast('No valid course entries found in CSV', 'error');
+                return;
+            }
+            const grouped = groupCoursesByCode(courses);
+            const dataObj = {
+                filename: name,
+                courses,
+                count: Object.keys(grouped).length,
+                totalSections: courses.length,
+                uploadedAt: new Date().toISOString()
+            };
+            const newDeptCSVs = {
+                ...deptCSVs,
+                [deptId]: dataObj
+            };
+            setDeptCSVs(newDeptCSVs);
+            try {
+                localStorage.setItem('uiu_dept_csvs', JSON.stringify(newDeptCSVs));
+            } catch (e) {
+                console.warn('LocalStorage save failed:', e);
+            }
+            if (selectedDept === deptId) {
+                setCourseMap(grouped);
+            } else {
+                setSelectedDept(deptId);
+            }
+            setError(null);
+            setLoading(false);
+            showToast(`Loaded ${Object.keys(grouped).length} courses for ${DEPARTMENTS.find(d => d.id === deptId)?.label || deptId}!`, 'success');
+        } catch (err) {
+            showToast('Failed to parse CSV: ' + err.message, 'error');
         }
-    }, [selectedDept]);
+    };
+
+    const handleClearDeptCSV = (deptId) => {
+        const newDeptCSVs = { ...deptCSVs };
+        delete newDeptCSVs[deptId];
+        setDeptCSVs(newDeptCSVs);
+        try {
+            localStorage.setItem('uiu_dept_csvs', JSON.stringify(newDeptCSVs));
+        } catch {}
+
+        if (deptId === 'BSCSE') {
+            setLoading(true);
+            setError(null);
+            loadCourseData('/CSE_Courses.csv')
+                .then(courses => {
+                    setCourseMap(groupCoursesByCode(courses));
+                    setLoading(false);
+                })
+                .catch(err => {
+                    setError(err.message);
+                    setLoading(false);
+                });
+            showToast('Reset BSCSE to official course catalog', 'info');
+        } else {
+            if (selectedDept === deptId) {
+                setCourseMap({});
+            }
+            showToast(`Removed custom routine for ${DEPARTMENTS.find(d => d.id === deptId)?.label || deptId}`, 'info');
+        }
+    };
+
+    const handleUploadSuccess = (courses, filename, targetDept) => {
+        const deptId = targetDept || selectedDept;
+        const grouped = groupCoursesByCode(courses);
+        const dataObj = {
+            filename,
+            count: Object.keys(grouped).length,
+            totalSections: courses.length,
+            courses,
+            uploadedAt: new Date().toISOString(),
+        };
+        const newDeptCSVs = {
+            ...deptCSVs,
+            [deptId]: dataObj
+        };
+        setDeptCSVs(newDeptCSVs);
+        try {
+            localStorage.setItem('uiu_dept_csvs', JSON.stringify(newDeptCSVs));
+        } catch (e) {
+            console.warn('LocalStorage save failed:', e);
+        }
+
+        if (selectedDept === deptId) {
+            setCourseMap(grouped);
+        } else {
+            setSelectedDept(deptId);
+        }
+        setLoading(false);
+        setError(null);
+        showToast(`Loaded ${Object.keys(grouped).length} courses into ${DEPARTMENTS.find(d => d.id === deptId)?.label || deptId}!`, 'success');
+    };
+
+    // Global drag & drop for CSV file anywhere onto the page
+    useEffect(() => {
+        const handleWindowDragOver = (e) => {
+            if (e.dataTransfer.types && Array.from(e.dataTransfer.types).includes('Files')) {
+                e.preventDefault();
+            }
+        };
+
+        const handleWindowDrop = async (e) => {
+            const files = e.dataTransfer.files;
+            if (!files || files.length === 0) return;
+            const file = files[0];
+            if (file.name.toLowerCase().endsWith('.csv') || file.type === 'text/csv') {
+                e.preventDefault();
+                try {
+                    handleDeptCSVUpload(selectedDept, file, file.name);
+                } catch (err) {
+                    setIsUploadModalOpen(true);
+                }
+            }
+        };
+
+        window.addEventListener('dragover', handleWindowDragOver);
+        window.addEventListener('drop', handleWindowDrop);
+        return () => {
+            window.removeEventListener('dragover', handleWindowDragOver);
+            window.removeEventListener('drop', handleWindowDrop);
+        };
+    }, [selectedDept, deptCSVs]);
 
     // Load CSV whenever selectedDept changes
     useEffect(() => {
-        const dept = DEPARTMENTS.find(d => d.id === selectedDept);
-        if (!dept || !dept.csv) {
-            setCourseMap({});
-            setIsDeptDisabled(true);
-            setLoading(false);
+        if (selectedDept === 'BSCSE') {
+            if (deptCSVs['BSCSE'] && deptCSVs['BSCSE'].courses) {
+                setCourseMap(groupCoursesByCode(deptCSVs['BSCSE'].courses));
+                setLoading(false);
+                setError(null);
+            } else {
+                setLoading(true);
+                setError(null);
+                loadCourseData('/CSE_Courses.csv')
+                    .then(courses => {
+                        setCourseMap(groupCoursesByCode(courses));
+                        setLoading(false);
+                    })
+                    .catch(err => {
+                        setError(err.message);
+                        setLoading(false);
+                    });
+            }
             return;
         }
 
-        setLoading(true);
+        // For all other departments (BA in English, BSBGE, BSCE, BBA, etc.):
+        // Do not load any static CSV file. Only show user-uploaded CSV if present.
+        setLoading(false);
         setError(null);
-        setIsDeptDisabled(false);
-
-        loadCourseData(dept.csv)
-            .then(courses => {
-                if (courses.length === 0) {
-                    setIsDeptDisabled(true);
-                } else {
-                    setCourseMap(groupCoursesByCode(courses));
-                }
-                setLoading(false);
-            })
-            .catch(err => {
-                // If it failed to fetch/load because file is not found (status 404/not found)
-                if (err.message.includes('404') || err.message.toLowerCase().includes('failed to fetch') || err.message.toLowerCase().includes('failed to load csv')) {
-                    setIsDeptDisabled(true);
-                } else {
-                    setError(err.message);
-                }
-                setLoading(false);
-            });
-    }, [selectedDept]);
+        if (deptCSVs[selectedDept] && deptCSVs[selectedDept].courses) {
+            setCourseMap(groupCoursesByCode(deptCSVs[selectedDept].courses));
+        } else {
+            setCourseMap({});
+        }
+    }, [selectedDept, deptCSVs]);
 
     const handleAddCourse = (courseEntry) => {
         if (plannerMode === 'conflict') {
@@ -288,6 +436,7 @@ export default function App() {
                                 </button>
                             </>
                         )}
+
                         <span className="text-xs font-semibold px-3 py-1 rounded-full border border-emerald-500/30 bg-[#0e2417] text-emerald-400 shadow-sm shadow-emerald-950/40 animate-pulse-glow flex-shrink-0">
                             Fall-2026
                         </span>
@@ -320,7 +469,7 @@ export default function App() {
 
             {/* ── Top Notice Banner ── */}
             <div className="max-w-screen-2xl w-full mx-auto px-4 lg:px-6 pt-3 lg:pt-4 relative z-30">
-                <div className="rounded-xl px-4 py-2.5 border border-amber-500/35 bg-[#171207]/95 flex items-center justify-between gap-3 shadow-lg shadow-amber-950/15 animate-fade-in">
+                <div className="rounded-xl px-4 py-2.5 border border-amber-500/35 bg-[#171207]/95 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-lg shadow-amber-950/15 animate-fade-in">
                     <div className="flex items-center gap-2.5 min-w-0">
                         <div className="w-5 h-5 rounded-md flex items-center justify-center flex-shrink-0 text-amber-400">
                             <AlertTriangle size={15} className="text-amber-400" />
@@ -329,9 +478,20 @@ export default function App() {
                             <span className="font-bold text-amber-400 text-[10px] px-1.5 py-0.5 rounded bg-transparent border border-amber-500/50 uppercase tracking-wider mr-2">
                                 Notice
                             </span>
-                            The <span className="font-semibold text-white">BA in English</span>, <span className="font-semibold text-white">BSBGE</span>, <span className="font-semibold text-white">BSCE</span>, <span className="font-semibold text-white">BSSEDS</span>, and <span className="font-semibold text-white">BSSMSJ</span> schedules need to be updated. Their options are temporarily disabled until further notice.
+                            Courses are pre-loaded for <span className="font-semibold text-white">BSCSE</span>. For other departments, export & sync your courses directly from UCAM Cloud or upload a CSV!
                         </p>
                     </div>
+                    <button
+                        onClick={() => {
+                            setModalShowDeptSelect(true);
+                            setIsUploadModalOpen(true);
+                        }}
+                        className="text-[11px] font-bold px-3 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 whitespace-nowrap transition-colors flex items-center gap-1.5 self-start sm:self-auto flex-shrink-0"
+                    >
+                        <UploadCloud size={12} />
+                        <span>Sync from UCAM Cloud</span>
+                        <ArrowRight size={12} />
+                    </button>
                 </div>
             </div>
 
@@ -342,38 +502,27 @@ export default function App() {
                     <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar scroll-smooth flex-1 w-full">
                         {DEPARTMENTS.map(dept => {
                             const isActive = selectedDept === dept.id;
-                            const isDisabled = dept.disabled;
-
-                            if (isDisabled) {
-                                return (
-                                    <button
-                                        key={dept.id}
-                                        disabled
-                                        title={`${dept.label} routine needs to be updated (Fall 2026 pending)`}
-                                        className="px-2.5 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all duration-200 opacity-40 cursor-not-allowed bg-transparent text-slate-500 flex items-center gap-1.5 pointer-events-none select-none"
-                                    >
-                                        <span>{dept.label}</span>
-                                        <span className="text-[9px] px-1.5 py-0.2 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20 font-semibold">
-                                            Pending
-                                        </span>
-                                    </button>
-                                );
-                            }
+                            const hasCustomData = deptCSVs[dept.id] != null;
 
                             return (
                                 <button
                                     key={dept.id}
                                     onClick={() => setSelectedDept(dept.id)}
-                                    className={`px-3 py-1.5 text-xs whitespace-nowrap transition-all duration-200 ${
+                                    className={`px-3 py-1.5 text-xs whitespace-nowrap transition-all duration-200 flex items-center gap-1.5 rounded-lg ${
                                         isActive 
-                                            ? 'text-white font-bold bg-[#14182b] border-b-2 border-orange-500 rounded-t-lg shadow-sm' 
-                                            : 'text-slate-400 font-semibold hover:text-slate-200 hover:bg-white/5 rounded-lg'
+                                            ? 'text-white font-bold bg-[#14182b] border-b-2 border-orange-500 shadow-sm' 
+                                            : 'text-slate-400 font-semibold hover:text-slate-200 hover:bg-white/5'
                                     }`}
                                 >
-                                    {dept.label}
+                                    <span>{dept.label}</span>
+                                    {hasCustomData && (
+                                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.8)]" title="Custom schedule active" />
+                                    )}
                                 </button>
                             );
                         })}
+
+
                     </div>
 
                     {/* Divider line (desktop only) */}
@@ -449,74 +598,205 @@ export default function App() {
                 </div>
             </div>
 
-            {/* Mobile Tab Switcher (visible only under lg) */}
-            <div className="flex lg:hidden w-full px-4 pt-3 gap-2 max-w-screen-2xl mx-auto">
-                <button
-                    onClick={() => setMobileTab('catalogue')}
-                    className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-xs font-bold transition-all border ${
-                        mobileTab === 'catalogue'
-                            ? 'bg-indigo-600/20 text-indigo-300 border-indigo-500/40 shadow-sm'
-                            : 'bg-white/5 border-white/5 text-slate-400'
-                    }`}
-                >
-                    <BookOpen size={14} />
-                    Course Catalogue
-                </button>
-                <button
-                    onClick={() => setMobileTab('schedule')}
-                    className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-xs font-bold transition-all border relative ${
-                        mobileTab === 'schedule'
-                            ? 'bg-indigo-600/20 text-indigo-300 border-indigo-500/40 shadow-sm'
-                            : 'bg-white/5 border-white/5 text-slate-400'
-                    }`}
-                >
-                    <Calendar size={14} />
-                    Weekly Schedule
-                    {routine.length > 0 && (
-                        <span className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-indigo-600 text-white text-[10px] font-bold flex items-center justify-center border border-[#050814] animate-scale-in">
-                            {routine.length}
-                        </span>
-                    )}
-                </button>
-            </div>
+            {/* Mobile Tab Switcher (visible only under lg and only when NOT awaiting CSV) */}
+            {!isAwaitingCSV && (
+                <div className="flex lg:hidden w-full px-4 pt-3 gap-2 max-w-screen-2xl mx-auto">
+                    <button
+                        onClick={() => setMobileTab('catalogue')}
+                        className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-xs font-bold transition-all border ${
+                            mobileTab === 'catalogue'
+                                ? 'bg-indigo-600/20 text-indigo-300 border-indigo-500/40 shadow-sm'
+                                : 'bg-white/5 border-white/5 text-slate-400'
+                        }`}
+                    >
+                        <BookOpen size={14} />
+                        Course Catalogue
+                    </button>
+                    <button
+                        onClick={() => setMobileTab('schedule')}
+                        className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-xs font-bold transition-all border relative ${
+                            mobileTab === 'schedule'
+                                ? 'bg-indigo-600/20 text-indigo-300 border-indigo-500/40 shadow-sm'
+                                : 'bg-white/5 border-white/5 text-slate-400'
+                        }`}
+                    >
+                        <Calendar size={14} />
+                        Weekly Schedule
+                        {routine.length > 0 && (
+                            <span className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-indigo-600 text-white text-[10px] font-bold flex items-center justify-center border border-[#050814] animate-scale-in">
+                                {routine.length}
+                            </span>
+                        )}
+                    </button>
+                </div>
+            )}
 
             {/* ── Body ── */}
-            <main className="flex-1 max-w-screen-2xl w-full mx-auto p-4 lg:p-6 pt-2 lg:pt-4 flex flex-col lg:flex-row gap-4 lg:gap-6">
+            <main className="flex-1 max-w-screen-2xl w-full mx-auto p-4 lg:p-6 pt-2 lg:pt-4 flex flex-col gap-4 lg:gap-6">
+                {isAwaitingCSV ? (
+                    <div className="w-full flex-1 flex flex-col items-center justify-center py-8 md:py-16 px-4 animate-fade-in my-auto">
+                        <div className="dark-panel rounded-3xl p-6 sm:p-10 max-w-xl w-full border border-white/10 shadow-2xl flex flex-col items-center text-center space-y-6">
+                            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-3xl bg-gradient-to-tr from-orange-500/20 to-amber-500/20 border border-orange-500/30 flex items-center justify-center text-orange-400 shadow-inner">
+                                <UploadCloud size={38} />
+                            </div>
 
-                {/* ── Left Sidebar: Course Search ── */}
-                <aside className={`w-full lg:w-72 xl:w-80 flex-shrink-0 flex flex-col gap-4 ${mobileTab === 'catalogue' ? 'block' : 'hidden lg:block'}`}>
-                    <div className="dark-panel rounded-2xl p-4 flex flex-col gap-3 flex-1 shadow-lg">
-                        {isDeptDisabled ? (
-                            <div className="flex flex-col items-center justify-center text-center p-6 py-12 bg-white/[0.01] border border-white/5 rounded-xl animate-fade-in my-auto">
-                                <div className="relative w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center border border-white/10 mb-6 shadow-inner">
-                                    <Wrench className="text-slate-300 w-7 h-7" />
-                                    <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-slate-800 rounded-lg flex items-center justify-center border border-white/10 shadow-md">
-                                        <Settings className="text-slate-400 w-3.5 h-3.5 animate-spin-slow" />
-                                    </div>
-                                </div>
-                                <h3 className="text-sm font-bold text-white mb-2">Disabled for {DEPARTMENTS.find(d => d.id === selectedDept)?.label || selectedDept}</h3>
-                                <p className="text-[11px] text-slate-400 leading-relaxed max-w-[220px] mx-auto">
-                                    Courses & Faculties is currently disabled for this department. If UCAM Cloud updates than this will too be updated soon.
+                            <div className="space-y-2">
+                                <span className="text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-orange-500/15 text-orange-400 border border-orange-500/30">
+                                    {DEPARTMENTS.find(d => d.id === selectedDept)?.label || selectedDept}
+                                </span>
+                                <h2 className="text-xl sm:text-2xl font-black text-white">
+                                    Upload Course Schedule
+                                </h2>
+                                <p className="text-xs sm:text-sm text-slate-400 max-w-md mx-auto leading-relaxed">
+                                    Courses for <strong className="text-slate-200">{DEPARTMENTS.find(d => d.id === selectedDept)?.label || selectedDept}</strong> are not pre-loaded. Drop your CSV or sync using UCAM Bookmarklet to unlock the routine builder and exam calendar.
                                 </p>
                             </div>
-                        ) : loading ? (
-                            <div className="flex flex-col items-center justify-center py-12 gap-3">
-                                <div className="w-8 h-8 rounded-full border-2 border-orange-500 border-t-transparent animate-spin" />
-                                <p className="text-xs text-slate-500">Loading schedule…</p>
-                            </div>
-                        ) : error ? (
-                            <div className="text-center py-8">
-                                <p className="text-sm text-red-400">Failed to load schedule</p>
-                                <p className="text-xs text-slate-500 mt-1">{error}</p>
-                            </div>
-                        ) : (
-                            <CourseSearch courseMap={courseMap} onAddCourse={handleAddCourse} routine={routine} getExamInfo={(code) => getExamInfo(code, selectedDept)} />
-                        )}
-                    </div>
-                </aside>
 
-                {/* ── Main Content: Routine Grid + Added list ── */}
-                <div className={`flex-1 flex flex-col gap-4 min-w-0 ${mobileTab === 'schedule' ? 'block' : 'hidden lg:block'}`}>
+                            {/* Drag & Drop Card */}
+                            <div
+                                onDragOver={(e) => { e.preventDefault(); setDeptDragOver(true); }}
+                                onDragLeave={() => setDeptDragOver(false)}
+                                onDrop={(e) => {
+                                    e.preventDefault();
+                                    setDeptDragOver(false);
+                                    const file = e.dataTransfer.files?.[0];
+                                    if (file) handleDeptCSVUpload(selectedDept, file);
+                                }}
+                                onClick={() => deptFileInputRef.current?.click()}
+                                className={`w-full rounded-2xl p-8 sm:p-10 border-2 border-dashed cursor-pointer transition-all duration-200 flex flex-col items-center justify-center group ${
+                                    deptDragOver
+                                        ? 'border-orange-500 bg-orange-500/15 scale-[1.01]'
+                                        : 'border-[#283258] hover:border-orange-500/60 bg-[#070914] hover:bg-[#0a0d20]'
+                                }`}
+                            >
+                                <input 
+                                    ref={deptFileInputRef}
+                                    type="file" 
+                                    accept=".csv,text/csv" 
+                                    className="hidden" 
+                                    onChange={(e) => {
+                                        const file = e.target.files?.[0];
+                                        if (file) handleDeptCSVUpload(selectedDept, file);
+                                    }}
+                                />
+                                <div className="w-14 h-14 rounded-2xl bg-[#131830] flex items-center justify-center text-orange-400 mb-3 border border-[#273059] group-hover:scale-110 group-hover:border-orange-500/40 transition-transform">
+                                    <FileSpreadsheet size={26} />
+                                </div>
+                                <p className="font-bold text-slate-200 text-sm sm:text-base">
+                                    Drop your <span className="text-orange-400">.csv</span> file here
+                                </p>
+                                <p className="text-xs text-slate-500 mt-1">
+                                    or click to browse from device
+                                </p>
+                            </div>
+
+                            {/* Bookmarklet Helper CTA */}
+                            <div className="w-full pt-1 flex flex-col sm:flex-row items-center gap-3">
+                                <button
+                                    onClick={() => {
+                                        setModalShowDeptSelect(false);
+                                        setIsUploadModalOpen(true);
+                                    }}
+                                    className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-bold text-xs sm:text-sm shadow-lg shadow-orange-950/40 transition-all flex items-center justify-center gap-2"
+                                >
+                                    <Sparkles size={16} />
+                                    <span>How to Export from UCAM Cloud (Bookmarklet)</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                ) : (
+                    <div className="flex flex-col lg:flex-row gap-4 lg:gap-6 w-full">
+                        {/* ── Left Sidebar: Course Search ── */}
+                        <aside className={`w-full lg:w-72 xl:w-80 flex-shrink-0 flex flex-col gap-4 ${mobileTab === 'catalogue' ? 'block' : 'hidden lg:block'}`}>
+                            <div className="dark-panel rounded-2xl p-4 flex flex-col gap-3 flex-1 shadow-lg">
+                                {loading ? (
+                                    <div className="flex flex-col items-center justify-center py-12 gap-3">
+                                        <div className="w-8 h-8 rounded-full border-2 border-orange-500 border-t-transparent animate-spin" />
+                                        <p className="text-xs text-slate-500">Loading schedule…</p>
+                                    </div>
+                                ) : error ? (
+                                    <div className="text-center py-8">
+                                        <p className="text-sm text-red-400">Failed to load schedule</p>
+                                        <p className="text-xs text-slate-500 mt-1">{error}</p>
+                                    </div>
+                                ) : (
+                                    <>
+                                        {/* Department Routine Status & CSV Management Bar */}
+                                        <div className="flex flex-col gap-2 p-2.5 rounded-xl bg-[#0b0e1e] border border-[#1b223c]">
+                                            <div className="flex items-center justify-between gap-2">
+                                                <div className="flex items-center gap-2 min-w-0">
+                                                    <div className={`w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 ${
+                                                        deptCSVs[selectedDept] ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30' : 'bg-orange-500/15 text-orange-400 border border-orange-500/30'
+                                                    }`}>
+                                                        <FileSpreadsheet size={14} />
+                                                    </div>
+                                                    <div className="min-w-0">
+                                                        <div className="flex items-center gap-1.5">
+                                                            <span className="text-xs font-bold text-white truncate max-w-[130px] sm:max-w-[160px]" title={deptCSVs[selectedDept]?.filename || `${selectedDept} Default`}>
+                                                                {deptCSVs[selectedDept] ? deptCSVs[selectedDept].filename : `${selectedDept} Catalog`}
+                                                            </span>
+                                                            {deptCSVs[selectedDept] ? (
+                                                                <span className="text-[9px] px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-semibold flex-shrink-0">
+                                                                    Custom
+                                                                </span>
+                                                            ) : (
+                                                                <span className="text-[9px] px-1.5 py-0.2 rounded bg-orange-500/20 text-orange-300 border border-orange-500/30 font-semibold flex-shrink-0">
+                                                                    Official
+                                                                </span>
+                                                            )}
+                                                        </div>
+                                                        <p className="text-[10px] text-slate-400 mt-0.5">
+                                                            {Object.keys(courseMap).length} courses available
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            {/* Action buttons row */}
+                                            <div className="flex items-center gap-1.5 pt-1.5 border-t border-[#161c33]">
+                                                <button
+                                                    onClick={() => {
+                                                        setModalShowDeptSelect(false);
+                                                        setIsUploadModalOpen(true);
+                                                    }}
+                                                    className="flex-1 py-1.5 px-3 rounded-lg border border-dashed border-orange-500/50 hover:border-orange-500/80 bg-orange-500/5 hover:bg-orange-500/10 text-orange-400 hover:text-orange-300 text-xs font-semibold transition-all flex items-center justify-center gap-1.5"
+                                                    title="Update CSV file for this department"
+                                                >
+                                                    <Plus size={13} className="text-orange-400" />
+                                                    <span>Update CSV</span>
+                                                </button>
+
+                                                {deptCSVs[selectedDept] && (
+                                                    <button
+                                                        onClick={() => handleClearDeptCSV(selectedDept)}
+                                                        className="py-1.5 px-2.5 rounded-lg bg-red-950/30 hover:bg-red-900/40 text-red-400 hover:text-red-300 border border-red-800/40 text-[11px] font-semibold transition-all flex items-center justify-center gap-1.5 flex-shrink-0"
+                                                        title={selectedDept === 'BSCSE' ? "Reset to official CSE catalog" : "Remove uploaded CSV"}
+                                                    >
+                                                        {selectedDept === 'BSCSE' ? (
+                                                            <>
+                                                                <RotateCcw size={12} />
+                                                                <span>Reset</span>
+                                                            </>
+                                                        ) : (
+                                                            <>
+                                                                <Trash2 size={12} />
+                                                                <span>Clear</span>
+                                                            </>
+                                                        )}
+                                                    </button>
+                                                )}
+                                            </div>
+                                        </div>
+
+                                        <CourseSearch courseMap={courseMap} onAddCourse={handleAddCourse} routine={routine} getExamInfo={(code) => getExamInfo(code, selectedDept)} />
+                                    </>
+                                )}
+                            </div>
+                        </aside>
+
+                        {/* ── Main Content: Routine Grid + Added list ── */}
+                        <div className={`flex-1 flex flex-col gap-4 min-w-0 ${mobileTab === 'schedule' ? 'block' : 'hidden lg:block'}`}>
 
                     {/* Routine summary chips */}
                     {routine.length > 0 && (
@@ -761,7 +1041,21 @@ export default function App() {
                         </div>
                     </div>
                 </div>
-            </main>
+            </div>
+        )}
+    </main>
+
+            {/* ── Custom CSV / UCAM Bookmarklet Sync Modal ── */}
+            <UploadCSVModal
+                isOpen={isUploadModalOpen}
+                onClose={() => setIsUploadModalOpen(false)}
+                onUploadSuccess={handleUploadSuccess}
+                departments={DEPARTMENTS}
+                currentDept={selectedDept}
+                deptCSVs={deptCSVs}
+                onClearDeptCSV={handleClearDeptCSV}
+                showDeptSelect={modalShowDeptSelect}
+            />
 
             {/* ── Toast ── */}
             <Toast toast={toast} onDismiss={() => { }} />

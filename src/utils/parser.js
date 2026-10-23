@@ -88,21 +88,13 @@ function cleanRoom(raw) {
 }
 
 /**
- * Fetches and parses the UIU schedule CSV file.
-
- * @param {string} csvPath - path to the CSV (typically '/UIU_Full_Schedule.csv')
+ * Parses raw CSV text into an array of course objects.
+ * @param {string} csvText - raw CSV text
  * @returns {Promise<Array>} array of parsed course objects
  */
-export async function loadCourseData(csvPath = '/UIU_Full_Schedule.csv') {
-    const response = await fetch(csvPath);
-    const contentType = response.headers.get('content-type');
-    if (!response.ok || (contentType && contentType.includes('text/html'))) {
-        throw new Error(`Failed to load CSV: ${response.status}`);
-    }
-    const text = await response.text();
-
+export function parseCSVText(csvText) {
     return new Promise((resolve, reject) => {
-        Papa.parse(text, {
+        Papa.parse(csvText, {
             header: true,
             skipEmptyLines: true,
             transformHeader: (h) => h.trim(),
@@ -124,6 +116,21 @@ export async function loadCourseData(csvPath = '/UIU_Full_Schedule.csv') {
             error: reject,
         });
     });
+}
+
+/**
+ * Fetches and parses the UIU schedule CSV file.
+ * @param {string} csvPath - path to the CSV (typically '/UIU_Full_Schedule.csv')
+ * @returns {Promise<Array>} array of parsed course objects
+ */
+export async function loadCourseData(csvPath = '/UIU_Full_Schedule.csv') {
+    const response = await fetch(csvPath);
+    const contentType = response.headers.get('content-type');
+    if (!response.ok || (contentType && contentType.includes('text/html'))) {
+        throw new Error(`Failed to load CSV: ${response.status}`);
+    }
+    const text = await response.text();
+    return parseCSVText(text);
 }
 
 /**
